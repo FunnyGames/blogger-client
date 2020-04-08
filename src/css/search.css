@@ -1,0 +1,9 @@
+/* Create two equal columns that floats next to each other */
+.xcolumn {
+  display: flex;
+}
+
+/* Clear floats after the columns */
+.xrow:after {
+  flex: 50%;
+}

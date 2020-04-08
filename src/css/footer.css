@@ -1,0 +1,40 @@
+.footer-ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0%);
+}
+
+.footer-center {
+  background-color: #333;
+  color: white;
+  min-height: 250px;
+  width: 100%;
+  text-align: center;
+  margin-top: auto;
+}
+
+.blogger-copyright {
+    padding-bottom: 15px;
+}
+
+.footer-link {
+  display: block;
+  float: left;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  color: white;
+}
+
+@media screen and (max-width: 600px) {
+  .footer-link {float: none;}
+}

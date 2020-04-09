@@ -68,7 +68,7 @@ function register(values) {
                 data => {
                     dispatch(success(data));
                     localStorage.setItem(LOCAL_STR_TOKEN, data.jwt);
-                    history.push('/');
+                    history.push(paths.HOMEPAGE);
                 },
                 error => returnError(dispatch, failure, error, true)
             );
@@ -79,25 +79,21 @@ function register(values) {
     function failure(error) { return { type: userConstants.REGISTER_FAILURE, error } }
 }
 
-function logout() {
+function logout(error) {
     return dispatch => {
-        dispatch(request({}));
-
-        userService.logout()
-            .then(
-                data => {
-                    localStorage.removeItem(LOCAL_STR_TOKEN);
-                    dispatch(success(data));
-                    dispatch(alertActions.success('Logged out successfully'));
-                    history.push('/');
-                },
-                error => returnError(dispatch, failure, error, true)
-            );
+        dispatch(success());
+        if (error) {
+            dispatch(alertActions.error(error));
+        } else {
+            dispatch(alertActions.success('Logged out successfully'));
+        }
+        setTimeout(() => {
+            localStorage.removeItem(LOCAL_STR_TOKEN);
+            history.push(paths.LOGIN);
+        }, 50);
     };
 
-    function request() { return { type: userConstants.LOGOUT_REQUEST } }
-    function success(data) { return { type: userConstants.LOGOUT_SUCCESS, data } }
-    function failure(error) { return { type: userConstants.LOGOUT_FAILURE, error } }
+    function success() { return { type: userConstants.LOGOUT_SUCCESS } }
 }
 
 function getProfile() {

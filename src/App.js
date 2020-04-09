@@ -11,6 +11,7 @@ import { cancelPendingRequests } from './helpers/axios';
 import Navbar from './components/pages/Navbar';
 import Footer from './components/pages/Footer';
 import Toast from './components/interactive/Toast';
+import ForceLogout from './components/interactive/ForceLogout';
 
 import { PrivateRoute } from './routes/PrivateRoute';
 import { NotFound } from './components/pages/NotFound';
@@ -115,6 +116,7 @@ class App extends React.Component {
                 </Switch>
                 <Footer />
                 <Toast />
+                <ForceLogout />
             </Router>
         );
     }

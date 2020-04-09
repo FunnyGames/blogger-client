@@ -19,6 +19,11 @@ export function alert(state = {}, action) {
                 type: 'alert-refresh',
                 forceRefresh: true
             }
+        case alertConstants.LOGOUT:
+            return {
+                type: 'alert-logout',
+                forceLogout: true
+            }
         default:
             return state;
     }

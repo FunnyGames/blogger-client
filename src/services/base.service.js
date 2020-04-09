@@ -22,9 +22,7 @@ export function get(url, params = {}, denyCancel) {
             return Promise.reject(err);
         });
 
-    if (!denyCancel) {
-        requests.push(cancel);
-    }
+    addCancelToReq(cancel, denyCancel);
     return ax;
 }
 
@@ -49,9 +47,7 @@ export function post(url, data, params = {}, denyCancel) {
             return Promise.reject(err);
         });
 
-    if (!denyCancel) {
-        requests.push(cancel);
-    }
+    addCancelToReq(cancel, denyCancel);
     return ax;
 }
 
@@ -76,9 +72,7 @@ export function del(url, params = {}, denyCancel) {
             return Promise.reject(err);
         });
 
-    if (!denyCancel) {
-        requests.push(cancel);
-    }
+    addCancelToReq(cancel, denyCancel);
     return ax;
 }
 
@@ -103,8 +97,20 @@ export function put(url, data, params = {}, denyCancel) {
             return Promise.reject(err);
         });
 
+    addCancelToReq(cancel, denyCancel);
+    return ax;
+}
+
+function addCancelToReq(cancel, denyCancel) {
     if (!denyCancel) {
         requests.push(cancel);
     }
-    return ax;
+}
+
+let denyCancelFields = {};
+
+export function denyCancelOnFirstCall(field) {
+    let deny = denyCancelFields[field];
+    denyCancelFields[field] = true;
+    return deny;
 }

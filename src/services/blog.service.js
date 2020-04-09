@@ -21,7 +21,7 @@ function getBlogs(page, limit, name, sortBy, sortOrder, query) {
         ...query
     };
 
-    return http.get(url.GET_BLOGS, params);
+    return http.get(url.GET_BLOGS, params, http.denyCancelOnFirstCall('getBlogs'));
 }
 
 function createBlog(data) {

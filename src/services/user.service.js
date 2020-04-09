@@ -4,7 +4,6 @@ import * as utils from '../helpers/utils';
 
 export const userService = {
     login,
-    logout,
     checkAvailability,
     register,
     getProfile,
@@ -20,10 +19,6 @@ function login(username, password) {
         username, password
     };
     return http.post(url.LOGIN, data);
-}
-
-function logout() {
-    return http.get(url.LOGOUT);
 }
 
 function checkAvailability(username, email) {

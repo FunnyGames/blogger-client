@@ -6,11 +6,13 @@ import { user, userAvailable, users, profile, userGroups } from './user.reducer'
 import { groups, group, groupUsers } from './group.reducer';
 import { blogs, blog, members } from './blog.reducer';
 import { update } from './update.reducer';
+import { comments } from './comment.reducer';
 
 const rootReducer = combineReducers({
     alert,
     blogs,
     blog,
+    comments,
     members,
     group,
     groups,

@@ -9,6 +9,17 @@ export const alertActions = {
     logout
 };
 
+export const alertRefersh = {
+    // Forced refresh actions
+    CREATE_COMMENT: 'CREATE_COMMENT',
+    UPDATE_COMMENT: 'UPDATE_COMMENT',
+    DELETE_COMMENT: 'DELETE_COMMENT',
+
+    // Functions
+    is,
+    isIn
+}
+
 function success(message) {
     return { type: alertConstants.SUCCESS, message };
 }
@@ -21,12 +32,20 @@ function clear() {
     return { type: alertConstants.CLEAR };
 }
 
-function refresh() {
-    return { type: alertConstants.REFRESH };
+function refresh(action) {
+    return { type: alertConstants.REFRESH, action };
 }
 
 function logout() {
     return { type: alertConstants.LOGOUT };
+}
+
+function is(alert, action) {
+    return alert && alert.forceRefresh && alert.action && alert.action === action;
+}
+
+function isIn(alert, actions) {
+    return alert && alert.forceRefresh && alert.action && actions && actions.length > 0 && actions.includes(alert.action);
 }
 
 export function returnError(dispatch, failure, error, includeAlert) {

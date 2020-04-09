@@ -42,7 +42,6 @@ class BlogsList extends React.Component {
     fetchBlogs() {
         // Get dispatch function from props
         const { dispatch, profile } = this.props;
-        // console.log(this.props);
 
         // Fetch blogs
         const limit = globalConstants.TABLE_LIMIT;

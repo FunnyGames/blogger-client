@@ -6,7 +6,7 @@ import * as v from '../validator';
 import MultiSelect from '../../components/interactive/MultiSelect';
 import { userActions } from '../../actions';
 
-class NewGroupForm extends React.Component {
+class GroupForm extends React.Component {
     state = {
         selectedOption: null,
     };
@@ -88,12 +88,12 @@ function mapStateToProps(state) {
     return { users: users.data, loading: users.loading };
 }
 
-let NewGroup = connect(
+let Group = connect(
     mapStateToProps
-)(NewGroupForm);
+)(GroupForm);
 
 export default reduxForm({
     // a unique name for the form
-    form: 'new_group',
+    form: 'group',
     validate
-})(NewGroup);
+})(Group);

@@ -8,7 +8,7 @@ import Tags from '../../components/interactive/Tags';
 import { userActions } from '../../actions';
 import * as utils from '../../helpers/utils';
 
-class NewBlogForm extends React.Component {
+class BlogForm extends React.Component {
     state = {
         selectedMemberOption: null,
         selectedGroupOption: null,
@@ -166,12 +166,12 @@ function mapStateToProps(state) {
     return { users: users.data, userLoading: users.loading, groups: userGroups.data, groupLoading: userGroups.loading };
 }
 
-let NewBlog = connect(
+let Blog = connect(
     mapStateToProps
-)(NewBlogForm);
+)(BlogForm);
 
 export default reduxForm({
     // a unique name for the form
-    form: 'new_blog',
+    form: 'blog',
     validate
-})(NewBlog);
+})(Blog);

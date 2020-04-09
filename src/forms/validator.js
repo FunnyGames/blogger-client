@@ -81,6 +81,15 @@ export function validateBlogContent(errors, values) {
     validate(errors, values, 'content', 'blog content', options);
 }
 
+export function validateComment(errors, values) {
+    let options = {
+        min: constants.COMMENT_MIN_LENGTH,
+        max: constants.COMMENT_MAX_LENGTH,
+        allowSpaces: true
+    }
+    validate(errors, values, 'content', 'comment content', options);
+}
+
 function validate(errors, values, fieldName, text, options) {
     let field = values[fieldName];
     if (!field) {

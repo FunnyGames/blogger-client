@@ -1,8 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { blogActions } from '../../actions';
-import * as timeUtils from '../../helpers/time-utils';
+import { blogActions, commentActions, alertActions, alertRefersh } from '../../actions';
 import paths from '../../constants/path.constants';
 import setTitle from '../../environments/document';
 import history from '../../helpers/history';
@@ -11,12 +10,19 @@ import renderLoader from '../../components/interactive/Loader';
 import { NotFound } from '../../components/pages/NotFound';
 import { AccessDenied } from '../../components/pages/AccessDenied';
 import * as utils from '../../helpers/utils';
+import * as timeUtils from '../../helpers/time-utils';
+import Comment from '../../components/blog/Comment';
 import Modal from '../../components/interactive/Modal';
 import _ from 'lodash';
 
 import '../../css/search.css';
+import CommentForm from '../../forms/blogs/CommentForm';
 
 class ViewBlog extends React.Component {
+    state = {
+        addComment: false,
+        openCommendId: null,
+    };
 
     openModal = {};
 
@@ -26,6 +32,11 @@ class ViewBlog extends React.Component {
         // Fetch blog and the users
         this.fetchBlog();
         this.fetchBlogUsers();
+        this.fetchBlogComments(true);
+    }
+
+    getBlogId = () => {
+        return this.props.match.params.id;
     }
 
     fetchBlog() {
@@ -33,22 +44,37 @@ class ViewBlog extends React.Component {
         const { dispatch } = this.props;
 
         // Fetch group info
-        const { match } = this.props;
-        const blogId = match.params.id;
+        const blogId = this.getBlogId();
 
         dispatch(blogActions.getBlog(blogId));
     }
 
     fetchBlogUsers() {
         // Get dispatch function from props
-        const { dispatch, match, loggedIn } = this.props;
+        const { dispatch, loggedIn } = this.props;
 
         if (!loggedIn) return;
 
         // Fetch users and groups of blog
-        const blogId = match.params.id;
+        const blogId = this.getBlogId();
 
         dispatch(blogActions.getMembers(blogId));
+    }
+
+    fetchBlogComments(clear) {
+        if (clear) {
+            this.props.dispatch(commentActions.clear());
+        }
+        // Get dispatch function from props
+        const { dispatch, comments } = this.props;
+
+        // Fetch users and groups of blog
+        const blogId = this.getBlogId();
+
+        const page = comments.metadata && !clear && comments.metadata.page + 1 || 1;
+        const limit = 5;
+
+        dispatch(commentActions.getComments(blogId, page, limit));
     }
 
     isBlogOwner = (userId) => {
@@ -57,8 +83,7 @@ class ViewBlog extends React.Component {
 
     showDeleteConfirm = () => {
         if (this.openModal.func) {
-            const { match } = this.props;
-            const blogId = match.params.id;
+            const blogId = this.getBlogId();
             this.openModal.func(blogId);
         }
     }
@@ -103,8 +128,70 @@ class ViewBlog extends React.Component {
         return this.buildList(groups, linkTo, title);
     }
 
+    addReply = () => {
+        const addComment = !this.state.addComment;
+        const openCommendId = addComment ? '0' : null;
+        this.setState({ addComment, openCommendId });
+    }
+
+    onAddReply = (values) => {
+        const { dispatch } = this.props;
+        const blogId = this.getBlogId();
+        dispatch(commentActions.createComment(blogId, values));
+        this.setState({ addComment: false, openCommendId: null });
+    }
+
+    updateEditComment = (openCommendId) => {
+        this.setState({ openCommendId, addComment: false });
+    }
+
+    buildComments = (comments, metadata) => {
+        const list = [];
+        if (!comments || comments.loading) return renderLoader();
+        if (comments && comments.length > 0) {
+            const decodeId = utils.getUserId();
+            const len = comments.length;
+            for (let i = 0; i < len; ++i) {
+                const c = comments[i];
+                const { _id, user, content, lastUpdate, createDate } = c;
+                const userId = user._id;
+                const toLink = utils.convertUrlPath(paths.USER, { id: userId });
+                const dateTooltip = timeUtils.formatBlogDateTime(createDate);
+                const owner = userId === decodeId;
+                const { openCommendId } = this.state;
+                const item = (
+                    <Comment
+                        key={_id}
+                        openId={openCommendId}
+                        dispatch={this.props.dispatch}
+                        commentId={_id}
+                        username={user.username}
+                        content={content}
+                        toLink={toLink}
+                        dateTooltip={dateTooltip}
+                        owner={owner}
+                        lastUpdate={lastUpdate}
+                        createDate={createDate}
+                        updateEditComment={this.updateEditComment}
+                    />);
+                list.push(item);
+            }
+            if (metadata && metadata.total && metadata.page) {
+                const totalComments = comments.length;
+                if (totalComments < metadata.total) {
+                    const loadMore = (<div key="loadMore"><a style={{ cursor: 'pointer' }} onClick={() => this.fetchBlogComments()}>Load More...</a></div>);
+                    list.push(loadMore);
+                }
+            }
+        } else {
+            return (<div>No comments. Be the first one to comment!</div>);
+        }
+        return list;
+    }
+
     render() {
-        const { deleteBlog, blog, members } = this.props;
+        const { deleteBlog, blog, members, comments, alert } = this.props;
+        const { addComment } = this.state;
         if (deleteBlog && deleteBlog.ok) {
             history.push(paths.BLOGS);
             return null;
@@ -113,6 +200,12 @@ class ViewBlog extends React.Component {
         if (blog.notFound) return <NotFound title="Blog not found" />;
         if (blog.accessDenied) return <AccessDenied title="Private Blog" />;
         if (blog.error) return <ErrorConnect />;
+
+        if (alertRefersh.isIn(alert, [alertRefersh.DELETE_COMMENT, alertRefersh.CREATE_COMMENT, alertRefersh.UPDATE_COMMENT])) {
+            this.fetchBlogComments(true);
+            const { dispatch } = this.props;
+            dispatch(alertActions.clear());
+        }
 
         let title = blog.name;
         let text = blog.entry;
@@ -143,6 +236,8 @@ class ViewBlog extends React.Component {
         const userList = this.buildUsers(users);
         const groupList = this.buildGroups(groups);
 
+        const commentList = this.buildComments(comments.data, comments.metadata);
+
         return (
             <div style={{ marginBottom: '4em', marginTop: '4em' }}>
                 <div className="ui header">
@@ -168,6 +263,20 @@ class ViewBlog extends React.Component {
                             : null
                         }
                     </div>
+                    <div className="ui segment">
+                        "reactions" | <button className="ui blue labeled submit icon button" onClick={this.addReply}><i className="icon comment"></i>Comment</button>
+                    </div>
+                    {addComment ?
+                        <div className="ui segment">
+                            <CommentForm saveMessage="Add Reply" onSubmit={this.onAddReply} />
+                        </div>
+                        : null}
+                    <div className="ui segment">
+                        <div className="ui comments" style={{ maxWidth: '100%' }}>
+                            <h3 className="ui dividing header">Comments</h3>
+                            {commentList}
+                        </div>
+                    </div>
                 </div>
                 <Modal
                     message="Are you sure you want to delete this blog?"
@@ -184,11 +293,11 @@ class ViewBlog extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const { update, blog, members, user } = state;
+    const { update, blog, members, user, comments, alert } = state;
     if (blog && blog.name) {
         setTitle(blog.name);
     }
-    return { deleteBlog: update.deleteBlog, blog, members, loggedIn: user.loggedIn };
+    return { deleteBlog: update.deleteBlog, blog, members, loggedIn: user.loggedIn, comments, alert };
 }
 
 const connected = connect(mapStateToProps)(ViewBlog);

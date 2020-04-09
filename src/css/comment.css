@@ -1,0 +1,7 @@
+.ui.comments .comment .actions .delete_comment {
+    color: lightcoral;
+}
+
+.ui.comments .comment .actions .delete_comment:hover {
+    color: red;
+}

@@ -33,5 +33,8 @@ export default {
     BLOG_TITLE_MIN_LENGTH: 5,
     BLOG_TITLE_MAX_LENGTH: 120,
     BLOG_CONT_MIN_LENGTH: 5,
-    BLOG_CONT_MAX_LENGTH: Number.NaN
+    BLOG_CONT_MAX_LENGTH: Number.NaN,
+    // Comment
+    COMMENT_MIN_LENGTH: 5,
+    COMMENT_MAX_LENGTH: 1000,
 };

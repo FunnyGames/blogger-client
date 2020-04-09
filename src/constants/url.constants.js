@@ -31,4 +31,9 @@ export default {
     CREATE_BLOG: api + '/blogs',
     GET_BLOG_MEMBERS: api + '/blogs/:id/members',
 
+    // Comments
+    GET_COMMENTS: api + '/comments/:id',
+    CREATE_COMMENT: api + '/comments/:id',
+    UPDATE_COMMENT: api + '/comments/:id',
+    DELETE_COMMENT: api + '/comments/:id'
 }

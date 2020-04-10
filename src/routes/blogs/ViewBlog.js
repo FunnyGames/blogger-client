@@ -17,6 +17,7 @@ import _ from 'lodash';
 
 import '../../css/search.css';
 import CommentForm from '../../forms/blogs/CommentForm';
+import globalConstants from '../../constants/global.constants';
 
 class ViewBlog extends React.Component {
     state = {
@@ -72,7 +73,7 @@ class ViewBlog extends React.Component {
         const blogId = this.getBlogId();
 
         const page = (comments.metadata && !clear && comments.metadata.page + 1) || 1;
-        const limit = 5;
+        const limit = globalConstants.COMMENT_ROWS_LIMIT;
 
         dispatch(commentActions.getComments(blogId, page, limit));
     }
@@ -178,7 +179,7 @@ class ViewBlog extends React.Component {
             }
             if (metadata && metadata.total && metadata.page) {
                 const totalComments = comments.length;
-                if (totalComments < metadata.total) {
+                if (totalComments < metadata.total && !metadata.end) {
                     const loadMore = (<div key="loadMore"><p style={{ cursor: 'pointer', color: 'blue' }} onClick={() => this.fetchBlogComments()}>Load More...</p></div>);
                     list.push(loadMore);
                 }

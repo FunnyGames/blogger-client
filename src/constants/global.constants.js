@@ -13,6 +13,9 @@ export default {
     TABLE_MAX_PAGES: 10,
     TABLE_LIMIT: 10,
 
+    // Comments Limit
+    COMMENT_ROWS_LIMIT: 5,
+
     // Validators
     // User
     USERNAME_MIN_LENGTH: 5,

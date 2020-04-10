@@ -10,11 +10,11 @@ export const commentActions = {
     clear
 };
 
-function getComments(blogId, page, limit, name, sortBy, sortOrder) {
+function getComments(blogId, limit, seenIds) {
     return dispatch => {
         dispatch(request());
 
-        commentService.getComments(blogId, page, limit, name, sortBy, sortOrder)
+        commentService.getComments(blogId, limit, seenIds)
             .then(
                 data => {
                     dispatch(success(data));

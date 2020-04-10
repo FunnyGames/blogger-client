@@ -9,17 +9,15 @@ export const commentService = {
     deleteComment
 };
 
-function getComments(blogId, page, limit, name, sortBy, sortOrder) {
+function getComments(blogId, limit, seenIds) {
     let params = {
-        page,
-        limit,
-        name,
-        sortBy,
-        sortOrder
+        limit
     };
-
+    let data = {
+        seenIds
+    };
     let urlx = utils.convertUrlPath(url.GET_COMMENTS, { id: blogId });
-    return http.get(urlx, params);
+    return http.put(urlx, data, params);
 }
 
 function createComment(blogId, data) {

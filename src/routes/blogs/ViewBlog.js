@@ -72,10 +72,12 @@ class ViewBlog extends React.Component {
         // Fetch users and groups of blog
         const blogId = this.getBlogId();
 
-        const page = (comments.metadata && !clear && comments.metadata.page + 1) || 1;
         const limit = globalConstants.COMMENT_ROWS_LIMIT;
-
-        dispatch(commentActions.getComments(blogId, page, limit));
+        let seenIds = undefined;
+        if (comments && comments.data && !clear) {
+            seenIds = comments.data.map(c => c._id);
+        }
+        dispatch(commentActions.getComments(blogId, limit, seenIds));
     }
 
     isBlogOwner = (userId) => {
@@ -177,9 +179,8 @@ class ViewBlog extends React.Component {
                     />);
                 list.push(item);
             }
-            if (metadata && metadata.total && metadata.page) {
-                const totalComments = comments.length;
-                if (totalComments < metadata.total && !metadata.end) {
+            if (metadata && metadata.total) {
+                if (metadata.total > globalConstants.COMMENT_ROWS_LIMIT) {
                     const loadMore = (<div key="loadMore"><p style={{ cursor: 'pointer', color: 'blue' }} onClick={() => this.fetchBlogComments()}>Load More...</p></div>);
                     list.push(loadMore);
                 }
@@ -238,7 +239,7 @@ class ViewBlog extends React.Component {
         const groupList = this.buildGroups(groups);
 
         const commentList = this.buildComments(comments.data, comments.metadata);
-        const numberOfComments = comments && comments.metadata ? comments.metadata.total : '-';
+        const numberOfComments = comments && comments.metadata ? comments.metadata.overall : '-';
 
         return (
             <div style={{ marginBottom: '4em', marginTop: '4em' }}>

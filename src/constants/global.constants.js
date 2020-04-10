@@ -11,7 +11,6 @@ export default {
 
     // Table
     TABLE_MAX_PAGES: 10,
-    TABLE_MAX_ROWS: 10,
     TABLE_LIMIT: 10,
 
     // Validators

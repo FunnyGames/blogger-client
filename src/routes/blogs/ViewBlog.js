@@ -71,7 +71,7 @@ class ViewBlog extends React.Component {
         // Fetch users and groups of blog
         const blogId = this.getBlogId();
 
-        const page = comments.metadata && !clear && comments.metadata.page + 1 || 1;
+        const page = (comments.metadata && !clear && comments.metadata.page + 1) || 1;
         const limit = 5;
 
         dispatch(commentActions.getComments(blogId, page, limit));
@@ -179,7 +179,7 @@ class ViewBlog extends React.Component {
             if (metadata && metadata.total && metadata.page) {
                 const totalComments = comments.length;
                 if (totalComments < metadata.total) {
-                    const loadMore = (<div key="loadMore"><a style={{ cursor: 'pointer' }} onClick={() => this.fetchBlogComments()}>Load More...</a></div>);
+                    const loadMore = (<div key="loadMore"><p style={{ cursor: 'pointer', color: 'blue' }} onClick={() => this.fetchBlogComments()}>Load More...</p></div>);
                     list.push(loadMore);
                 }
             }
@@ -237,6 +237,7 @@ class ViewBlog extends React.Component {
         const groupList = this.buildGroups(groups);
 
         const commentList = this.buildComments(comments.data, comments.metadata);
+        const numberOfComments = comments && comments.metadata ? comments.metadata.total : '-';
 
         return (
             <div style={{ marginBottom: '4em', marginTop: '4em' }}>
@@ -264,7 +265,15 @@ class ViewBlog extends React.Component {
                         }
                     </div>
                     <div className="ui segment">
-                        "reactions" | <button className="ui blue labeled submit icon button" onClick={this.addReply}><i className="icon comment"></i>Comment</button>
+                        "reactions" | {" "}
+                        <div className="ui left labeled button" tabIndex="0">
+                            <p className="ui basic right pointing label">
+                                {numberOfComments}
+                            </p>
+                            <div className="ui blue button" onClick={this.addReply}>
+                                <i className="comment icon"></i> Comment
+                            </div>
+                        </div>
                     </div>
                     {addComment ?
                         <div className="ui segment">

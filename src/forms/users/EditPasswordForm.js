@@ -6,6 +6,8 @@ import paths from '../../constants/path.constants';
 import * as v from '../validator';
 import * as w from '../warn';
 
+const formName = 'password';
+
 class EditPasswordForm extends React.Component {
     render() {
         const { handleSubmit, submitting } = this.props;
@@ -50,7 +52,7 @@ const warn = values => {
 
 export default reduxForm({
     // a unique name for the form
-    form: 'password',
+    form: formName,
     validate,
     warn
 })(EditPasswordForm);

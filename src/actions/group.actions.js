@@ -1,6 +1,6 @@
 import { groupConstants } from '../constants';
 import { groupService } from '../services';
-import { alertActions, returnError } from '../actions';
+import { alertActions, returnError, alertRefersh } from '../actions';
 import history from '../helpers/history';
 import paths from '../constants/path.constants';
 import * as utils from '../helpers/utils';
@@ -140,6 +140,7 @@ function updateGroup(groupId, name, description) {
                 data => {
                     dispatch(success(data));
                     dispatch(alertActions.success(`Group updated successfully`));
+                    dispatch(alertActions.refresh(alertRefersh.UPDATE_GROUP));
                 },
                 error => returnError(dispatch, failure, error, true)
             );

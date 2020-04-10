@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { blogActions } from '../../actions';
 import paths from '../../constants/path.constants';
 import setTitle from '../../environments/document';
@@ -66,4 +67,9 @@ class AddBlog extends React.Component {
     }
 }
 
-export { AddBlog };
+function mapStateToProps() {
+    return {};
+}
+
+const connected = connect(mapStateToProps)(AddBlog);
+export { connected as AddBlog };

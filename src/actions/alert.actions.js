@@ -15,6 +15,9 @@ export const alertRefersh = {
     UPDATE_COMMENT: 'UPDATE_COMMENT',
     DELETE_COMMENT: 'DELETE_COMMENT',
 
+    UPDATE_GROUP: 'UPDATE_GROUP',
+    UPDATE_GROUP_USERS: 'UPDATE_GROUP_USERS',
+
     // Functions
     is,
     isIn

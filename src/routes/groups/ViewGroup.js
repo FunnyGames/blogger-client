@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { userActions, groupActions, alertActions } from '../../actions';
+import { userActions, groupActions, alertActions, alertRefersh } from '../../actions';
 import paths from '../../constants/path.constants';
 import globalConstants from '../../constants/global.constants';
 import Table from '../../components/interactive/Table';
@@ -217,7 +217,7 @@ class ViewGroup extends React.Component {
     }
 
     render() {
-        const { group, users, searhUsers, forceRefresh, update, deleteGroup } = this.props;
+        const { group, users, searhUsers, alert, update, deleteGroup, dispatch } = this.props;
         if (deleteGroup && deleteGroup.ok) {
             history.push(paths.GROUPS);
             return null;
@@ -228,9 +228,11 @@ class ViewGroup extends React.Component {
         const { edit, errors, selectedMemberOption } = this.state;
 
         if (update && update.loading && edit) this.setState({ edit: false });
-        if (forceRefresh) {
+        if (alertRefersh.is(alert, alertRefersh.UPDATE_GROUP_USERS)) {
             this.fetchGroupUsers();
-            const { dispatch } = this.props;
+            dispatch(alertActions.clear());
+        } else if (alertRefersh.is(alert, alertRefersh.UPDATE_GROUP)) {
+            this.fetchGroup();
             dispatch(alertActions.clear());
         }
 
@@ -335,8 +337,7 @@ function mapStateToProps(state) {
     if (group && group.name) {
         setTitle(group.name);
     }
-    const { forceRefresh } = alert;
-    return { group, users: groupUsers, searhUsers: users, forceRefresh, update: update.updateGroup, deleteGroup: update.deleteGroup };
+    return { group, users: groupUsers, searhUsers: users, alert, update: update.updateGroup, deleteGroup: update.deleteGroup };
 }
 
 const connected = connect(mapStateToProps)(ViewGroup);

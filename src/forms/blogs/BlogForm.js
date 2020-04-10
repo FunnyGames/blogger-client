@@ -8,6 +8,8 @@ import Tags from '../../components/interactive/Tags';
 import { userActions } from '../../actions';
 import * as utils from '../../helpers/utils';
 
+const formName = 'blog';
+
 class BlogForm extends React.Component {
     state = {
         selectedMemberOption: null,
@@ -55,23 +57,23 @@ class BlogForm extends React.Component {
 
     handleMemberChange = (selectedMemberOption) => {
         this.setState({ selectedMemberOption });
-        this.props.dispatch(change('new_blog', 'members', selectedMemberOption));
+        this.props.dispatch(change(formName, 'members', selectedMemberOption));
     }
 
     handleGroupChange = (selectedGroupOption) => {
         this.setState({ selectedGroupOption });
-        this.props.dispatch(change('new_blog', 'groups', selectedGroupOption));
+        this.props.dispatch(change(formName, 'groups', selectedGroupOption));
     }
 
     handleTagsChange = (tags) => {
         this.setState({ tags });
-        this.props.dispatch(change('new_blog', 'tags', tags));
+        this.props.dispatch(change(formName, 'tags', tags));
     }
 
     changePrivacy = () => {
         const isPrivate = !this.state.isPrivate;
         this.setState({ isPrivate });
-        this.props.dispatch(change('new_blog', 'isPrivate', isPrivate));
+        this.props.dispatch(change(formName, 'isPrivate', isPrivate));
     }
 
     buildMemberOptions = (users) => {
@@ -172,6 +174,6 @@ let Blog = connect(
 
 export default reduxForm({
     // a unique name for the form
-    form: 'blog',
+    form: formName,
     validate
 })(Blog);

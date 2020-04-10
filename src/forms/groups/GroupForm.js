@@ -6,6 +6,8 @@ import * as v from '../validator';
 import MultiSelect from '../../components/interactive/MultiSelect';
 import { userActions } from '../../actions';
 
+const formName = 'group';
+
 class GroupForm extends React.Component {
     state = {
         selectedOption: null,
@@ -27,7 +29,7 @@ class GroupForm extends React.Component {
 
     handleChange = (selectedOption) => {
         this.setState({ selectedOption });
-        this.props.dispatch(change('new_group', 'members', selectedOption));
+        this.props.dispatch(change(formName, 'members', selectedOption));
     }
 
     buildOptions = (users) => {
@@ -94,6 +96,6 @@ let Group = connect(
 
 export default reduxForm({
     // a unique name for the form
-    form: 'group',
+    form: formName,
     validate
 })(Group);

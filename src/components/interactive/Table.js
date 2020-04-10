@@ -6,7 +6,7 @@ import renderLoader from './Loader';
 
 import '../../css/table.css';
 
-const { TABLE_MAX_PAGES, TABLE_MAX_ROWS } = globalConstants;
+const { TABLE_MAX_PAGES, TABLE_LIMIT } = globalConstants;
 
 // Component for table
 class Table extends React.Component {
@@ -18,7 +18,7 @@ class Table extends React.Component {
 
     calculateNumberOfPages(totalRows) {
         if (!totalRows) totalRows = 0;
-        return Math.ceil(totalRows / TABLE_MAX_ROWS);
+        return Math.ceil(totalRows / TABLE_LIMIT);
     }
 
     renderPageNumbers(totalRows) {
@@ -34,9 +34,11 @@ class Table extends React.Component {
         let aPages = [];
         let prevPage = Math.max(1, currentPage - 1);
         let nextPage = Math.min(pages, currentPage + 1);
-        aPages.push(<a key="00" className="icon item" onClick={() => onPageChange(prevPage)}>
-            <i className="left chevron icon"></i>
-        </a>);
+        aPages.push(
+            <b style={{ cursor: 'pointer' }} key="00" className="icon item" onClick={() => onPageChange(prevPage)}>
+                <i className="left chevron icon"></i>
+            </b>
+        );
 
         let minPage = 1;
         let maxPage = pages;
@@ -48,7 +50,7 @@ class Table extends React.Component {
                 maxPage = TABLE_MAX_PAGES;
             } else {
                 // Add jump to first page
-                aPages.push(<a key="0" className="icon item" onClick={() => onPageChange(1)}>...</a>);
+                aPages.push(<b style={{ cursor: 'pointer' }} key="0" className="icon item" onClick={() => onPageChange(1)}>...</b>);
                 maxPage = currentPage + half - 1;
                 if (maxPage > pages) {
                     minPage = currentPage - (maxPage - pages) - half + 1;
@@ -61,22 +63,24 @@ class Table extends React.Component {
         for (let i = minPage - 1; i < maxPage; ++i) {
             let selected = (currentPage === i + 1 ? "pageselected" : undefined);
             let key = i + 1 + "";
-            aPages.push(<a key={key} id={selected} className="item" onClick={() => onPageChange(i + 1)}>{i + 1}</a>);
+            aPages.push(<b style={{ cursor: 'pointer' }} key={key} id={selected} className="item" onClick={() => onPageChange(i + 1)}>{i + 1}</b>);
         }
         // No pages - so make 1 page
         if (maxPage === 0) {
-            aPages.push(<a key="no-data-page-1" id="pageselected" className="item">{1}</a>);
+            aPages.push(<b style={{ cursor: 'pointer' }} key="no-data-page-1" id="pageselected" className="item">{1}</b>);
         }
 
         // Add jump to last page
         if (pages > maxPage) {
-            aPages.push(<a key="last" className="icon item" onClick={() => onPageChange(pages)}>...</a>);
+            aPages.push(<b style={{ cursor: 'pointer' }} key="last" className="icon item" onClick={() => onPageChange(pages)}>...</b>);
         }
 
         key = pages + 1 + "";
-        aPages.push(<a key={key} className="icon item" onClick={() => onPageChange(nextPage)}>
-            <i className="right chevron icon"></i>
-        </a>);
+        aPages.push(
+            <b style={{ cursor: 'pointer' }} key={key} className="icon item" onClick={() => onPageChange(nextPage)}>
+                <i className="right chevron icon"></i>
+            </b>
+        );
         return aPages;
     }
 

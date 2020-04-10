@@ -3,6 +3,8 @@ import { Field, reduxForm } from 'redux-form';
 import { renderUsername, renderPasswordNoWarn } from '../render';
 import * as v from '../validator';
 
+const formName = 'login';
+
 const LoginForm = props => {
     const { handleSubmit, submitting } = props;
 
@@ -31,6 +33,6 @@ const validate = values => {
 
 export default reduxForm({
     // a unique name for the form
-    form: 'login',
+    form: formName,
     validate
 })(LoginForm);

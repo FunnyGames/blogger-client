@@ -79,11 +79,11 @@ class Comment extends React.Component {
                     {owner &&
                         <div className="actions">
                             {edit ?
-                                <a className="edit" onClick={this.handleEditChange}>Cancel</a>
+                                <i className="edit_comment" onClick={this.handleEditChange}>Cancel</i>
                                 :
-                                <a className="edit" onClick={this.handleEditChange}>Edit</a>
+                                <i className="edit_comment" onClick={this.handleEditChange}>Edit</i>
                             }
-                            <a className="delete_comment" onClick={this.showDeleteConfirm}>Delete</a>
+                            <i className="delete_comment" onClick={this.showDeleteConfirm}> Delete</i>
                         </div>
                     }
                 </div>

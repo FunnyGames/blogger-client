@@ -3,6 +3,8 @@ import { Field, reduxForm } from 'redux-form';
 import { renderTextbox } from '../render';
 import * as v from '../validator';
 
+const formName = 'comment';
+
 class CommentForm extends React.Component {
 
     render() {
@@ -30,6 +32,6 @@ const validate = values => {
 
 export default reduxForm({
     // a unique name for the form
-    form: 'comment',
+    form: formName,
     validate
 })(CommentForm);

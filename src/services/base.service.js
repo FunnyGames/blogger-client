@@ -110,7 +110,7 @@ function addCancelToReq(cancel, denyCancel) {
 let denyCancelFields = {};
 
 export function denyCancelOnFirstCall(field) {
-    let deny = denyCancelFields[field];
-    denyCancelFields[field] = true;
+    let deny = !denyCancelFields[field];
+    denyCancelFields[field] = false;
     return deny;
 }

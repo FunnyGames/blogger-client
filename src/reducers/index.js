@@ -7,11 +7,14 @@ import { groups, group, groupUsers } from './group.reducer';
 import { blogs, blog, members } from './blog.reducer';
 import { update } from './update.reducer';
 import { comments } from './comment.reducer';
+import { reactions, userReactions } from './reaction.reducer';
 
 const rootReducer = combineReducers({
     alert,
     blogs,
     blog,
+    userReactions,
+    reactions,
     comments,
     members,
     group,

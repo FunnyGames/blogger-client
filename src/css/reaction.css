@@ -1,0 +1,17 @@
+.reaction_display {
+    display: none;
+    position: absolute;
+    height: 70px;
+    top: -45px;
+    left: 0px;
+    z-index: 10;
+}
+#like_button {
+    display: inline;
+}
+
+#like_button:hover > .reaction_display,
+#like_button:focus-within > .reaction_display,
+.reaction_display:hover {
+    display: block;
+}

@@ -1,4 +1,10 @@
-import { userConstants, groupConstants, alertConstants, blogConstants, commentConstants } from '../constants';
+import {
+    userConstants,
+    groupConstants,
+    alertConstants,
+    blogConstants,
+    commentConstants,
+} from '../constants';
 
 export function update(state = {}, action) {
     switch (action.type) {

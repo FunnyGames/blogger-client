@@ -12,12 +12,13 @@ import { AccessDenied } from '../../components/pages/AccessDenied';
 import * as utils from '../../helpers/utils';
 import * as timeUtils from '../../helpers/time-utils';
 import Comment from '../../components/blog/Comment';
+import Reaction from '../../components/blog/Reaction';
 import Modal from '../../components/interactive/Modal';
 import _ from 'lodash';
-
-import '../../css/search.css';
 import CommentForm from '../../forms/blogs/CommentForm';
 import globalConstants from '../../constants/global.constants';
+
+import '../../css/search.css';
 
 class ViewBlog extends React.Component {
     state = {
@@ -209,6 +210,9 @@ class ViewBlog extends React.Component {
             dispatch(alertActions.clear());
         }
 
+        const loggedIn = utils.getUserId();
+        const blogId = this.getBlogId();
+
         let title = blog.name;
         let text = blog.entry;
         let content = text ? text.split('\n').map((item, i) => {
@@ -240,6 +244,7 @@ class ViewBlog extends React.Component {
 
         const commentList = this.buildComments(comments.data, comments.metadata);
         const numberOfComments = comments && comments.metadata ? comments.metadata.overall : '-';
+        const addCommentButton = loggedIn ? this.addReply : null;
 
         return (
             <div style={{ marginBottom: '4em', marginTop: '4em' }}>
@@ -267,12 +272,12 @@ class ViewBlog extends React.Component {
                         }
                     </div>
                     <div className="ui segment">
-                        "reactions" | {" "}
+                        <Reaction loggedIn={loggedIn} blogId={blogId} />
                         <div className="ui left labeled button" tabIndex="0">
                             <p className="ui basic right pointing label">
                                 {numberOfComments}
                             </p>
-                            <div className="ui blue button" onClick={this.addReply}>
+                            <div className="ui blue button" onClick={addCommentButton}>
                                 <i className="comment icon"></i> Comment
                             </div>
                         </div>

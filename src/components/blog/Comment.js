@@ -5,9 +5,9 @@ import * as timeUtils from '../../helpers/time-utils';
 import CommentForm from '../../forms/blogs/CommentForm';
 import Modal from '../../components/interactive/Modal';
 import { commentActions } from '../../actions';
+import renderLoader from '../interactive/Loader';
 
 import '../../css/comment.css';
-import renderLoader from '../interactive/Loader';
 
 class Comment extends React.Component {
     state = {

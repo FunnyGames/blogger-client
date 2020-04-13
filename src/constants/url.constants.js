@@ -35,5 +35,11 @@ export default {
     GET_COMMENTS: api + '/comments/:id/get',
     CREATE_COMMENT: api + '/comments/:id',
     UPDATE_COMMENT: api + '/comments/:id',
-    DELETE_COMMENT: api + '/comments/:id'
+    DELETE_COMMENT: api + '/comments/:id',
+
+    // Reactions
+    CREATE_REACTION: api + '/reactions/:id',
+    GET_REACTIONS: api + '/reactions/:id',
+    GET_USERS_REACTIONS: api + '/reactions/:id/users',
+    DELETE_REACTION: api + '/reactions/:id',
 }

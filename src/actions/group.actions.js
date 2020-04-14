@@ -100,7 +100,7 @@ function addMember(groupId, userId, username) {
                 data => {
                     dispatch(success(data));
                     dispatch(alertActions.success(`User ${username} added successfully`));
-                    dispatch(alertActions.refresh());
+                    dispatch(alertActions.refresh(alertRefersh.UPDATE_GROUP_USERS));
                 },
                 error => returnError(dispatch, failure, error, true)
             );
@@ -120,7 +120,7 @@ function removeMember(groupId, userId, username) {
                 data => {
                     dispatch(success(data));
                     dispatch(alertActions.success(`User ${username} removed successfully`));
-                    dispatch(alertActions.refresh());
+                    dispatch(alertActions.refresh(alertRefersh.UPDATE_GROUP_USERS));
                 },
                 error => returnError(dispatch, failure, error, true)
             );

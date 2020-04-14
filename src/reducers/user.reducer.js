@@ -28,6 +28,7 @@ export function user(state = initialState, action) {
 
         case userConstants.LOGOUT_REQUEST:
             return {};
+        case userConstants.CANCEL_ACCOUNT_SUCCESS:
         case userConstants.LOGOUT_SUCCESS:
         case userConstants.LOGOUT_FAILURE:
             return { loggedIn: false, user: {} };

@@ -13,8 +13,10 @@ import history from '../../helpers/history';
 import globalConstants from '../../constants/global.constants';
 import { groupOptions } from '../../constants/table.options';
 import Modal from '../../components/interactive/Modal';
+import BasicModal from '../../components/interactive/BasicModal';
 
 import '../../css/profile.css';
+import CancelAccountForm from '../../forms/users/CancelAccountForm';
 
 class Profile extends React.Component {
     state = {
@@ -25,6 +27,7 @@ class Profile extends React.Component {
 
     openModal = {};
     openModal2 = {};
+    openCancelModal = {};
 
     componentDidMount() {
         setTitle("Profile");
@@ -102,6 +105,25 @@ class Profile extends React.Component {
         }
     }
 
+    openCancelAccount = () => {
+        if (this.openCancelModal.func) {
+            this.openCancelModal.func();
+        }
+    }
+
+    cancelAccountSubmit = (values) => {
+        // Get dispatch function from props
+        let { dispatch } = this.props;
+
+        // Get username and password from form
+        let { username, password } = values;
+
+        // Sent cancel request
+        if (username && password) {
+            dispatch(userActions.cancelAccount(username, password));
+        }
+    }
+
     confirmDelete = (groupId) => {
         const { dispatch } = this.props;
         dispatch(groupActions.deleteGroup(groupId));
@@ -172,6 +194,8 @@ class Profile extends React.Component {
                     <p></p>
                     <Link to={paths.EDIT_PASSWORD} className="ui blue button">Change Password</Link>
                     <p></p>
+                    <button className="ui red button" onClick={this.openCancelAccount}>Delete Account</button>
+                    <p></p>
                     <div className="">Groups:</div>
                     {groups.error ?
                         <center>Error loading</center>
@@ -205,6 +229,14 @@ class Profile extends React.Component {
                     denyLabel="No"
                     openModal={this.openModal2}
                 />
+                <BasicModal openModal={this.openCancelModal} showCloseButton={true}>
+                    <h2>Are you sure you want to delete your account?</h2>
+                    <div style={{ color: 'red', fontWeight: 'bold' }}>You cannot restore your account after deletion!</div>
+                    <div>If you're sure, please enter your username and password and click `Delete Account`.</div>
+                    <div>Otherwise, exit this window.</div>
+                    <p></p>
+                    <CancelAccountForm onSubmit={this.cancelAccountSubmit} username={username} />
+                </BasicModal>
             </div >
         );
     }

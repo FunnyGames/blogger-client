@@ -14,6 +14,7 @@ export default {
     GET_USER_GROUPS: api + '/users/:id/groups',
     GET_USERS: api + '/users',
     GET_USER_PROFILE: api + '/users/:id',
+    CANCEL_ACCOUNT: api + '/users/cancel',
 
     // Groups
     GET_GROUPS: api + '/groups',

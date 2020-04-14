@@ -51,9 +51,11 @@ class BasicModal extends React.Component {
 
     render() {
         const { showModal } = this.state;
-        const { children, openModal } = this.props;
+        const { children, openModal, showCloseButton } = this.props;
 
         if (openModal) openModal.func = this.openModal;
+
+        const closeButton = showCloseButton ? <button className="ui black button" onClick={this.closeModal}>x</button> : null;
 
         return (
             <ReactModal
@@ -64,6 +66,7 @@ class BasicModal extends React.Component {
                 onAfterClose={this.afterCloseModal}
                 style={customStyles}
             >
+                {closeButton}
                 {children}
             </ReactModal>
         );

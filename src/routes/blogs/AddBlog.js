@@ -4,7 +4,7 @@ import { blogActions } from '../../actions';
 import paths from '../../constants/path.constants';
 import setTitle from '../../environments/document';
 import history from '../../helpers/history';
-import NewBlog from '../../forms/blogs/NewBlogForm';
+import Blog from '../../forms/blogs/BlogForm';
 
 class AddBlog extends React.Component {
     componentDidMount() {
@@ -60,7 +60,7 @@ class AddBlog extends React.Component {
                     </div>
                 </div >
                 <div className="ui container">
-                    <NewBlog onSubmit={this.onSubmit} onCancel={this.handleCancel} />
+                    <Blog onSubmit={this.onSubmit} onCancel={this.handleCancel} />
                 </div>
             </div>
         );

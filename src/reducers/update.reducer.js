@@ -1,4 +1,10 @@
-import { userConstants, groupConstants, alertConstants, blogConstants } from '../constants';
+import {
+    userConstants,
+    groupConstants,
+    alertConstants,
+    blogConstants,
+    commentConstants,
+} from '../constants';
 
 export function update(state = {}, action) {
     switch (action.type) {
@@ -46,6 +52,13 @@ export function update(state = {}, action) {
             return { deleteBlog: action.payload };
         case blogConstants.DELETE_BLOG_FAILURE:
             return { deleteBlog: { error: action.error } };
+
+        case commentConstants.UPDATE_COMMENT_REQUEST:
+            return { updateComment: { loading: true } };
+        case commentConstants.UPDATE_COMMENT_SUCCESS:
+            return { updateComment: action.payload };
+        case commentConstants.UPDATE_COMMENT_FAILURE:
+            return { updateComment: { error: action.error } };
 
         default:
             return state;

@@ -1,6 +1,6 @@
 import { groupConstants } from '../constants';
 import { groupService } from '../services';
-import { alertActions, returnError } from '../actions';
+import { alertActions, returnError, alertRefersh } from '../actions';
 import history from '../helpers/history';
 import paths from '../constants/path.constants';
 import * as utils from '../helpers/utils';
@@ -100,7 +100,7 @@ function addMember(groupId, userId, username) {
                 data => {
                     dispatch(success(data));
                     dispatch(alertActions.success(`User ${username} added successfully`));
-                    dispatch(alertActions.refresh());
+                    dispatch(alertActions.refresh(alertRefersh.UPDATE_GROUP_USERS));
                 },
                 error => returnError(dispatch, failure, error, true)
             );
@@ -120,7 +120,7 @@ function removeMember(groupId, userId, username) {
                 data => {
                     dispatch(success(data));
                     dispatch(alertActions.success(`User ${username} removed successfully`));
-                    dispatch(alertActions.refresh());
+                    dispatch(alertActions.refresh(alertRefersh.UPDATE_GROUP_USERS));
                 },
                 error => returnError(dispatch, failure, error, true)
             );
@@ -140,6 +140,7 @@ function updateGroup(groupId, name, description) {
                 data => {
                     dispatch(success(data));
                     dispatch(alertActions.success(`Group updated successfully`));
+                    dispatch(alertActions.refresh(alertRefersh.UPDATE_GROUP));
                 },
                 error => returnError(dispatch, failure, error, true)
             );

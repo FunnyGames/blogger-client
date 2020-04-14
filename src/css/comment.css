@@ -1,0 +1,20 @@
+.ui.comments .comment .actions .delete_comment {
+    color: lightcoral;
+    font-style: normal;
+    cursor: pointer;
+}
+
+.ui.comments .comment .actions .delete_comment:hover {
+    color: red;
+}
+
+.ui.comments .comment .actions .edit_comment {
+    color: #A0A0A0;
+    font-style: normal;
+    cursor: pointer;
+}
+
+.ui.comments .comment .actions .edit_comment:hover {
+    color: gray;
+}
+

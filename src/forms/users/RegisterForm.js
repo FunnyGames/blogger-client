@@ -6,6 +6,8 @@ import * as v from '../validator';
 import * as w from '../warn';
 import { userActions } from '../../actions';
 
+const formName = 'register';
+
 class RegisterForm extends React.Component {
     onUsernameBlur = (event) => {
         // Get dispatch function from props
@@ -97,7 +99,7 @@ let RegForm = connect(
 
 export default reduxForm({
     // a unique name for the form
-    form: 'register',
+    form: formName,
     validate,
     warn
 })(RegForm);

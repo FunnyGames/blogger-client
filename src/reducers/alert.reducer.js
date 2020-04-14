@@ -17,7 +17,8 @@ export function alert(state = {}, action) {
         case alertConstants.REFRESH:
             return {
                 type: 'alert-refresh',
-                forceRefresh: true
+                forceRefresh: true,
+                action: action.action
             }
         case alertConstants.LOGOUT:
             return {

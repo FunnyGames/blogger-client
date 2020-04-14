@@ -4,7 +4,7 @@ import { groupActions } from '../../actions';
 import paths from '../../constants/path.constants';
 import setTitle from '../../environments/document';
 import history from '../../helpers/history';
-import NewGroup from '../../forms/groups/NewGroupForm';
+import Group from '../../forms/groups/GroupForm';
 
 class AddGroup extends React.Component {
     componentDidMount() {
@@ -46,7 +46,7 @@ class AddGroup extends React.Component {
                     </div>
                 </div>
                 <div className="ui container">
-                    <NewGroup onSubmit={this.onSubmit} onCancel={this.handleCancel} />
+                    <Group onSubmit={this.onSubmit} onCancel={this.handleCancel} />
                 </div>
             </div>
         );

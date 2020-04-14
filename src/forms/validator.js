@@ -26,12 +26,16 @@ export function validateEmail(errors, values) {
     validate(errors, values, 'email', 'email', options);
 }
 
-export function validateUsername(errors, values) {
+export function validateUsername(errors, values, username) {
     let options = {
         min: constants.USERNAME_MIN_LENGTH,
         max: constants.USERNAME_MAX_LENGTH,
         regex: /^[a-zA-Z0-9]+$/,
         regexError: 'You can use only these characters: English alphabet (a-z, A-Z), numericals (0-9)'
+    }
+    if (username) {
+        options.regex = new RegExp(`^${username}$`, 'i');
+        options.regexError = `You didn't enter your username correctly`;
     }
     validate(errors, values, 'username', 'username', options);
 }
@@ -79,6 +83,15 @@ export function validateBlogContent(errors, values) {
         allowSpaces: true
     }
     validate(errors, values, 'content', 'blog content', options);
+}
+
+export function validateComment(errors, values) {
+    let options = {
+        min: constants.COMMENT_MIN_LENGTH,
+        max: constants.COMMENT_MAX_LENGTH,
+        allowSpaces: true
+    }
+    validate(errors, values, 'content', 'comment content', options);
 }
 
 function validate(errors, values, fieldName, text, options) {

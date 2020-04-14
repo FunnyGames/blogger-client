@@ -17,7 +17,8 @@ export const userActions = {
     updatePassword,
     getUserGroups,
     getUsers,
-    getUserProfile
+    getUserProfile,
+    cancelAccount
 };
 
 function checkAvailability(username, email) {
@@ -98,7 +99,7 @@ function logout(error) {
 
 function getProfile() {
     return dispatch => {
-        dispatch(request({}));
+        dispatch(request());
 
         userService.getProfile()
             .then(
@@ -200,4 +201,27 @@ function getUserProfile(userId) {
     function request(user) { return { type: userConstants.GET_USER_PROFILE_REQUEST, user } }
     function success(payload) { return { type: userConstants.GET_USER_PROFILE_SUCCESS, payload } }
     function failure(error, status) { return { type: userConstants.GET_USER_PROFILE_FAILURE, error, status } }
+}
+
+function cancelAccount(username, password) {
+    return dispatch => {
+        dispatch(request());
+
+        userService.cancelAccount(username, password)
+            .then(
+                data => {
+                    dispatch(success(data));
+                    dispatch(alertActions.success('Your account was cancelled!'));
+                    setTimeout(() => {
+                        localStorage.removeItem(LOCAL_STR_TOKEN);
+                        history.push(paths.LOGIN);
+                    }, 50);
+                },
+                error => returnError(dispatch, failure, error, true)
+            );
+    };
+
+    function request() { return { type: userConstants.CANCEL_ACCOUNT_REQUEST } }
+    function success(payload) { return { type: userConstants.CANCEL_ACCOUNT_SUCCESS, payload } }
+    function failure(error) { return { type: userConstants.CANCEL_ACCOUNT_FAILURE, error } }
 }

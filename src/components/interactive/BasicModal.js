@@ -22,10 +22,9 @@ const customStyles = {
 };
 
 // Component for showing messages over the screen
-class Modal extends React.Component {
+class BasicModal extends React.Component {
     state = {
-        showModal: false,
-        info: null
+        showModal: false
     }
 
     openModal = (info) => {
@@ -50,30 +49,13 @@ class Modal extends React.Component {
         }
     }
 
-    onConfirm = confirm => {
-        if (confirm) confirm(this.state.info);
-        this.closeModal();
-    }
-
-    onDeny = deny => {
-        if (deny) deny();
-        this.closeModal();
-    }
-
     render() {
         const { showModal } = this.state;
-        const { message, details, confirmColor, confirmLabel, denyColor, denyLabel, openModal, onConfirm, onDeny } = this.props;
+        const { children, openModal, showCloseButton } = this.props;
 
         if (openModal) openModal.func = this.openModal;
 
-        const conColor = confirmColor || 'green';
-        const denColor = denyColor || 'red';
-        const conBtnClass = `ui right floated ${conColor} button`;
-        const denBtnClass = `ui right floated ${denColor} button`;
-
-        const detailsDiv = details ? (<div className="ui">{details}</div>) : null;
-        const btnConfirm = confirmLabel ? (<button className={conBtnClass} onClick={e => this.onConfirm(onConfirm)}>{confirmLabel}</button>) : null;
-        const btnDeny = denyLabel ? (<button className={denBtnClass} onClick={e => this.onDeny(onDeny)}>{denyLabel}</button>) : null;
+        const closeButton = showCloseButton ? <button className="ui black button" onClick={this.closeModal}>x</button> : null;
 
         return (
             <ReactModal
@@ -84,15 +66,11 @@ class Modal extends React.Component {
                 onAfterClose={this.afterCloseModal}
                 style={customStyles}
             >
-                <button className="ui black button" onClick={this.closeModal}>x</button>
-                <h2>{message}</h2>
-                {detailsDiv}
-                <div className="ui basic segment"></div>
-                {btnConfirm}
-                {btnDeny}
+                {closeButton}
+                {children}
             </ReactModal>
         );
     }
 }
 
-export default Modal;
+export default BasicModal;

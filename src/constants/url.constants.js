@@ -14,6 +14,7 @@ export default {
     GET_USER_GROUPS: api + '/users/:id/groups',
     GET_USERS: api + '/users',
     GET_USER_PROFILE: api + '/users/:id',
+    CANCEL_ACCOUNT: api + '/users/cancel',
 
     // Groups
     GET_GROUPS: api + '/groups',
@@ -31,4 +32,15 @@ export default {
     CREATE_BLOG: api + '/blogs',
     GET_BLOG_MEMBERS: api + '/blogs/:id/members',
 
+    // Comments
+    GET_COMMENTS: api + '/comments/:id/get',
+    CREATE_COMMENT: api + '/comments/:id',
+    UPDATE_COMMENT: api + '/comments/:id',
+    DELETE_COMMENT: api + '/comments/:id',
+
+    // Reactions
+    CREATE_REACTION: api + '/reactions/:id',
+    GET_REACTIONS: api + '/reactions/:id',
+    GET_USERS_REACTIONS: api + '/reactions/:id/users',
+    DELETE_REACTION: api + '/reactions/:id',
 }

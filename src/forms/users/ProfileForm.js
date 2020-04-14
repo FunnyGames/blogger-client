@@ -5,6 +5,8 @@ import { renderEmail, renderContactInput } from '../render';
 import * as v from '../validator';
 import { userActions } from '../../actions';
 
+const formName = 'profile';
+
 class ProfileForm extends React.Component {
     state = {
         edit: false
@@ -113,6 +115,6 @@ let ProForm = connect(
 
 export default reduxForm({
     // a unique name for the form
-    form: 'profile',
+    form: formName,
     validate
 })(ProForm);

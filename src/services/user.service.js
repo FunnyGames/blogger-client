@@ -11,7 +11,8 @@ export const userService = {
     updatePassword,
     getUserGroups,
     getUsers,
-    getUserProfile
+    getUserProfile,
+    cancelAccount
 };
 
 function login(username, password) {
@@ -71,4 +72,11 @@ function getUsers(page, limit, name, sortBy, sortOrder) {
 function getUserProfile(userId) {
     let urlx = utils.convertUrlPath(url.GET_USER_PROFILE, { id: userId });
     return http.get(urlx);
+}
+
+function cancelAccount(username, password) {
+    let data = {
+        username, password
+    };
+    return http.put(url.CANCEL_ACCOUNT, data);
 }

@@ -11,8 +11,11 @@ export default {
 
     // Table
     TABLE_MAX_PAGES: 10,
-    TABLE_MAX_ROWS: 10,
     TABLE_LIMIT: 10,
+
+    // Comments & ReactionsLimit
+    COMMENT_ROWS_LIMIT: 5,
+    REACTION_USER_ROWS_LIMIT: 20,
 
     // Validators
     // User
@@ -33,5 +36,8 @@ export default {
     BLOG_TITLE_MIN_LENGTH: 5,
     BLOG_TITLE_MAX_LENGTH: 120,
     BLOG_CONT_MIN_LENGTH: 5,
-    BLOG_CONT_MAX_LENGTH: Number.NaN
+    BLOG_CONT_MAX_LENGTH: Number.NaN,
+    // Comment
+    COMMENT_MIN_LENGTH: 5,
+    COMMENT_MAX_LENGTH: 1000,
 };

@@ -10,7 +10,7 @@ import renderLoader from '../../components/interactive/Loader';
 import { NotFound } from '../../components/pages/NotFound';
 import { AccessDenied } from '../../components/pages/AccessDenied';
 import Modal from '../../components/interactive/Modal';
-import NewBlog from '../../forms/blogs/NewBlogForm';
+import Blog from '../../forms/blogs/BlogForm';
 import _ from 'lodash';
 
 class EditBlog extends React.Component {
@@ -179,7 +179,7 @@ class EditBlog extends React.Component {
                     </div>
                 </div >
                 <div className="ui container">
-                    <NewBlog
+                    <Blog
                         onSubmit={this.onSubmit}
                         onCancel={this.handleCancel}
                         initialValues={initialValues}

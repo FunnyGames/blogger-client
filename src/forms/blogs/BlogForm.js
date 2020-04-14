@@ -8,7 +8,9 @@ import Tags from '../../components/interactive/Tags';
 import { userActions } from '../../actions';
 import * as utils from '../../helpers/utils';
 
-class NewBlogForm extends React.Component {
+const formName = 'blog';
+
+class BlogForm extends React.Component {
     state = {
         selectedMemberOption: null,
         selectedGroupOption: null,
@@ -55,23 +57,23 @@ class NewBlogForm extends React.Component {
 
     handleMemberChange = (selectedMemberOption) => {
         this.setState({ selectedMemberOption });
-        this.props.dispatch(change('new_blog', 'members', selectedMemberOption));
+        this.props.dispatch(change(formName, 'members', selectedMemberOption));
     }
 
     handleGroupChange = (selectedGroupOption) => {
         this.setState({ selectedGroupOption });
-        this.props.dispatch(change('new_blog', 'groups', selectedGroupOption));
+        this.props.dispatch(change(formName, 'groups', selectedGroupOption));
     }
 
     handleTagsChange = (tags) => {
         this.setState({ tags });
-        this.props.dispatch(change('new_blog', 'tags', tags));
+        this.props.dispatch(change(formName, 'tags', tags));
     }
 
     changePrivacy = () => {
         const isPrivate = !this.state.isPrivate;
         this.setState({ isPrivate });
-        this.props.dispatch(change('new_blog', 'isPrivate', isPrivate));
+        this.props.dispatch(change(formName, 'isPrivate', isPrivate));
     }
 
     buildMemberOptions = (users) => {
@@ -166,12 +168,12 @@ function mapStateToProps(state) {
     return { users: users.data, userLoading: users.loading, groups: userGroups.data, groupLoading: userGroups.loading };
 }
 
-let NewBlog = connect(
+let Blog = connect(
     mapStateToProps
-)(NewBlogForm);
+)(BlogForm);
 
 export default reduxForm({
     // a unique name for the form
-    form: 'new_blog',
+    form: formName,
     validate
-})(NewBlog);
+})(Blog);

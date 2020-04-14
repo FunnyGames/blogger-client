@@ -9,6 +9,7 @@ import globalConstants from '../../constants/global.constants';
 import { reactionActions } from '../../actions';
 import paths from '../../constants/path.constants';
 import history from '../../helpers/history';
+import InfiniteScroll from 'react-infinite-scroller';
 import _ from 'lodash';
 
 import like from '../../images/emojis/like.svg';
@@ -111,7 +112,7 @@ class Reaction extends React.Component {
             data.seenIds = userReactions.reactions.map(c => c.reactionId);
         }
         if (filter) {
-            data.filter = filter;
+            data.filter = filter === reacts.none ? undefined : filter;
         }
         dispatch(reactionActions.getUsersReactions(blogId, data, limit));
     }
@@ -155,13 +156,12 @@ class Reaction extends React.Component {
         return tip;
     }
 
-    getReactOrUndefined = (react) => {
-        return react === reacts.none ? undefined : react;
+    changeTab = (react) => {
+        this.setState({ currentTab: react }, () => this.fetchUsers(true, react));
     }
 
-    changeTab = (react) => {
-        const fetchReact = this.getReactOrUndefined(react);
-        this.setState({ currentTab: react }, () => this.fetchUsers(true, fetchReact));
+    afterCloseModal = () => {
+        this.setState({ currentTab: reacts.none });
     }
 
     buildTabContent = (react) => {
@@ -186,14 +186,11 @@ class Reaction extends React.Component {
                 </div>
             );
         }
+        if (content.length === 0) {
+            content.push(<div key="no-reactions" className="ui segment">No Reactions</div>)
+        }
         if (userReactions.loading) {
-            content.push(<div className="ui loading segment">Loading...</div>);
-        } else if (metadata && metadata.total) {
-            if (metadata.total > globalConstants.REACTION_USER_ROWS_LIMIT) {
-                const fetchReact = this.getReactOrUndefined(react);
-                const loadMore = (<div key="react-loadMore"><p style={{ cursor: 'pointer', color: 'blue' }} onClick={() => this.fetchUsers(false, fetchReact)}>Load More...</p></div>);
-                content.push(loadMore);
-            }
+            content.push(<div key="loading-reactions" className="ui loading segment">Loading...</div>);
         }
         return <TabPanel key={react + "-tab-content"}>{content}</TabPanel>;
     }
@@ -229,8 +226,8 @@ class Reaction extends React.Component {
     }
 
     render() {
-        const { react } = this.state;
-        const { reaction, reactions, loggedIn } = this.props;
+        const { react, currentTab } = this.state;
+        const { reaction, reactions, userReactions, loggedIn } = this.props;
         if (reactions.loading) {
             return this.renderLoader();
         }
@@ -256,6 +253,8 @@ class Reaction extends React.Component {
         const activeButtons = loggedIn && (!reactions.myReaction || (reactions.myReaction && !reactions.myReaction.loading));
         const cancelButton = activeButtons ? this.cancelReaction : null;
         const openLikesButton = activeButtons ? this.openLikes : null;
+        const { metadata, loading } = userReactions;
+        const hasMore = !loading && metadata && metadata.total > globalConstants.REACTION_USER_ROWS_LIMIT;
 
         return (
             <div className="ui labeled button" tabIndex="0">
@@ -271,13 +270,24 @@ class Reaction extends React.Component {
                     </p>
                     <ReactTooltip effect="solid" html={true} />
                 </div>
-                <BasicModal openModal={this.openModal}>
+                <BasicModal openModal={this.openModal} afterClose={this.afterCloseModal}>
                     <p></p>
                     <Tabs style={{ minWidth: '350px' }}>
                         <TabList>
                             {tabsList}
                         </TabList>
-                        {tabsContentList}
+                        <div style={{ height: '350px', overflow: 'auto' }}>
+                            <InfiniteScroll
+                                pageStart={0}
+                                initialLoad={false}
+                                loadMore={() => this.fetchUsers(false, currentTab)}
+                                hasMore={hasMore}
+                                loader={null}
+                                useWindow={false}
+                            >
+                                {tabsContentList}
+                            </InfiniteScroll>
+                        </div>
                     </Tabs>
                 </BasicModal>
             </div>

@@ -1,6 +1,6 @@
 import { reactionConstants } from '../constants';
 import { reactionService } from '../services';
-import { alertActions, returnError, alertRefersh } from '../actions';
+import { returnError } from '../actions';
 
 export const reactionActions = {
     getReactions,

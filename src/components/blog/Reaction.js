@@ -142,10 +142,9 @@ class Reaction extends React.Component {
             });
             for (let i = 0; i < len; ++i) {
                 const { react, count } = totals[i];
-                const liked = reactType === react ? 0 : 0;
                 const image = this.setReactionImage(react);
-                const format = utils.nFormatter(count + liked);
-                tip += `${format} <img src="${image}" width="12px" height="12px" />`;
+                const format = utils.nFormatter(count);
+                tip += `${format} <img src="${image}" width="12px" height="12px" alt="${react}" />`;
                 if (i === half - 1 && len > 3) tip += '<br />';
                 else if (i + 1 !== len) tip += ', ';
             }
@@ -173,7 +172,7 @@ class Reaction extends React.Component {
                 </div>
             </TabPanel>;
         }
-        const { reactions, metadata } = userReactions;
+        const { reactions } = userReactions;
         let content = [];
         for (let i = 0; i < reactions.length; ++i) {
             const r = reactions[i];
@@ -182,7 +181,7 @@ class Reaction extends React.Component {
             const userUrl = userId ? utils.convertUrlPath(paths.USER, { id: userId }) : '';
             content.push(
                 <div key={reactionId} style={{ cursor: 'pointer' }} className="ui segment" onClick={e => { e.stopPropagation(); history.push(userUrl); }}>
-                    <b>{username}</b> <img src={image} width="16px" height="16px" />
+                    <b>{username}</b> <img src={image} width="16px" height="16px" alt={react} />
                 </div>
             );
         }
@@ -203,10 +202,8 @@ class Reaction extends React.Component {
         for (let i = 0; i < len; ++i) {
             const { react, count } = totals[i];
             const image = this.setReactionImage(react);
-            const liked = reactType === react ? 0 : 0;
-            const countReacts = count + liked;
-            if (countReacts > 0) {
-                const tab = <Tab key={react + "-tab"} onClick={e => this.changeTab(react)}><img src={image} width="16px" height="16px" /><b> {countReacts}</b></Tab>;
+            if (count > 0) {
+                const tab = <Tab key={react + "-tab"} onClick={e => this.changeTab(react)}><img src={image} width="16px" height="16px" alt={react} /><b> {count}</b></Tab>;
                 const tabContent = this.buildTabContent(react);
                 tabsList.push(tab);
                 tabsContentList.push(tabContent);

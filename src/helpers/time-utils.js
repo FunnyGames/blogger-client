@@ -11,6 +11,17 @@ export const formatBlogDateTime = (date) => {
 export const formatCommentDateTime = (date) => {
     return timeSince(new Date(date));
 }
+
+export const formatNotificationDateTime = (date) => {
+    date = new Date(date);
+    let seconds = Math.floor((new Date() - date) / 1000);
+    let interval = Math.floor(seconds / 86400);
+    if (interval >= 1) {
+        return formatBlogDate(date);
+    }
+    return timeSince(date);
+}
+
 function timeSince(date) {
     let seconds = Math.floor((new Date() - date) / 1000);
     let interval = Math.floor(seconds / 31536000);

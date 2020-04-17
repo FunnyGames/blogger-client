@@ -33,8 +33,26 @@ class ViewGroup extends React.Component {
         setTitle("Group");
 
         // Fetch group and the users
+        this.reloadData();
+    }
+
+    componentDidUpdate() {
+        const { group } = this.props;
+        if (group && group._id) {
+            const urlId = this.getGroupId();
+            if (group._id !== urlId) {
+                this.reloadData();
+            }
+        }
+    }
+
+    reloadData = () => {
         this.fetchGroup();
         this.fetchGroupUsers();
+    }
+
+    getGroupId = () => {
+        return this.props.match.params.id;
     }
 
     fetchGroup() {
@@ -42,18 +60,17 @@ class ViewGroup extends React.Component {
         const { dispatch } = this.props;
 
         // Fetch group info
-        const { match } = this.props;
-        const groupId = match.params.id;
+        const groupId = this.getGroupId();
 
         dispatch(groupActions.getGroup(groupId));
     }
 
     fetchGroupUsers() {
         // Get dispatch function from props
-        const { dispatch, match } = this.props;
+        const { dispatch } = this.props;
 
         // Fetch groups of user
-        const groupId = match.params.id;
+        const groupId = this.getGroupId();
         const limit = globalConstants.TABLE_LIMIT;
         const { page, name, selectedOption } = this.state;
         let { sortOrder, sortBy } = {};
@@ -96,10 +113,10 @@ class ViewGroup extends React.Component {
         let { label, value } = selectedMemberOption;
 
         // Get dispatch function from props
-        const { dispatch, match } = this.props;
+        const { dispatch } = this.props;
 
         // Add member to group
-        const groupId = match.params.id;
+        const groupId = this.getGroupId();
         dispatch(groupActions.addMember(groupId, value, label));
 
         // Remove selection
@@ -108,10 +125,10 @@ class ViewGroup extends React.Component {
 
     removeMember = (userId, username) => {
         // Get dispatch function from props
-        const { dispatch, match } = this.props;
+        const { dispatch } = this.props;
 
         // Add member to group
-        const groupId = match.params.id;
+        const groupId = this.getGroupId();
         dispatch(groupActions.removeMember(groupId, userId, username));
     }
 
@@ -180,16 +197,15 @@ class ViewGroup extends React.Component {
             this.setState({ errors });
             return;
         }
-        const { dispatch, match, group } = this.props;
-        const groupId = match.params.id;
+        const { dispatch, group } = this.props;
+        const groupId = this.getGroupId();
         if (group && group.name === groupName && group.description === groupDesc) return;
         dispatch(groupActions.updateGroup(groupId, groupName, groupDesc));
     }
 
     showDeleteConfirm = () => {
         if (this.openModal.func) {
-            const { match } = this.props;
-            const groupId = match.params.id;
+            const groupId = this.getGroupId();
             this.openModal.func(groupId);
         }
     }

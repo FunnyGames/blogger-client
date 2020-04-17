@@ -43,4 +43,11 @@ export default {
     GET_REACTIONS: api + '/reactions/:id',
     GET_USERS_REACTIONS: api + '/reactions/:id/users',
     DELETE_REACTION: api + '/reactions/:id',
+
+    // Notifications
+    GET_NOTIFICATIONS: api + '/notifications',
+    GET_SHORT_NOTIFICATIONS: api + '/notifications/short',
+    GET_TOTAL_NOTIFICATIONS: api + '/notifications/total',
+    MARK_ALL_READ_NOTIFICATIONS: api + '/notifications/readall',
+    MARK_READ_NOTIFICATION: api + '/notifications/:id/read',
 }

@@ -24,5 +24,8 @@ export default {
     BLOG: '/blogs/:id',
     BLOG_EDIT: '/blogs/:id/edit',
     ADD_BLOG: '/blogs/add',
-    USER_BLOGS: '/users/:id/blogs'
+    USER_BLOGS: '/users/:id/blogs',
+
+    // Notifications
+    NOTIFICATIONS: '/notifications'
 }

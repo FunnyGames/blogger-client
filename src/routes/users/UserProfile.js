@@ -29,8 +29,21 @@ class UserProfile extends React.Component {
         setTitle("Loading Profile");
 
         // Fetch user profile
-        const { match } = this.props;
-        const userId = match.params.id;
+        this.reloadData();
+    }
+
+    componentDidUpdate() {
+        const { blog } = this.props;
+        if (blog && blog._id) {
+            const urlId = this.getBlogId();
+            if (blog._id !== urlId) {
+                this.reloadData();
+            }
+        }
+    }
+
+    reloadData = () => {
+        const userId = this.getUserId();
         const myId = utils.getUserId();
 
         // Don't fetch if user is loading their profile
@@ -43,23 +56,26 @@ class UserProfile extends React.Component {
         this.fetchUserGroups();
     }
 
+    getUserId = () => {
+        return this.props.match.params.id;
+    }
+
     fetchUser() {
         // Get dispatch function from props
         const { dispatch } = this.props;
 
         // Fetch user profile
-        const { match } = this.props;
-        const userId = match.params.id;
+        const userId = this.getUserId();
 
         dispatch(userActions.getUserProfile(userId));
     }
 
     fetchUserGroups() {
         // Get dispatch function from props
-        const { dispatch, match } = this.props;
+        const { dispatch } = this.props;
 
         // Fetch groups of user
-        const userId = match.params.id;
+        const userId = this.getUserId();
         const limit = globalConstants.TABLE_LIMIT;
         const { page, name, selectedOption } = this.state;
         let { sortOrder, sortBy } = {};
@@ -117,8 +133,7 @@ class UserProfile extends React.Component {
         let totalRows = groups.metadata ? groups.metadata.total : 0;
         let loadingTable = groups.loading;
 
-        const { match } = this.props;
-        const userId = match.params.id;
+        const userId = this.getUserId();
         let userBlogsLink = utils.convertUrlPath(paths.USER_BLOGS, { id: userId });
         return (
             <div style={{ marginBottom: '4em', marginTop: '4em' }}>

@@ -8,11 +8,14 @@ import { blogs, blog, members } from './blog.reducer';
 import { update } from './update.reducer';
 import { comments } from './comment.reducer';
 import { reactions, userReactions } from './reaction.reducer';
+import { notifications, totalNotifications } from './notification.reducer';
 
 const rootReducer = combineReducers({
     alert,
     blogs,
     blog,
+    notifications,
+    totalNotifications,
     userReactions,
     reactions,
     comments,

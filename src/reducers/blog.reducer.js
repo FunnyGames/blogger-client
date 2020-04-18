@@ -1,4 +1,4 @@
-import { blogConstants } from '../constants';
+import { blogConstants, userConstants } from '../constants';
 
 export function blogs(state = {}, action) {
     switch (action.type) {
@@ -9,6 +9,8 @@ export function blogs(state = {}, action) {
         case blogConstants.GET_BLOGS_FAILURE:
             return { error: action.error };
 
+        case userConstants.LOGOUT_SUCCESS:
+            return {};
         default:
             return state;
     }
@@ -25,6 +27,8 @@ export function blog(state = {}, action) {
             let accessDenied = action.status === 403;
             return { error: action.error, status: action.status, notFound, accessDenied };
 
+        case userConstants.LOGOUT_SUCCESS:
+            return {};
         default:
             return state;
     }
@@ -41,6 +45,8 @@ export function members(state = {}, action) {
             let accessDenied = action.status === 403;
             return { error: action.error, status: action.status, notFound, accessDenied };
 
+        case userConstants.LOGOUT_SUCCESS:
+            return {};
         default:
             return state;
     }

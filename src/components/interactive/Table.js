@@ -60,10 +60,10 @@ class Table extends React.Component {
         }
         let key;
 
-        for (let i = minPage - 1; i < maxPage; ++i) {
-            let selected = (currentPage === i + 1 ? "pageselected" : undefined);
-            let key = i + 1 + "";
-            aPages.push(<b style={{ cursor: 'pointer' }} key={key} id={selected} className="item" onClick={() => onPageChange(i + 1)}>{i + 1}</b>);
+        for (let i = minPage; i <= maxPage; ++i) {
+            let selected = (currentPage === i ? "pageselected" : undefined);
+            let key = `p-${i}`;
+            aPages.push(<b style={{ cursor: 'pointer' }} key={key} id={selected} className="item" onClick={() => onPageChange(i)}>{i}</b>);
         }
         // No pages - so make 1 page
         if (maxPage === 0) {

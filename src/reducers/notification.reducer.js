@@ -1,4 +1,4 @@
-import { notificationConstants } from '../constants';
+import { notificationConstants, userConstants } from '../constants';
 
 export function notifications(state = {}, action) {
     switch (action.type) {
@@ -16,6 +16,9 @@ export function notifications(state = {}, action) {
         case notificationConstants.MARK_READ_ALL_SUCCESS:
             markAll(state);
             return { ...state };
+
+        case userConstants.LOGOUT_SUCCESS:
+            return {};
 
         default:
             return state;
@@ -39,6 +42,9 @@ export function shortNotifications(state = {}, action) {
             markAll(state);
             return { ...state };
 
+        case userConstants.LOGOUT_SUCCESS:
+            return {};
+
         default:
             return state;
     }
@@ -56,6 +62,9 @@ export function totalNotifications(state = {}, action) {
         case notificationConstants.GET_NOTIFICATIONS_SUCCESS:
         case notificationConstants.GET_SHORT_NOTIFICATIONS_SUCCESS:
             return { count: 0 };
+
+        case userConstants.LOGOUT_SUCCESS:
+            return {};
 
         default:
             return state;

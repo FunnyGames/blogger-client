@@ -1,6 +1,6 @@
 import { userConstants } from '../constants';
 import { userService } from '../services';
-import { alertActions, returnError } from '../actions';
+import { alertActions, returnError, notificationActions } from '../actions';
 import history from '../helpers/history';
 import paths from '../constants/path.constants';
 import globalConstants from '../constants/global.constants';
@@ -20,6 +20,10 @@ export const userActions = {
     getUserProfile,
     cancelAccount
 };
+
+function loadInitialData(dispatch) {
+    dispatch(notificationActions.getTotalNotifications());
+}
 
 function checkAvailability(username, email) {
     return dispatch => {
@@ -50,6 +54,7 @@ function login(username, password, redirect) {
                     localStorage.setItem(LOCAL_STR_TOKEN, data.jwt);
                     if (!redirect) redirect = paths.HOMEPAGE;
                     history.push(redirect);
+                    loadInitialData(dispatch);
                 },
                 error => returnError(dispatch, failure, error, true)
             );

@@ -1,4 +1,4 @@
-import { commentConstants } from '../constants';
+import { commentConstants, userConstants } from '../constants';
 
 export function comments(state = {}, action) {
     switch (action.type) {
@@ -14,6 +14,7 @@ export function comments(state = {}, action) {
         case commentConstants.GET_COMMENTS_FAILURE:
             return { error: action.error };
         case commentConstants.GET_COMMENTS_CLEAR:
+        case userConstants.LOGOUT_SUCCESS:
             return {};
 
         default:

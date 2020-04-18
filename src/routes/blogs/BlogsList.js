@@ -140,7 +140,6 @@ class BlogsList extends React.Component {
         let { user, blogs, profile, forceRefresh } = this.props;
         const { userId, my } = this.state;
         const { loggedIn } = user;
-        if (!blogs || blogs.loading || _.isEmpty(blogs)) return renderLoader();
         if (my) {
             profile = user.user;
         }

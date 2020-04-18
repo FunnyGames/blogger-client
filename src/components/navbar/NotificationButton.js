@@ -55,6 +55,15 @@ export const formatNotification = (notification) => {
             );
             msgType = 'Group Update';
             break;
+        case types.BLOG_NEW:
+            path = paths.BLOG;
+            text = (
+                <div allowclose="true">
+                    {userLink} have posted a new blog: <b>{sourceName}</b>
+                </div>
+            );
+            msgType = 'New Blog';
+            break;
         default:
     }
     if (path && sourceId) {

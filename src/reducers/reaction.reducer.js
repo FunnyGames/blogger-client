@@ -1,4 +1,4 @@
-import { reactionConstants } from '../constants';
+import { reactionConstants, userConstants } from '../constants';
 
 export function reactions(state = {}, action) {
     switch (action.type) {
@@ -23,6 +23,9 @@ export function reactions(state = {}, action) {
         case reactionConstants.DELETE_REACTION_FAILURE:
             return { ...state, myReaction: { error: action.error } };
 
+        case userConstants.LOGOUT_SUCCESS:
+            return {};
+
         default:
             return state;
     }
@@ -43,6 +46,9 @@ export function userReactions(state = {}, action) {
         case reactionConstants.GET_REACTIONS_USERS_FAILURE:
             return { error: action.error };
         case reactionConstants.GET_REACTIONS_CLEAR:
+            return {};
+
+        case userConstants.LOGOUT_SUCCESS:
             return {};
 
         default:

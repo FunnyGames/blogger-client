@@ -27,6 +27,7 @@ import { UserBlogs } from './routes/blogs/UserBlogList';
 
 import { GroupsList } from './routes/groups/GroupsList';
 import { AddGroup } from './routes/groups/AddGroup';
+import { ViewGroup } from './routes/groups/ViewGroup';
 
 import { Login } from './routes/users/Login';
 import { Register } from './routes/users/Register';
@@ -34,7 +35,7 @@ import { Profile } from './routes/users/Profile';
 import { EditPassword } from './routes/users/EditPassword';
 import { UsersList } from './routes/users/UsersList';
 import { UserProfile } from './routes/users/UserProfile';
-import { ViewGroup } from './routes/groups/ViewGroup';
+import { Notifications } from './routes/users/Notifications';
 
 Modal.setAppElement('#root');
 
@@ -89,6 +90,7 @@ class App extends React.Component {
         list.push(<PrivateRoute key="Profile" path={paths.PROFILE} component={Profile} />);
         list.push(<PrivateRoute key="User" exact path={paths.USER} component={UserProfile} />);
         list.push(<PrivateRoute key="UsersList" exact path={paths.USERS} component={UsersList} />);
+        list.push(<PrivateRoute key="Notifications" exact path={paths.NOTIFICATIONS} component={Notifications} />);
 
         list.push(<PrivateRoute key="AddBlog" exact path={paths.ADD_BLOG} component={AddBlog} />);
         list.push(<PrivateRoute key="EditBlog" exact path={paths.BLOG_EDIT} component={EditBlog} />);

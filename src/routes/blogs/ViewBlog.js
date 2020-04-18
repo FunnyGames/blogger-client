@@ -130,7 +130,7 @@ class ViewBlog extends React.Component {
 
     buildTags = (tags) => {
         let linkTo = tag => paths.HOMEPAGE + '?tags=' + tag;
-        let title = tag => tag;
+        let title = tag => '#' + tag;
         return this.buildList(tags, linkTo, title);
     }
 

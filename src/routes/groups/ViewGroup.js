@@ -154,7 +154,9 @@ class ViewGroup extends React.Component {
         return (
             <tr key={id} style={{ cursor: 'pointer' }} onClick={() => history.push(path)}>
                 <td>{title}{ownerDiv}</td>
-                {owner && !groupOwner ? <td><button className="ui right floated red button" onClick={e => { e.stopPropagation(); this.removeMember(id, title); }}>- Remove</button></td> : null}
+                {owner && !groupOwner ?
+                    <td><button className="ui right floated red button" onClick={e => { e.stopPropagation(); this.removeMember(id, title); }}>- Remove</button></td>
+                    : <td />}
             </tr>
         );
     }

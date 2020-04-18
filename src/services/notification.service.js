@@ -30,8 +30,11 @@ function getTotalNotifications() {
     return http.get(url.GET_TOTAL_NOTIFICATIONS);
 }
 
-function markReadAll() {
-    return http.get(url.MARK_ALL_READ_NOTIFICATIONS);
+function markReadAll(filter) {
+    const params = {
+        filter
+    };
+    return http.get(url.MARK_ALL_READ_NOTIFICATIONS, params);
 }
 
 function markReadById(id) {

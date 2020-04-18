@@ -33,10 +33,10 @@ class UserProfile extends React.Component {
     }
 
     componentDidUpdate() {
-        const { blog } = this.props;
-        if (blog && blog._id) {
-            const urlId = this.getBlogId();
-            if (blog._id !== urlId) {
+        const { profile } = this.props;
+        if (profile && profile._id) {
+            const urlId = this.getUserId();
+            if (profile._id !== urlId) {
                 this.reloadData();
             }
         }

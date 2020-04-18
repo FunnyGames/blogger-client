@@ -12,6 +12,57 @@ import types from '../../constants/notification-types.contants';
 import '../../css/notification.css';
 import { notificationActions } from '../../actions';
 
+export const formatNotification = (notification) => {
+    const { kind, fromUserId, fromUsername, sourceName, content, sourceId } = notification;
+    let toLink = paths.HOMEPAGE;
+    let path = null;
+    let msgType = '';
+    const userUrl = fromUserId ? utils.convertUrlPath(paths.USER, { id: fromUserId }) : '';
+    const userLink = <div className="notification-user-link" onClick={e => { e.stopPropagation(); history.push(userUrl); }} allowclose="true">{fromUsername}</div>;
+    let text;
+    let image;
+    switch (kind) {
+        case types.COMMENT:
+            path = paths.BLOG;
+            text = (
+                <div allowclose="true">
+                    {userLink} have posted a comment in your post <b>{sourceName}</b>:
+                    <p>
+                        <i>
+                            {content}
+                        </i>
+                    </p>
+                </div>
+            );
+            msgType = 'New Comment';
+            break;
+        case types.REACT:
+            path = paths.BLOG;
+            image = setReactionImage(content);
+            text = (
+                <div allowclose="true">
+                    {userLink} reacted to your post <b>{sourceName}</b> with {<img src={image} width="16px" height="16px" alt={content} />}
+                </div>
+            );
+            msgType = 'New Reaction';
+            break;
+        case types.GROUP_ADD:
+            path = paths.GROUP;
+            text = (
+                <div allowclose="true">
+                    {userLink} added you to a group <b>{sourceName}</b>
+                </div>
+            );
+            msgType = 'Group Update';
+            break;
+        default:
+    }
+    if (path && sourceId) {
+        toLink = utils.convertUrlPath(path, { id: sourceId });
+    }
+    return { text, toLink, msgType };
+}
+
 class NotificationButton extends React.Component {
     hasUnread = false;
 
@@ -34,7 +85,7 @@ class NotificationButton extends React.Component {
     }
 
     onClickViewAllNotifications = (e) => {
-        console.log('view all notification');
+        history.push(paths.NOTIFICATIONS);
     }
 
     onClickMarkAsRead = (id) => {
@@ -49,74 +100,23 @@ class NotificationButton extends React.Component {
         this.onClickMarkAsRead(id);
     }
 
-    formatNotification = (notification) => {
-        const { kind, fromUserId, fromUsername, sourceName, content, sourceId } = notification;
-        let toLink = paths.HOMEPAGE;
-        let path = null;
-        let msgType = '';
-        const userUrl = fromUserId ? utils.convertUrlPath(paths.USER, { id: fromUserId }) : '';
-        const userLink = <div className="notification-user-link" onClick={e => { e.stopPropagation(); history.push(userUrl); }}>{fromUsername}</div>;
-        let text;
-        let image;
-        switch (kind) {
-            case types.COMMENT:
-                path = paths.BLOG;
-                text = (
-                    <div>
-                        {userLink} have posted a comment in your post <b>{sourceName}</b>:
-                        <p>
-                            <i>
-                                {content}
-                            </i>
-                        </p>
-                    </div>
-                );
-                msgType = 'New Comment';
-                break;
-            case types.REACT:
-                path = paths.BLOG;
-                image = setReactionImage(content);
-                text = (
-                    <div>
-                        {userLink} reacted to your post <b>{sourceName}</b> with {<img src={image} width="16px" height="16px" alt={content} />}
-                    </div>
-                );
-                msgType = 'New Reaction';
-                break;
-            case types.GROUP_ADD:
-                path = paths.GROUP;
-                text = (
-                    <div>
-                        {userLink} added you to a group <b>{sourceName}</b>
-                    </div>
-                );
-                msgType = 'Group Update';
-                break;
-            default:
-        }
-        if (path && sourceId) {
-            toLink = utils.convertUrlPath(path, { id: sourceId });
-        }
-        return { text, toLink, msgType };
-    }
-
     buildNotificationItem = (notification, hasMore) => {
         const { _id, read, createDate } = notification;
-        const date = timeUtils.formatCommentDateTime(createDate);
-        const { text, toLink, msgType } = this.formatNotification(notification);
+        const date = timeUtils.formatNotificationDateTime(createDate);
+        const { text, toLink, msgType } = formatNotification(notification);
         const itemClass = `notification-item ${!read && 'read'}`;
         return (
-            <div key={_id} className={itemClass} onClick={() => this.onNotificationClick(toLink, _id)}>
-                <div className="event">
-                    <div className="content">
-                        <div className="noitifcation-header" style={{ float: 'right' }}>
+            <div key={_id} className={itemClass} onClick={() => this.onNotificationClick(toLink, _id)} allowclose="true">
+                <div className="event" allowclose="true">
+                    <div className="content" allowclose="true">
+                        <div className="notification-header" style={{ float: 'right' }} allowclose="true">
                             {date}
                         </div>
-                        <div className="noitifcation-header">{msgType}</div>
+                        <div className="notification-header" allowclose="true">{msgType}</div>
                         <div className="">
                             {!read && (
                                 <b className="not-mark" onClick={e => { e.stopPropagation(); this.onClickMarkAsRead(_id); }}>
-                                    <a className="ui blue empty circular label" style={{ marginRight: '5px' }} />
+                                    <b className="ui blue empty circular label" style={{ marginRight: '5px' }} />
                                     <i className="icon check"></i>Mark as Read
                                 </b>
                             )}
@@ -163,7 +163,7 @@ class NotificationButton extends React.Component {
         return (
             <div className="ui segment" style={{ width: '400px', marginLeft: '-175px' }}>
                 Notifications
-                <Link to={settingsLink} className="notifications-settings">
+                <Link to={settingsLink} className="notifications-settings" allowclose="true">
                     <i className="icon cog"></i>Settings
                 </Link>
                 <b className={markAllClass} onClick={this.hasUnread ? this.onClickMarkAllAsRead : null}>
@@ -174,7 +174,7 @@ class NotificationButton extends React.Component {
                     {notificationsList}
                 </div>
                 <div className="ui divider"></div>
-                <center className="view-all-notifications" onClick={this.onClickViewAllNotifications}>View all notifications</center>
+                <center className="view-all-notifications" onClick={this.onClickViewAllNotifications} allowclose="true">View all notifications</center>
             </div>
         );
     }
@@ -199,8 +199,8 @@ class NotificationButton extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    const { notifications, totalNotifications } = state;
-    return { notifications, totalNotifications };
+    const { shortNotifications, totalNotifications } = state;
+    return { notifications: shortNotifications, totalNotifications };
 };
 
 export default connect(

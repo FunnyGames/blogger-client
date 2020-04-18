@@ -18,9 +18,23 @@ class Dropdown extends Component {
         });
     }
 
+    isAllowToClose = (event) => {
+        const attributes = event.target.attributes;
+        if (attributes) {
+            const length = event.target.attributes.length;
+            for (let i = 0; i < length; ++i) {
+                const a = attributes[i];
+                if (a.nodeName === 'allowclose')
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
     closeMenu = (event) => {
         if (!this.dropdownMenu) return;
-        if (!this.dropdownMenu.contains(event.target)) {
+        if (this.isAllowToClose(event) || !this.dropdownMenu.contains(event.target)) {
             this.setState({ showMenu: false }, () => {
                 document.removeEventListener('click', this.closeMenu);
             });

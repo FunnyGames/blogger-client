@@ -14,9 +14,9 @@ import globalConstants from '../../constants/global.constants';
 import { groupOptions } from '../../constants/table.options';
 import Modal from '../../components/interactive/Modal';
 import BasicModal from '../../components/interactive/BasicModal';
+import CancelAccountForm from '../../forms/users/CancelAccountForm';
 
 import '../../css/profile.css';
-import CancelAccountForm from '../../forms/users/CancelAccountForm';
 
 class Profile extends React.Component {
     state = {

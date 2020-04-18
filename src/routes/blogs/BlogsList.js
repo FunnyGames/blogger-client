@@ -102,7 +102,7 @@ class BlogsList extends React.Component {
                     <td style={{ textAlign: 'right', width: '1%' }}>
                         <button className="ui red button" onClick={e => {e.stopPropagation(); this.showDeleteConfirm(id);}}>Delete</button>
                     </td>
-                    : null}
+                    : <td/>}
             </tr>
         );
     }

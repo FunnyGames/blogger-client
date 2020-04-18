@@ -64,11 +64,11 @@ function getTotalNotifications() {
     function failure(error) { return { type: notificationConstants.GET_TOTAL_NOTIFICATIONS_FAILURE, error } }
 }
 
-function markReadAll() {
+function markReadAll(filter) {
     return dispatch => {
         dispatch(request());
 
-        notificationService.markReadAll()
+        notificationService.markReadAll(filter)
             .then(
                 data => {
                     dispatch(success(data));

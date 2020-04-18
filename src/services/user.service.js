@@ -12,7 +12,10 @@ export const userService = {
     getUserGroups,
     getUsers,
     getUserProfile,
-    cancelAccount
+    cancelAccount,
+    subscribe,
+    unsubscribe,
+    subscriptions
 };
 
 function login(username, password) {
@@ -79,4 +82,25 @@ function cancelAccount(username, password) {
         username, password
     };
     return http.put(url.CANCEL_ACCOUNT, data);
+}
+
+function subscribe(userId) {
+    let urlx = utils.convertUrlPath(url.SUBSCRIBE, { id: userId });
+    return http.get(urlx);
+}
+
+function unsubscribe(userId) {
+    let urlx = utils.convertUrlPath(url.UNUBSCRIBE, { id: userId });
+    return http.get(urlx);
+}
+
+function subscriptions(page, limit, name, sortBy, sortOrder) {
+    let params = {
+        page,
+        limit,
+        name,
+        sortBy,
+        sortOrder
+    };
+    return http.get(url.SUBSCRIPTIONS, params);
 }

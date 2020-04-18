@@ -99,6 +99,16 @@ export function profile(state = {}, action) {
             let notFound = action.status === 404 || action.status === 400;
             return { error: action.error, status: action.status, notFound };
 
+        case userConstants.SUBSCRIBE_SUCCESS:
+            return { ...state, subscribed: true, subLoading: undefined };
+
+        case userConstants.UNSUBSCRIBE_SUCCESS:
+            return { ...state, subscribed: false, subLoading: undefined };
+
+        case userConstants.SUBSCRIBE_REQUEST:
+        case userConstants.UNSUBSCRIBE_REQUEST:
+            return { ...state, subLoading: true };
+
         case userConstants.LOGOUT_SUCCESS:
             return {};
         default:

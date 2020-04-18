@@ -18,7 +18,10 @@ export const userActions = {
     getUserGroups,
     getUsers,
     getUserProfile,
-    cancelAccount
+    cancelAccount,
+    subscribe,
+    unsubscribe,
+    subscriptions
 };
 
 function loadInitialData(dispatch) {
@@ -229,4 +232,58 @@ function cancelAccount(username, password) {
     function request() { return { type: userConstants.CANCEL_ACCOUNT_REQUEST } }
     function success(payload) { return { type: userConstants.CANCEL_ACCOUNT_SUCCESS, payload } }
     function failure(error) { return { type: userConstants.CANCEL_ACCOUNT_FAILURE, error } }
+}
+
+function subscribe(userId) {
+    return dispatch => {
+        dispatch(request());
+
+        userService.subscribe(userId)
+            .then(
+                data => {
+                    dispatch(success(data));
+                },
+                error => returnError(dispatch, failure, error, true)
+            );
+    };
+
+    function request() { return { type: userConstants.SUBSCRIBE_REQUEST } }
+    function success(payload) { return { type: userConstants.SUBSCRIBE_SUCCESS, payload } }
+    function failure(error) { return { type: userConstants.SUBSCRIBE_FAILURE, error } }
+}
+
+function unsubscribe(userId) {
+    return dispatch => {
+        dispatch(request());
+
+        userService.unsubscribe(userId)
+            .then(
+                data => {
+                    dispatch(success(data));
+                },
+                error => returnError(dispatch, failure, error, true)
+            );
+    };
+
+    function request() { return { type: userConstants.UNSUBSCRIBE_REQUEST } }
+    function success(payload) { return { type: userConstants.UNSUBSCRIBE_SUCCESS, payload } }
+    function failure(error) { return { type: userConstants.UNSUBSCRIBE_FAILURE, error } }
+}
+
+function subscriptions(page, limit, name, sortBy, sortOrder) {
+    return dispatch => {
+        dispatch(request());
+
+        userService.subscriptions(page, limit, name, sortBy, sortOrder)
+            .then(
+                data => {
+                    dispatch(success(data));
+                },
+                error => returnError(dispatch, failure, error, true)
+            );
+    };
+
+    function request() { return { type: userConstants.GET_SUBSCRIPTIONS_REQUEST } }
+    function success(payload) { return { type: userConstants.GET_SUBSCRIPTIONS_SUCCESS, payload } }
+    function failure(error) { return { type: userConstants.GET_SUBSCRIPTIONS_FAILURE, error } }
 }

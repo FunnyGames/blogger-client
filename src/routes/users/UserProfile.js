@@ -95,6 +95,19 @@ class UserProfile extends React.Component {
         this.setState({ page }, this.fetchUserGroups);
     }
 
+    onSubscribeClick = () => {
+        const { dispatch, profile } = this.props;
+        if (profile.subLoading) return;
+
+        const userId = this.getUserId();
+
+        if (profile.subscribed) {
+            dispatch(userActions.unsubscribe(userId));
+        } else {
+            dispatch(userActions.subscribe(userId));
+        }
+    }
+
     handleSelectChange = selectedOption => {
         this.setState({ selectedOption }, this.fetchUserGroups);
     };
@@ -125,9 +138,7 @@ class UserProfile extends React.Component {
         if (profile.notFound) return <NotFound title="User not found" />;
         if (profile.error) return <ErrorConnect />;
 
-        const username = profile.username;
-        const firstName = profile.firstName;
-        const lastName = profile.lastName;
+        const { username, firstName, lastName, subscribed, subLoading } = profile;
 
         let tableRows = this.createTableRows(groups.data);
         let totalRows = groups.metadata ? groups.metadata.total : 0;
@@ -135,6 +146,9 @@ class UserProfile extends React.Component {
 
         const userId = this.getUserId();
         let userBlogsLink = utils.convertUrlPath(paths.USER_BLOGS, { id: userId });
+
+        const subText = subscribed ? 'SUBSCRIBED' : 'SUBSCRIBE';
+        const subClass = `ui ${subscribed ? '' : 'blue'} ${subLoading ? 'loading' : ''} right floated button`;
         return (
             <div style={{ marginBottom: '4em', marginTop: '4em' }}>
                 <div className="ui header">
@@ -144,6 +158,7 @@ class UserProfile extends React.Component {
                 </div>
                 <div className="ui container">
                     <Link className="ui blue right floated button" to={userBlogsLink} >View Blogs</Link>
+                    <button className={subClass} onClick={this.onSubscribeClick} >{subText}</button>
                     <div className="six wide column">
                         <div>First name: {firstName}</div>
                         <div>Last name: {lastName}</div>

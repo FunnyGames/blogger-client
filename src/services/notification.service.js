@@ -10,7 +10,7 @@ export const notificationService = {
     markReadById
 };
 
-function getNotifications(page, limit, filter, sortBy, sortOrder) {
+function getNotifications({ page, limit, filter, sortBy, sortOrder }) {
     let params = {
         page,
         limit,

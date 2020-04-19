@@ -1,6 +1,6 @@
 import { notificationConstants } from '../constants';
 import { notificationService } from '../services';
-import { returnError } from '../actions';
+import { perform } from './base.actions';
 
 export const notificationActions = {
     getNotifications,
@@ -11,91 +11,52 @@ export const notificationActions = {
 };
 
 function getNotifications(page, limit, filter, sortBy, sortOrder) {
-    return dispatch => {
-        dispatch(request());
-
-        notificationService.getNotifications(page, limit, filter, sortBy, sortOrder)
-            .then(
-                data => {
-                    dispatch(success(data));
-                },
-                error => returnError(dispatch, failure, error, true)
-            );
+    const datax = { page, limit, filter, sortBy, sortOrder };
+    const actions = {
+        request: notificationConstants.GET_NOTIFICATIONS_REQUEST,
+        success: notificationConstants.GET_NOTIFICATIONS_SUCCESS,
+        failure: notificationConstants.GET_NOTIFICATIONS_FAILURE
     };
-
-    function request() { return { type: notificationConstants.GET_NOTIFICATIONS_REQUEST } }
-    function success(payload) { return { type: notificationConstants.GET_NOTIFICATIONS_SUCCESS, payload } }
-    function failure(error) { return { type: notificationConstants.GET_NOTIFICATIONS_FAILURE, error } }
+    return perform(notificationService.getNotifications, datax, actions);
 }
 
 function getShortNotifications() {
-    return dispatch => {
-        dispatch(request());
-
-        notificationService.getShortNotifications()
-            .then(
-                data => {
-                    dispatch(success(data));
-                },
-                error => returnError(dispatch, failure, error, true)
-            );
+    const datax = null;
+    const actions = {
+        request: notificationConstants.GET_SHORT_NOTIFICATIONS_REQUEST,
+        success: notificationConstants.GET_SHORT_NOTIFICATIONS_SUCCESS,
+        failure: notificationConstants.GET_SHORT_NOTIFICATIONS_FAILURE
     };
-
-    function request() { return { type: notificationConstants.GET_SHORT_NOTIFICATIONS_REQUEST } }
-    function success(payload) { return { type: notificationConstants.GET_SHORT_NOTIFICATIONS_SUCCESS, payload } }
-    function failure(error) { return { type: notificationConstants.GET_SHORT_NOTIFICATIONS_FAILURE, error } }
+    return perform(notificationService.getShortNotifications, datax, actions);
 }
 
 function getTotalNotifications() {
-    return dispatch => {
-        dispatch(request());
-
-        notificationService.getTotalNotifications()
-            .then(
-                data => {
-                    dispatch(success(data));
-                },
-                error => returnError(dispatch, failure, error, true)
-            );
+    const datax = null;
+    const actions = {
+        request: notificationConstants.GET_TOTAL_NOTIFICATIONS_REQUEST,
+        success: notificationConstants.GET_TOTAL_NOTIFICATIONS_SUCCESS,
+        failure: notificationConstants.GET_TOTAL_NOTIFICATIONS_FAILURE
     };
-
-    function request() { return { type: notificationConstants.GET_TOTAL_NOTIFICATIONS_REQUEST } }
-    function success(payload) { return { type: notificationConstants.GET_TOTAL_NOTIFICATIONS_SUCCESS, payload } }
-    function failure(error) { return { type: notificationConstants.GET_TOTAL_NOTIFICATIONS_FAILURE, error } }
+    return perform(notificationService.getTotalNotifications, datax, actions);
 }
 
 function markReadAll(filter) {
-    return dispatch => {
-        dispatch(request());
-
-        notificationService.markReadAll(filter)
-            .then(
-                data => {
-                    dispatch(success(data));
-                },
-                error => returnError(dispatch, failure, error, true)
-            );
+    const datax = filter;
+    const actions = {
+        request: notificationConstants.MARK_READ_ALL_REQUEST,
+        success: notificationConstants.MARK_READ_ALL_SUCCESS,
+        failure: notificationConstants.MARK_READ_ALL_FAILURE
     };
-
-    function request() { return { type: notificationConstants.MARK_READ_ALL_REQUEST } }
-    function success(payload) { return { type: notificationConstants.MARK_READ_ALL_SUCCESS, payload } }
-    function failure(error) { return { type: notificationConstants.MARK_READ_ALL_FAILURE, error } }
+    return perform(notificationService.markReadAll, datax, actions);
 }
 
 function markReadById(id) {
-    return dispatch => {
-        dispatch(request());
-
-        notificationService.markReadById(id)
-            .then(
-                data => {
-                    dispatch(success(data));
-                },
-                error => returnError(dispatch, failure, error, true)
-            );
+    const datax = id;
+    const actions = {
+        request: notificationConstants.MARK_READ_REQUEST,
+        success: notificationConstants.MARK_READ_SUCCESS,
+        failure: notificationConstants.MARK_READ_FAILURE
     };
-
-    function request() { return { type: notificationConstants.MARK_READ_REQUEST } }
-    function success(payload) { return { type: notificationConstants.MARK_READ_SUCCESS, payload, id } }
-    function failure(error) { return { type: notificationConstants.MARK_READ_FAILURE, error } }
+    const other = { success: id };
+    return perform(notificationService.markReadById, datax, actions, null, null, other);
 }

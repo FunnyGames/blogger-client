@@ -11,7 +11,7 @@ export const blogService = {
     deleteBlog
 };
 
-function getBlogs(page, limit, name, sortBy, sortOrder, query) {
+function getBlogs({ page, limit, name, sortBy, sortOrder, query }) {
     let params = {
         page,
         limit,
@@ -38,7 +38,7 @@ function getMembers(blogId) {
     return http.get(urlx);
 }
 
-function updateBlog(blogId, data) {
+function updateBlog({ blogId, data }) {
     let urlx = utils.convertUrlPath(url.UPDATE_BLOG, { id: blogId });
     return http.put(urlx, data);
 }

@@ -9,7 +9,7 @@ export const commentService = {
     deleteComment
 };
 
-function getComments(blogId, limit, seenIds) {
+function getComments({ blogId, limit, seenIds }) {
     let params = {
         limit
     };
@@ -20,12 +20,12 @@ function getComments(blogId, limit, seenIds) {
     return http.put(urlx, data, params);
 }
 
-function createComment(blogId, data) {
+function createComment({ blogId, data }) {
     let urlx = utils.convertUrlPath(url.CREATE_COMMENT, { id: blogId });
     return http.post(urlx, data);
 }
 
-function updateComment(commentId, data) {
+function updateComment({ commentId, data }) {
     let urlx = utils.convertUrlPath(url.UPDATE_COMMENT, { id: commentId });
     return http.put(urlx, data);
 }

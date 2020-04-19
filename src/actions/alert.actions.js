@@ -51,7 +51,7 @@ function isIn(alert, actions) {
     return alert && alert.forceRefresh && alert.action && actions && actions.length > 0 && actions.includes(alert.action);
 }
 
-export function returnError(dispatch, failure, error, includeAlert) {
+export function returnError(dispatch, failure, error, includeAlert, other) {
     let errorMsg;
     let logoutUser = false;
     if (!error.response) errorMsg = globalConstants.CONNECTION_ERROR;
@@ -67,5 +67,5 @@ export function returnError(dispatch, failure, error, includeAlert) {
     if (includeAlert && !error.cancel && !logoutUser) dispatch(alertActions.error(errorMsg));
 
     let status = error.response ? error.response.status : 0;
-    return dispatch(failure(errorMsg, status));
+    return dispatch(failure(errorMsg, status, other));
 }

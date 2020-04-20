@@ -9,12 +9,12 @@ const dev = {
 // Production config
 const prod = {
     api: {
-        serverAddress: 'http://localhost:5000'
+        serverAddress: 'http://ec2-18-184-213-254.eu-central-1.compute.amazonaws.com'
     }
 };
 
 // Set config based on OS environment variable
-const config = process.env.REACT_APP_STAGE === 'production' ? prod : dev;
+const config = process.env.NODE_ENV === 'production' ? prod : dev;
 
 export default {
     ...config

@@ -14,7 +14,7 @@ const prod = {
 };
 
 // Set config based on OS environment variable
-const config = process.env.REACT_APP_STAGE === 'production' ? prod : dev;
+const config = process.env.NODE_ENV === 'production' ? prod : dev;
 
 export default {
     ...config

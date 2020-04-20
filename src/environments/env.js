@@ -9,7 +9,7 @@ const dev = {
 // Production config
 const prod = {
     api: {
-        serverAddress: 'http://localhost:5000'
+        serverAddress: 'ec2-18-184-213-254.eu-central-1.compute.amazonaws.com'
     }
 };
 

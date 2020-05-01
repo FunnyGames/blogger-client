@@ -35,7 +35,6 @@ export function shortNotifications(state = {}, action) {
             return { error: action.error };
 
         case notificationConstants.MARK_READ_SUCCESS:
-            console.log(action);
             markById(state, action.other);
             return { ...state };
 

@@ -8,9 +8,9 @@ import history from '../../helpers/history';
 import Dropdown from '../interactive/Dropdown';
 import { setReactionImage } from '../blog/Reaction';
 import types from '../../constants/notification-types.contants';
+import { notificationActions } from '../../actions';
 
 import '../../css/notification.css';
-import { notificationActions } from '../../actions';
 
 export const formatNotification = (notification) => {
     const { kind, fromUserId, fromUsername, sourceName, content, sourceId } = notification;

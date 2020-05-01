@@ -9,11 +9,15 @@ import { update } from './update.reducer';
 import { comments } from './comment.reducer';
 import { reactions, userReactions } from './reaction.reducer';
 import { notifications, shortNotifications, totalNotifications } from './notification.reducer';
+import { chats, totalMessages, messages } from './chat.reducer';
 
 const rootReducer = combineReducers({
     alert,
     blogs,
     blog,
+    chats,
+    totalMessages,
+    messages,
     notifications,
     shortNotifications,
     totalNotifications,

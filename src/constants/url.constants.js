@@ -55,4 +55,15 @@ export default {
     GET_TOTAL_NOTIFICATIONS: api + '/notifications/total',
     MARK_ALL_READ_NOTIFICATIONS: api + '/notifications/readall',
     MARK_READ_NOTIFICATION: api + '/notifications/:id/read',
+
+    // Chat
+    CREATE_CHAT: api + '/chat',
+    CREATE_MESSAGE: api + '/chat/:id',
+    GET_MESSAGES: api + '/chat/:id/get',
+    GET_CHAT_LIST: api + '/chat',
+    GET_TOTAL_MESSAGES: api + '/chat/total',
+    GET_BLOCKED_USERS: api + '/chat/blocked',
+    CHAT_BLOCK_USER: api + '/chat/:id/block',
+    CHAT_UNBLOCK_USER: api + '/chat/:id/unblock',
+    DELETE_MESSAGE: api + '/chat/:id/delete/:id2',
 }

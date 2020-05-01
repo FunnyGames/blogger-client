@@ -27,5 +27,9 @@ export default {
     USER_BLOGS: '/users/:id/blogs',
 
     // Notifications
-    NOTIFICATIONS: '/notifications'
+    NOTIFICATIONS: '/notifications',
+
+    // Chat
+    CHAT: '/chat',
+    VIEW_CHAT: '/chat/:id',
 }

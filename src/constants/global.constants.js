@@ -40,4 +40,6 @@ export default {
     // Comment
     COMMENT_MIN_LENGTH: 5,
     COMMENT_MAX_LENGTH: 1000,
+    // Chat
+    MESSAGES_LIMIT: 20,
 };

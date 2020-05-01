@@ -4,6 +4,7 @@ import { alertActions, returnError, notificationActions } from '../actions';
 import history from '../helpers/history';
 import paths from '../constants/path.constants';
 import globalConstants from '../constants/global.constants';
+import { chatActions } from './chat.actions';
 
 const { LOCAL_STR_TOKEN } = globalConstants;
 
@@ -26,6 +27,7 @@ export const userActions = {
 
 function loadInitialData(dispatch) {
     dispatch(notificationActions.getTotalNotifications());
+    dispatch(chatActions.getTotalMessages());
 }
 
 function checkAvailability(username, email) {

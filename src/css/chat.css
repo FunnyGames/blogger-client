@@ -1,0 +1,85 @@
+.chat-username {
+    font-weight: bold;
+}
+
+.chat-new-messages-count {
+    padding: 2px 5px;
+    border-radius: 100%;
+    background-color:#21ba45;
+    color: white;
+    font-size: small;
+}
+
+.chat-last-message {
+    color: grey;
+    font-size: small;
+}
+
+.chat-last-update {
+    float: right;
+    color: grey;
+    font-size: small;
+}
+
+.user_info {
+    cursor: pointer;
+}
+
+.user_info.selected {
+    background-color: #f0f0ff;
+}
+
+.total-messages {
+    font-size: small;
+    color: grey;
+}
+
+.msg_cotainer {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 10px;
+    border-radius: 25px;
+    background-color: #82ccdd;
+    padding: 10px;
+    position: relative;
+}
+
+.msg_cotainer_send {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: 10px;
+    border-radius: 25px;
+    background-color: #78e08f;
+    padding: 10px;
+    position: relative;
+}
+
+.msg_time {
+    color: rgba(128, 128, 128);
+    font-size: smaller;
+    padding: 1em;
+}
+
+.msg_time_send {
+    color: rgba(128, 128, 128);
+    font-size: smaller;
+    padding: 1em;
+}
+
+.from_msg_me {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.25em;
+}
+
+.from_msg_other {
+    display: flex;
+    justify-content: flex-start;
+    padding: 0.25em;
+}
+
+.chat-go-down {
+  position: absolute;
+  bottom: 100px;
+  left: 30px;
+}

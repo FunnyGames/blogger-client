@@ -36,6 +36,7 @@ import { EditPassword } from './routes/users/EditPassword';
 import { UsersList } from './routes/users/UsersList';
 import { UserProfile } from './routes/users/UserProfile';
 import { Notifications } from './routes/users/Notifications';
+import { Chat } from './routes/chat/Chat';
 
 Modal.setAppElement('#root');
 
@@ -91,6 +92,9 @@ class App extends React.Component {
         list.push(<PrivateRoute key="User" exact path={paths.USER} component={UserProfile} />);
         list.push(<PrivateRoute key="UsersList" exact path={paths.USERS} component={UsersList} />);
         list.push(<PrivateRoute key="Notifications" exact path={paths.NOTIFICATIONS} component={Notifications} />);
+
+        list.push(<PrivateRoute key="Chat" exact path={paths.CHAT} component={Chat} />);
+        list.push(<PrivateRoute key="Chat" exact path={paths.VIEW_CHAT} component={Chat} />);
 
         list.push(<PrivateRoute key="AddBlog" exact path={paths.ADD_BLOG} component={AddBlog} />);
         list.push(<PrivateRoute key="EditBlog" exact path={paths.BLOG_EDIT} component={EditBlog} />);

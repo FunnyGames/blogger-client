@@ -26,11 +26,8 @@ export function user(state = initialState, action) {
                 error: action.error
             };
 
-        case userConstants.LOGOUT_REQUEST:
-            return {};
         case userConstants.CANCEL_ACCOUNT_SUCCESS:
         case userConstants.LOGOUT_SUCCESS:
-        case userConstants.LOGOUT_FAILURE:
             return { loggedIn: false, user: {} };
 
         case userConstants.GET_PROFILE_REQUEST:
@@ -68,6 +65,9 @@ export function userAvailable(state = {}, action) {
             if (action.error.data && action.error.data.email) data.error.email = true;
             else if (action.error.data && action.error.data.username) data.error.username = true;
             return data;
+
+        case userConstants.LOGOUT_SUCCESS:
+            return {};
         default:
             return state;
     }
@@ -82,6 +82,8 @@ export function users(state = {}, action) {
         case userConstants.GET_USERS_FAILURE:
             return { error: action.error };
 
+        case userConstants.LOGOUT_SUCCESS:
+            return {};
         default:
             return state;
     }
@@ -97,6 +99,18 @@ export function profile(state = {}, action) {
             let notFound = action.status === 404 || action.status === 400;
             return { error: action.error, status: action.status, notFound };
 
+        case userConstants.SUBSCRIBE_SUCCESS:
+            return { ...state, subscribed: true, subLoading: undefined };
+
+        case userConstants.UNSUBSCRIBE_SUCCESS:
+            return { ...state, subscribed: false, subLoading: undefined };
+
+        case userConstants.SUBSCRIBE_REQUEST:
+        case userConstants.UNSUBSCRIBE_REQUEST:
+            return { ...state, subLoading: true };
+
+        case userConstants.LOGOUT_SUCCESS:
+            return {};
         default:
             return state;
     }
@@ -111,6 +125,24 @@ export function userGroups(state = {}, action) {
         case userConstants.GET_GROUPS_FAILURE:
             return { error: action.error };
 
+        case userConstants.LOGOUT_SUCCESS:
+            return {};
+        default:
+            return state;
+    }
+}
+
+export function subscriptions(state = {}, action) {
+    switch (action.type) {
+        case userConstants.GET_SUBSCRIPTIONS_REQUEST:
+            return { loading: true };
+        case userConstants.GET_SUBSCRIPTIONS_SUCCESS:
+            return { data: action.payload.users, metadata: action.payload.metadata };
+        case userConstants.GET_SUBSCRIPTIONS_FAILURE:
+            return { error: action.error };
+
+        case userConstants.LOGOUT_SUCCESS:
+            return {};
         default:
             return state;
     }

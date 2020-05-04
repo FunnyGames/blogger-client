@@ -1,0 +1,118 @@
+.scroller::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+.scroller::-webkit-scrollbar-track {
+    background: white;
+}
+.scroller::-webkit-scrollbar-thumb {
+    background: #ddd;
+    visibility: hidden;
+}
+.scroller:hover::-webkit-scrollbar-thumb {
+    visibility: visible;
+}
+
+.notification {
+  padding: 14px 16px;
+  position: relative;
+  cursor: pointer;
+}
+
+.notification:hover {
+  background: #1a69a4;
+}
+
+.notification .badge {
+  position: absolute;
+  top: 1.5px;
+  right: 4px;
+  padding: 1.5px 4px;
+  border-radius: 20%;
+  background-color: #db2828!important;
+  color: white;
+}
+
+.notification-panel {
+  position: absolute;
+  color: black;
+}
+
+.not-mark {
+  font-weight: normal;
+  font-size: smaller;
+  color: #4183c4;
+  cursor: pointer;
+}
+
+.not-mark:hover {
+  text-decoration: underline;
+}
+
+.not-mark-all {
+  float: right;
+  font-weight: normal;
+  font-size: smaller;
+}
+
+.not-mark-all.active:hover {
+  text-decoration: underline;
+}
+
+.not-mark-all.active {
+  color: #4183c4;
+  cursor: pointer;
+}
+
+.notification-item {
+  color: black;
+}
+
+.notification-item:hover {
+  background-color: #f0f0ff!important;
+  cursor: pointer;
+  color: black;
+}
+
+.notification-item.read {
+  background-color: #e8e8ff;
+  cursor: pointer;
+}
+
+.notification-item.read:hover {
+  background-color: #f0f0ff;
+  cursor: pointer;
+}
+
+.notification-user-link {
+  display: inline-flex;
+  cursor: pointer;
+  color: #4183c4;
+}
+
+.notification-user-link:hover {
+  text-decoration: underline;
+}
+
+.view-all-notifications {
+  cursor: pointer;
+}
+
+.view-all-notifications:hover {
+  text-decoration: underline;
+}
+
+.notification-header {
+  font-size: small;
+  color: #aaa;
+}
+
+.notifications-settings {
+    float: right;
+    padding-left: 10px;
+    font-size: smaller;
+}
+
+.notifications-settings:hover {
+    text-decoration: underline;
+}

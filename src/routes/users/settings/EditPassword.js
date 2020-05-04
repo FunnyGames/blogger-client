@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { userActions } from '../../actions';
-import renderLoader from '../../components/interactive/Loader';
-import setTitle from '../../environments/document';
-import EditPasswordForm from '../../forms/users/EditPasswordForm';
-import ErrorConnect from '../../components/pages/ErrorConnect';
+import { userActions } from '../../../actions';
+import renderLoader from '../../../components/interactive/Loader';
+import setTitle from '../../../environments/document';
+import EditPasswordForm from '../../../forms/users/EditPasswordForm';
+import ErrorConnect from '../../../components/pages/ErrorConnect';
 
-import '../../css/profile.css';
+import '../../../css/profile.css';
 
 class EditPassword extends React.Component {
     componentDidMount() {
@@ -36,7 +36,7 @@ class EditPassword extends React.Component {
         if (!user) return renderLoader();
 
         return (
-            <div className="login-page">
+            <div className="">
                 <div className="ui center aligned header">
                     <h1>Change Password:</h1>
                 </div>

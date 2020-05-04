@@ -12,7 +12,7 @@ const Footer = () => {
                     <Link key="Support" to="/support" className="footer-link">Support</Link>
                     <Link key="Privacy" to="/privacy" className="footer-link">Privacy</Link>
                     <Link key="About" to="/about" className="footer-link">About</Link>
-                    <div className="blogger-copyright">Blogger v2 ©2020</div>
+                    <div className="blogger-copyright">Blogger v3 ©2020</div>
                 </div>
                 <br /><br /><br />
             </div>

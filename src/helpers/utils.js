@@ -69,3 +69,8 @@ export const nFormatter = (num, digits) => {
     }
     return (num / si[i].value).toFixed(digits).replace(rx, "$1") + si[i].symbol;
 }
+
+export const shortenMessage = (msg, length = 50) => {
+    if (!msg) return '';
+    return (msg.length > length ? msg.substring(0, length - 3) + '...' : msg);
+}

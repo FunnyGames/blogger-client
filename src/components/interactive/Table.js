@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Select from 'react-select';
 import _ from 'lodash';
 import globalConstants from '../../constants/global.constants';
@@ -60,10 +60,10 @@ class Table extends React.Component {
         }
         let key;
 
-        for (let i = minPage - 1; i < maxPage; ++i) {
-            let selected = (currentPage === i + 1 ? "pageselected" : undefined);
-            let key = i + 1 + "";
-            aPages.push(<b style={{ cursor: 'pointer' }} key={key} id={selected} className="item" onClick={() => onPageChange(i + 1)}>{i + 1}</b>);
+        for (let i = minPage; i <= maxPage; ++i) {
+            let selected = (currentPage === i ? "pageselected" : undefined);
+            let key = `p-${i}`;
+            aPages.push(<b style={{ cursor: 'pointer' }} key={key} id={selected} className="item" onClick={() => onPageChange(i)}>{i}</b>);
         }
         // No pages - so make 1 page
         if (maxPage === 0) {
@@ -107,14 +107,30 @@ class Table extends React.Component {
     }
 
     render() {
-        const { tableRows, totalRows, loading, options, searchPlaceHolder, initialInput } = this.props;
+        const { tableRows, totalRows, loading, options, searchPlaceHolder, initialInput, disableSearch, onSelectChange } = this.props;
         const { selectedOption } = this.state;
         const searchValue = this.state.name === undefined ? initialInput : this.state.name;
+        const searchStyle = !disableSearch ? null : { display: 'flex', flexDirection: 'row-reverse' };
+        const pageNumbers = onSelectChange ? (
+            <center>
+                <table>
+                    <tbody>
+                        <tr>
+                            <th colSpan="5">
+                                <div className="ui center pagination menu">
+                                    {this.renderPageNumbers(totalRows)}
+                                </div>
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
+            </center>
+        ) : null;
         return (
             <div>
                 <div className="">
-                    <div className="ui search">
-                        <div className="ui icon input">
+                    <div className="ui search" style={searchStyle}>
+                        {!disableSearch ? <div className="ui icon input">
                             <input
                                 key="search"
                                 className="prompt"
@@ -131,8 +147,9 @@ class Table extends React.Component {
                                 value={searchValue} />
                             <i className="search icon"></i>
                         </div>
+                            : null}
                         {options ?
-                            <div className="" style={{ float: 'right', maxWidth: '15em', minWidth: '15em' }}>
+                            <div style={{ float: 'right', maxWidth: '15em', minWidth: '15em' }}>
                                 <Select
                                     placeholder="Sort by"
                                     isDisabled={loading}
@@ -145,29 +162,18 @@ class Table extends React.Component {
                     </div>
                 </div>
                 <p></p>
-                {loading ? renderLoader() :
-                    <div>
-                        <table className="ui basic inverted blue table">
-                            <tbody>
-                                {tableRows}
-                            </tbody>
-                        </table>
-                        <center>
-                            <table>
+                {
+                    loading ? renderLoader() :
+                        <Fragment>
+                            <table className="ui basic table">
                                 <tbody>
-                                    <tr>
-                                        <th colSpan="5">
-                                            <div className="ui center pagination menu">
-                                                {this.renderPageNumbers(totalRows)}
-                                            </div>
-                                        </th>
-                                    </tr>
+                                    {tableRows}
                                 </tbody>
                             </table>
-                        </center>
-                    </div>
+                            {pageNumbers}
+                        </Fragment>
                 }
-            </div>
+            </div >
         );
     }
 }

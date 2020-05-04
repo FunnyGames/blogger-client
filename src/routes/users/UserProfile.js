@@ -29,8 +29,21 @@ class UserProfile extends React.Component {
         setTitle("Loading Profile");
 
         // Fetch user profile
-        const { match } = this.props;
-        const userId = match.params.id;
+        this.reloadData();
+    }
+
+    componentDidUpdate() {
+        const { profile } = this.props;
+        if (profile && profile._id) {
+            const urlId = this.getUserId();
+            if (profile._id !== urlId) {
+                this.reloadData();
+            }
+        }
+    }
+
+    reloadData = () => {
+        const userId = this.getUserId();
         const myId = utils.getUserId();
 
         // Don't fetch if user is loading their profile
@@ -43,23 +56,26 @@ class UserProfile extends React.Component {
         this.fetchUserGroups();
     }
 
+    getUserId = () => {
+        return this.props.match.params.id;
+    }
+
     fetchUser() {
         // Get dispatch function from props
         const { dispatch } = this.props;
 
         // Fetch user profile
-        const { match } = this.props;
-        const userId = match.params.id;
+        const userId = this.getUserId();
 
         dispatch(userActions.getUserProfile(userId));
     }
 
     fetchUserGroups() {
         // Get dispatch function from props
-        const { dispatch, match } = this.props;
+        const { dispatch } = this.props;
 
         // Fetch groups of user
-        const userId = match.params.id;
+        const userId = this.getUserId();
         const limit = globalConstants.TABLE_LIMIT;
         const { page, name, selectedOption } = this.state;
         let { sortOrder, sortBy } = {};
@@ -77,6 +93,19 @@ class UserProfile extends React.Component {
 
     onPageChange = (page) => {
         this.setState({ page }, this.fetchUserGroups);
+    }
+
+    onSubscribeClick = () => {
+        const { dispatch, profile } = this.props;
+        if (profile.subLoading) return;
+
+        const userId = this.getUserId();
+
+        if (profile.subscribed) {
+            dispatch(userActions.unsubscribe(userId));
+        } else {
+            dispatch(userActions.subscribe(userId));
+        }
     }
 
     handleSelectChange = selectedOption => {
@@ -109,17 +138,17 @@ class UserProfile extends React.Component {
         if (profile.notFound) return <NotFound title="User not found" />;
         if (profile.error) return <ErrorConnect />;
 
-        const username = profile.username;
-        const firstName = profile.firstName;
-        const lastName = profile.lastName;
+        const { username, firstName, lastName, subscribed, subLoading } = profile;
 
         let tableRows = this.createTableRows(groups.data);
         let totalRows = groups.metadata ? groups.metadata.total : 0;
         let loadingTable = groups.loading;
 
-        const { match } = this.props;
-        const userId = match.params.id;
+        const userId = this.getUserId();
         let userBlogsLink = utils.convertUrlPath(paths.USER_BLOGS, { id: userId });
+
+        const subText = subscribed ? 'SUBSCRIBED' : 'SUBSCRIBE';
+        const subClass = `ui ${subscribed ? '' : 'blue'} ${subLoading ? 'loading' : ''} right floated button`;
         return (
             <div style={{ marginBottom: '4em', marginTop: '4em' }}>
                 <div className="ui header">
@@ -129,6 +158,7 @@ class UserProfile extends React.Component {
                 </div>
                 <div className="ui container">
                     <Link className="ui blue right floated button" to={userBlogsLink} >View Blogs</Link>
+                    <button className={subClass} onClick={this.onSubscribeClick} >{subText}</button>
                     <div className="six wide column">
                         <div>First name: {firstName}</div>
                         <div>Last name: {lastName}</div>

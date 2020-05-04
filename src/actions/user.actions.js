@@ -1,9 +1,10 @@
 import { userConstants } from '../constants';
 import { userService } from '../services';
-import { alertActions, returnError } from '../actions';
+import { alertActions, returnError, notificationActions, alertRefersh } from '../actions';
 import history from '../helpers/history';
 import paths from '../constants/path.constants';
 import globalConstants from '../constants/global.constants';
+import { chatActions } from './chat.actions';
 
 const { LOCAL_STR_TOKEN } = globalConstants;
 
@@ -18,8 +19,16 @@ export const userActions = {
     getUserGroups,
     getUsers,
     getUserProfile,
-    cancelAccount
+    cancelAccount,
+    subscribe,
+    unsubscribe,
+    subscriptions
 };
+
+function loadInitialData(dispatch) {
+    dispatch(notificationActions.getTotalNotifications());
+    dispatch(chatActions.getTotalMessages());
+}
 
 function checkAvailability(username, email) {
     return dispatch => {
@@ -50,6 +59,7 @@ function login(username, password, redirect) {
                     localStorage.setItem(LOCAL_STR_TOKEN, data.jwt);
                     if (!redirect) redirect = paths.HOMEPAGE;
                     history.push(redirect);
+                    loadInitialData(dispatch);
                 },
                 error => returnError(dispatch, failure, error, true)
             );
@@ -224,4 +234,59 @@ function cancelAccount(username, password) {
     function request() { return { type: userConstants.CANCEL_ACCOUNT_REQUEST } }
     function success(payload) { return { type: userConstants.CANCEL_ACCOUNT_SUCCESS, payload } }
     function failure(error) { return { type: userConstants.CANCEL_ACCOUNT_FAILURE, error } }
+}
+
+function subscribe(userId) {
+    return dispatch => {
+        dispatch(request());
+
+        userService.subscribe(userId)
+            .then(
+                data => {
+                    dispatch(success(data));
+                },
+                error => returnError(dispatch, failure, error, true)
+            );
+    };
+
+    function request() { return { type: userConstants.SUBSCRIBE_REQUEST } }
+    function success(payload) { return { type: userConstants.SUBSCRIBE_SUCCESS, payload } }
+    function failure(error) { return { type: userConstants.SUBSCRIBE_FAILURE, error } }
+}
+
+function unsubscribe(userId) {
+    return dispatch => {
+        dispatch(request());
+
+        userService.unsubscribe(userId)
+            .then(
+                data => {
+                    dispatch(success(data));
+                    dispatch(alertActions.refresh(alertRefersh.UNSUBSCRIBE));
+                },
+                error => returnError(dispatch, failure, error, true)
+            );
+    };
+
+    function request() { return { type: userConstants.UNSUBSCRIBE_REQUEST } }
+    function success(payload) { return { type: userConstants.UNSUBSCRIBE_SUCCESS, payload } }
+    function failure(error) { return { type: userConstants.UNSUBSCRIBE_FAILURE, error } }
+}
+
+function subscriptions(page, limit, name, sortBy, sortOrder) {
+    return dispatch => {
+        dispatch(request());
+
+        userService.subscriptions(page, limit, name, sortBy, sortOrder)
+            .then(
+                data => {
+                    dispatch(success(data));
+                },
+                error => returnError(dispatch, failure, error, true)
+            );
+    };
+
+    function request() { return { type: userConstants.GET_SUBSCRIPTIONS_REQUEST } }
+    function success(payload) { return { type: userConstants.GET_SUBSCRIPTIONS_SUCCESS, payload } }
+    function failure(error) { return { type: userConstants.GET_SUBSCRIPTIONS_FAILURE, error } }
 }

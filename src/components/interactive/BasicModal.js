@@ -53,7 +53,10 @@ class BasicModal extends React.Component {
         const { showModal } = this.state;
         const { children, openModal, showCloseButton } = this.props;
 
-        if (openModal) openModal.func = this.openModal;
+        if (openModal) {
+            openModal.func = this.openModal;
+            openModal.close = this.closeModal;
+        }
 
         const closeButton = showCloseButton ? <button className="ui black button" onClick={this.closeModal}>x</button> : null;
 

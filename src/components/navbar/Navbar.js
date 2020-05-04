@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import paths from '../../constants/path.constants';
 import { userActions } from '../../actions';
+import NotificationButton from './NotificationButton';
+import MessageButton from './MessageButton';
 
 import '../../css/navbar.css';
 
@@ -70,6 +72,8 @@ class Navbar extends React.Component {
                 let name = user && user.user ? user.user.firstName : null;
                 let text = name ? "Hello " + name + "!" : "...";
                 listOfLinks.push(<div className="hello-nav" key="Welcome" style={{ minWidth: '200px' }}>{!name ? <div className="ui active loader"></div> : null} {text}</div >);
+                listOfLinks.push(<NotificationButton key="notification-button" />);
+                listOfLinks.push(<MessageButton key="message-button" />);
             }
         } else {
             listOfLinks.push(this.createLink("Log in", paths.LOGIN));
@@ -79,7 +83,7 @@ class Navbar extends React.Component {
         return (
             <div className="sticky">
                 <div className="navbar topnav">
-                    <Link className="header-main" to={paths.HOMEPAGE}>Blogger</Link>
+                    <Link className="header-main" to={paths.HOMEPAGE}>Blogger <span style={{ fontSize: 'x-small' }}>v3</span></Link>
                     {listOfLinks}
                 </div>
             </div>

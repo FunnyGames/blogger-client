@@ -1,4 +1,4 @@
-import { groupConstants } from '../constants';
+import { groupConstants, userConstants } from '../constants';
 
 export function groups(state = {}, action) {
     switch (action.type) {
@@ -9,6 +9,8 @@ export function groups(state = {}, action) {
         case groupConstants.GET_GROUPS_FAILURE:
             return { error: action.error };
 
+        case userConstants.LOGOUT_SUCCESS:
+            return {};
         default:
             return state;
     }
@@ -24,6 +26,8 @@ export function group(state = {}, action) {
             let notFound = action.status === 404 || action.status === 400;
             return { error: action.error, status: action.status, notFound };
 
+        case userConstants.LOGOUT_SUCCESS:
+            return {};
         default:
             return state;
     }
@@ -38,6 +42,8 @@ export function groupUsers(state = {}, action) {
         case groupConstants.GET_GROUP_USERS_FAILURE:
             return { error: action.error };
 
+        case userConstants.LOGOUT_SUCCESS:
+            return {};
         default:
             return state;
     }

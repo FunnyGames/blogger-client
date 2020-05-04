@@ -32,6 +32,32 @@ export const reacts = {
     angry: 'angry'
 };
 
+export const setReactionImage = (react) => {
+    switch (react) {
+        case reacts.like: return like;
+        case reacts.love: return love;
+        case reacts.haha: return haha;
+        case reacts.wow: return wow;
+        case reacts.sad: return sad;
+        case reacts.angry: return angry;
+        default: break;
+    }
+    return '';
+}
+
+export const setReactionText = (react) => {
+    switch (react) {
+        case reacts.like: return 'Like';
+        case reacts.love: return 'Love';
+        case reacts.haha: return 'Haha';
+        case reacts.wow: return 'Wow';
+        case reacts.sad: return 'Sad';
+        case reacts.angry: return 'Angry';
+        default: break;
+    }
+    return 'Like';
+}
+
 class Reaction extends React.Component {
     state = {
         react: reacts.none,
@@ -62,32 +88,6 @@ class Reaction extends React.Component {
         } else {
             this.onSelect(reacts.like);
         }
-    }
-
-    setReactionImage = (react) => {
-        switch (react) {
-            case reacts.like: return like;
-            case reacts.love: return love;
-            case reacts.haha: return haha;
-            case reacts.wow: return wow;
-            case reacts.sad: return sad;
-            case reacts.angry: return angry;
-            default: break;
-        }
-        return '';
-    }
-
-    setReactionText = (react) => {
-        switch (react) {
-            case reacts.like: return 'Like';
-            case reacts.love: return 'Love';
-            case reacts.haha: return 'Haha';
-            case reacts.wow: return 'Wow';
-            case reacts.sad: return 'Sad';
-            case reacts.angry: return 'Angry';
-            default: break;
-        }
-        return 'Like';
     }
 
     openLikes = (e) => {
@@ -142,7 +142,7 @@ class Reaction extends React.Component {
             });
             for (let i = 0; i < len; ++i) {
                 const { react, count } = totals[i];
-                const image = this.setReactionImage(react);
+                const image = setReactionImage(react);
                 const format = utils.nFormatter(count);
                 tip += `${format} <img src="${image}" width="12px" height="12px" alt="${react}" />`;
                 if (i === half - 1 && len > 3) tip += '<br />';
@@ -177,7 +177,7 @@ class Reaction extends React.Component {
         for (let i = 0; i < reactions.length; ++i) {
             const r = reactions[i];
             const { reactionId, username, userId, react } = r;
-            const image = this.setReactionImage(react);
+            const image = setReactionImage(react);
             const userUrl = userId ? utils.convertUrlPath(paths.USER, { id: userId }) : '';
             content.push(
                 <div key={reactionId} style={{ cursor: 'pointer' }} className="ui segment" onClick={e => { e.stopPropagation(); history.push(userUrl); }}>
@@ -201,7 +201,7 @@ class Reaction extends React.Component {
         const len = totals.length;
         for (let i = 0; i < len; ++i) {
             const { react, count } = totals[i];
-            const image = this.setReactionImage(react);
+            const image = setReactionImage(react);
             if (count > 0) {
                 const tab = <Tab key={react + "-tab"} onClick={e => this.changeTab(react)}><img src={image} width="16px" height="16px" alt={react} /><b> {count}</b></Tab>;
                 const tabContent = this.buildTabContent(react);
@@ -238,8 +238,8 @@ class Reaction extends React.Component {
         let totals = reactions.reacts;
         if (!totals) totals = [];
         const reactType = reaction || react;
-        const image = this.setReactionImage(reactType);
-        const text = this.setReactionText(reactType);
+        const image = setReactionImage(reactType);
+        const text = setReactionText(reactType);
         const totalTooptip = this.buildToolip(totals, reactType);
         const numerOfLikes = this.countReactions(totals, reactType);
         const formattedNumberOfLikes = utils.nFormatter(numerOfLikes);

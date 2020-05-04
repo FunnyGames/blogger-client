@@ -1,6 +1,7 @@
 import { blogConstants } from '../constants';
 import { blogService } from '../services';
-import { alertActions, returnError } from '../actions';
+import { alertActions } from './';
+import { perform } from './base.actions';
 import history from '../helpers/history';
 import paths from '../constants/path.constants';
 import * as utils from '../helpers/utils';
@@ -15,115 +16,72 @@ export const blogActions = {
 };
 
 function getBlogs(page, limit, name, sortBy, sortOrder, query) {
-    return dispatch => {
-        dispatch(request({}));
-
-        blogService.getBlogs(page, limit, name, sortBy, sortOrder, query)
-            .then(
-                data => {
-                    dispatch(success(data));
-                },
-                error => returnError(dispatch, failure, error, true)
-            );
+    const datax = { page, limit, name, sortBy, sortOrder, query };
+    const actions = {
+        request: blogConstants.GET_BLOGS_REQUEST,
+        success: blogConstants.GET_BLOGS_SUCCESS,
+        failure: blogConstants.GET_BLOGS_FAILURE
     };
-
-    function request() { return { type: blogConstants.GET_BLOGS_REQUEST } }
-    function success(payload) { return { type: blogConstants.GET_BLOGS_SUCCESS, payload } }
-    function failure(error) { return { type: blogConstants.GET_BLOGS_FAILURE, error } }
+    return perform(blogService.getBlogs, datax, actions);
 }
 
-function createBlog(data) {
-    return dispatch => {
-        dispatch(request(data));
-
-        blogService.createBlog(data)
-            .then(
-                data => {
-                    dispatch(success(data));
-                    let path = utils.convertUrlPath(paths.BLOG, { id: data._id });
-                    history.push(path);
-                },
-                error => returnError(dispatch, failure, error, true)
-            );
+function createBlog(datax) {
+    const actions = {
+        request: blogConstants.CREATE_BLOG_REQUEST,
+        success: blogConstants.CREATE_BLOG_SUCCESS,
+        failure: blogConstants.CREATE_BLOG_FAILURE
     };
-
-    function request(data) { return { type: blogConstants.CREATE_BLOG_REQUEST, data } }
-    function success(payload) { return { type: blogConstants.CREATE_BLOG_SUCCESS, payload } }
-    function failure(error) { return { type: blogConstants.CREATE_BLOG_FAILURE, error } }
+    const successCallback = (dispatch, data) => {
+        let path = utils.convertUrlPath(paths.BLOG, { id: data._id });
+        history.push(path);
+    };
+    return perform(blogService.createBlog, datax, actions, successCallback);
 }
 
 function getBlog(blogId) {
-    return dispatch => {
-        dispatch(request());
-
-        blogService.getBlog(blogId)
-            .then(
-                data => {
-                    dispatch(success(data));
-                },
-                error => returnError(dispatch, failure, error, true)
-            );
+    const datax = blogId;
+    const actions = {
+        request: blogConstants.GET_BLOG_REQUEST,
+        success: blogConstants.GET_BLOG_SUCCESS,
+        failure: blogConstants.GET_BLOG_FAILURE
     };
-
-    function request() { return { type: blogConstants.GET_BLOG_REQUEST } }
-    function success(payload) { return { type: blogConstants.GET_BLOG_SUCCESS, payload } }
-    function failure(error, status) { return { type: blogConstants.GET_BLOG_FAILURE, error, status } }
+    return perform(blogService.getBlog, datax, actions);
 }
 
 function getMembers(blogId) {
-    return dispatch => {
-        dispatch(request({}));
-
-        blogService.getMembers(blogId)
-            .then(
-                data => {
-                    dispatch(success(data));
-                },
-                error => returnError(dispatch, failure, error, true)
-            );
+    const datax = blogId;
+    const actions = {
+        request: blogConstants.GET_BLOG_MEMBERS_REQUEST,
+        success: blogConstants.GET_BLOG_MEMBERS_SUCCESS,
+        failure: blogConstants.GET_BLOG_MEMBERS_FAILURE
     };
-
-    function request() { return { type: blogConstants.GET_BLOG_MEMBERS_REQUEST } }
-    function success(payload) { return { type: blogConstants.GET_BLOG_MEMBERS_SUCCESS, payload } }
-    function failure(error) { return { type: blogConstants.GET_BLOG_MEMBERS_FAILURE, error } }
+    return perform(blogService.getMembers, datax, actions);
 }
 
 function updateBlog(blogId, data) {
-    return dispatch => {
-        dispatch(request());
-
-        blogService.updateBlog(blogId, data)
-            .then(
-                data => {
-                    dispatch(success(data));
-                    dispatch(alertActions.success(`Blog updated successfully`));
-                    dispatch(alertActions.refresh());
-                },
-                error => returnError(dispatch, failure, error, true)
-            );
+    const datax = { blogId, data };
+    const actions = {
+        request: blogConstants.UPDATE_BLOG_REQUEST,
+        success: blogConstants.UPDATE_BLOG_SUCCESS,
+        failure: blogConstants.UPDATE_BLOG_FAILURE
     };
-
-    function request() { return { type: blogConstants.UPDATE_BLOG_REQUEST } }
-    function success(payload) { return { type: blogConstants.UPDATE_BLOG_SUCCESS, payload } }
-    function failure(error) { return { type: blogConstants.UPDATE_BLOG_FAILURE, error } }
+    const successCallback = (dispatch, data) => {
+        dispatch(alertActions.success(`Blog updated successfully`));
+        dispatch(alertActions.refresh());
+    };
+    return perform(blogService.updateBlog, datax, actions, successCallback);
 }
 
 function deleteBlog(blogId) {
-    return dispatch => {
-        dispatch(request());
-
-        blogService.deleteBlog(blogId)
-            .then(
-                data => {
-                    dispatch(success(data));
-                    dispatch(alertActions.success(`Blog deleted successfully`));
-                    dispatch(alertActions.refresh());
-                },
-                error => returnError(dispatch, failure, error, true)
-            );
+    const datax = blogId;
+    const actions = {
+        request: blogConstants.DELETE_BLOG_REQUEST,
+        success: blogConstants.DELETE_BLOG_SUCCESS,
+        failure: blogConstants.DELETE_BLOG_FAILURE
     };
-
-    function request() { return { type: blogConstants.DELETE_BLOG_REQUEST } }
-    function success(payload) { return { type: blogConstants.DELETE_BLOG_SUCCESS, payload } }
-    function failure(error) { return { type: blogConstants.DELETE_BLOG_FAILURE, error } }
+    const successCallback = (dispatch) => {
+        dispatch(alertActions.success(`Blog deleted successfully`));
+        dispatch(alertActions.refresh());
+    };
+    return perform(blogService.deleteBlog, datax, actions, successCallback);
 }

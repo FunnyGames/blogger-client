@@ -11,6 +11,46 @@ export const formatBlogDateTime = (date) => {
 export const formatCommentDateTime = (date) => {
     return timeSince(new Date(date));
 }
+
+export const formatNotificationDateTime = (date) => {
+    date = new Date(date);
+    let seconds = Math.floor((new Date() - date) / 1000);
+    let interval = Math.floor(seconds / 86400);
+    if (interval >= 1) {
+        return formatBlogDate(date);
+    }
+    return timeSince(date);
+}
+
+export const formatChatTime = (date) => {
+    let otherDate = moment();
+    if (moment(date).isSame(otherDate, 'day')) {
+        return moment(date).format('HH:mm');
+    } else if (moment(date).isSame(otherDate.subtract(1, 'day'), 'day')) {
+        return 'Yesterday';
+    }
+    return moment(date).format('DD/MM/YY');
+}
+
+export const formatMessageTime = (date) => {
+    return moment(date).format('HH:mm');
+}
+
+export const formatConversationTime = (date) => {
+    let otherDate = moment();
+    if (moment(date).isSame(otherDate, 'day')) {
+        return 'Today';
+    } else if (moment(date).isSame(otherDate.subtract(1, 'day'), 'day')) {
+        return 'Yesterday';
+    }
+    return moment(date).format('DD/MM/YY');
+}
+
+export const dateEquals = (date1, date2) => {
+    if (!date1 || !date2) return false;
+    return moment(date1).isSame(date2, 'day');
+}
+
 function timeSince(date) {
     let seconds = Math.floor((new Date() - date) / 1000);
     let interval = Math.floor(seconds / 31536000);

@@ -60,6 +60,8 @@ export function update(state = {}, action) {
         case commentConstants.UPDATE_COMMENT_FAILURE:
             return { updateComment: { error: action.error } };
 
+        case userConstants.LOGOUT_SUCCESS:
+            return {};
         default:
             return state;
     }

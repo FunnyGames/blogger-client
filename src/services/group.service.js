@@ -13,7 +13,7 @@ export const groupService = {
     deleteGroup
 };
 
-function getGroups(page, limit, name, sortBy, sortOrder) {
+function getGroups({ page, limit, name, sortBy, sortOrder }) {
     let params = {
         page,
         limit,
@@ -34,7 +34,7 @@ function getGroup(groupId) {
     return http.get(urlx);
 }
 
-function getGroupUsers(groupId, page, limit, name, sortBy, sortOrder) {
+function getGroupUsers({ groupId, page, limit, name, sortBy, sortOrder }) {
     let urlx = utils.convertUrlPath(url.GET_GROUP_USERS, { id: groupId });
     let params = {
         page,
@@ -46,17 +46,17 @@ function getGroupUsers(groupId, page, limit, name, sortBy, sortOrder) {
     return http.get(urlx, params);
 }
 
-function addMember(groupId, userId) {
+function addMember({ groupId, userId }) {
     let urlx = utils.convertUrlPath(url.ADD_USER_TO_GROUP, { id: groupId, userId });
     return http.get(urlx);
 }
 
-function removeMember(groupId, userId) {
+function removeMember({ groupId, userId }) {
     let urlx = utils.convertUrlPath(url.ADD_USER_TO_GROUP, { id: groupId, userId });
     return http.del(urlx);
 }
 
-function updateGroup(groupId, name, description) {
+function updateGroup({ groupId, name, description }) {
     let urlx = utils.convertUrlPath(url.UPDATE_GROUP, { id: groupId });
     return http.put(urlx, { name, description });
 }

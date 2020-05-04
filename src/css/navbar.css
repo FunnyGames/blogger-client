@@ -77,3 +77,10 @@
   position: relative;
   font-size: large;
 }
+
+.navbar-icon {
+  float: right;
+  color: white;
+  text-decoration: none;
+  border-radius: 2px;
+}

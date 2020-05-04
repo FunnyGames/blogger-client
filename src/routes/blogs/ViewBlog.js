@@ -32,13 +32,27 @@ class ViewBlog extends React.Component {
         setTitle("Blog");
 
         // Fetch blog and the users
-        this.fetchBlog();
-        this.fetchBlogUsers();
-        this.fetchBlogComments(true);
+        this.reloadData();
+    }
+
+    componentDidUpdate() {
+        const { blog } = this.props;
+        if (blog && blog._id) {
+            const urlId = this.getBlogId();
+            if (blog._id !== urlId) {
+                this.reloadData();
+            }
+        }
     }
 
     getBlogId = () => {
         return this.props.match.params.id;
+    }
+
+    reloadData = () => {
+        this.fetchBlog();
+        this.fetchBlogUsers();
+        this.fetchBlogComments(true);
     }
 
     fetchBlog() {
@@ -116,7 +130,7 @@ class ViewBlog extends React.Component {
 
     buildTags = (tags) => {
         let linkTo = tag => paths.HOMEPAGE + '?tags=' + tag;
-        let title = tag => tag;
+        let title = tag => '#' + tag;
         return this.buildList(tags, linkTo, title);
     }
 

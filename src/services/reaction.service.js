@@ -14,12 +14,12 @@ function getReactions(blogId) {
     return http.get(urlx);
 }
 
-function createReaction(blogId, data) {
+function createReaction({ blogId, data }) {
     let urlx = utils.convertUrlPath(url.CREATE_REACTION, { id: blogId });
     return http.post(urlx, data);
 }
 
-function getUsersReactions(blogId, data, limit) {
+function getUsersReactions({ blogId, data, limit }) {
     let params = { limit };
     let urlx = utils.convertUrlPath(url.GET_USERS_REACTIONS, { id: blogId });
     return http.put(urlx, data, params);

@@ -1,6 +1,7 @@
 import { commentConstants } from '../constants';
 import { commentService } from '../services';
-import { alertActions, returnError, alertRefersh } from '../actions';
+import { perform } from './base.actions';
+import { alertActions, alertRefersh } from '../actions';
 
 export const commentActions = {
     getComments,
@@ -11,81 +12,55 @@ export const commentActions = {
 };
 
 function getComments(blogId, limit, seenIds) {
-    return dispatch => {
-        dispatch(request());
-
-        commentService.getComments(blogId, limit, seenIds)
-            .then(
-                data => {
-                    dispatch(success(data));
-                },
-                error => returnError(dispatch, failure, error, true)
-            );
+    const datax = { blogId, limit, seenIds };
+    const actions = {
+        request: commentConstants.GET_COMMENTS_REQUEST,
+        success: commentConstants.GET_COMMENTS_SUCCESS,
+        failure: commentConstants.GET_COMMENTS_FAILURE
     };
-
-    function request() { return { type: commentConstants.GET_COMMENTS_REQUEST } }
-    function success(payload) { return { type: commentConstants.GET_COMMENTS_SUCCESS, payload } }
-    function failure(error) { return { type: commentConstants.GET_COMMENTS_FAILURE, error } }
+    return perform(commentService.getComments, datax, actions);
 }
 
 function createComment(blogId, data) {
-    return dispatch => {
-        dispatch(request(data));
-
-        commentService.createComment(blogId, data)
-            .then(
-                data => {
-                    dispatch(success(data));
-                    dispatch(alertActions.success(`Comment added successfully`));
-                    dispatch(alertActions.refresh(alertRefersh.CREATE_COMMENT));
-                },
-                error => returnError(dispatch, failure, error, true)
-            );
+    const datax = { blogId, data };
+    const actions = {
+        request: commentConstants.CREATE_COMMENT_REQUEST,
+        success: commentConstants.CREATE_COMMENT_SUCCESS,
+        failure: commentConstants.CREATE_COMMENT_FAILURE
     };
-
-    function request(data) { return { type: commentConstants.CREATE_COMMENT_REQUEST, data } }
-    function success(payload) { return { type: commentConstants.CREATE_COMMENT_SUCCESS, payload } }
-    function failure(error) { return { type: commentConstants.CREATE_COMMENT_FAILURE, error } }
+    const successCallback = (dispatch, data) => {
+        dispatch(alertActions.success(`Comment added successfully`));
+        dispatch(alertActions.refresh(alertRefersh.CREATE_COMMENT));
+    };
+    return perform(commentService.createComment, datax, actions, successCallback);
 }
 
 function updateComment(commentId, data) {
-    return dispatch => {
-        dispatch(request());
-
-        commentService.updateComment(commentId, data)
-            .then(
-                data => {
-                    dispatch(success(data));
-                    dispatch(alertActions.success(`Comment updated successfully`));
-                    dispatch(alertActions.refresh(alertRefersh.UPDATE_COMMENT));
-                },
-                error => returnError(dispatch, failure, error, true)
-            );
+    const datax = { commentId, data };
+    const actions = {
+        request: commentConstants.UPDATE_COMMENT_REQUEST,
+        success: commentConstants.UPDATE_COMMENT_SUCCESS,
+        failure: commentConstants.UPDATE_COMMENT_FAILURE
     };
-
-    function request() { return { type: commentConstants.UPDATE_COMMENT_REQUEST } }
-    function success(payload) { return { type: commentConstants.UPDATE_COMMENT_SUCCESS, payload } }
-    function failure(error) { return { type: commentConstants.UPDATE_COMMENT_FAILURE, error } }
+    const successCallback = (dispatch, data) => {
+        dispatch(alertActions.success(`Comment updated successfully`));
+        dispatch(alertActions.refresh(alertRefersh.UPDATE_COMMENT));
+    };
+    return perform(commentService.updateComment, datax, actions, successCallback);
 }
 
 function deleteComment(commentId) {
-    return dispatch => {
-        dispatch(request());
-
-        commentService.deleteComment(commentId)
-            .then(
-                data => {
-                    dispatch(success(data));
-                    dispatch(alertActions.success(`Comment deleted successfully`));
-                    dispatch(alertActions.refresh(alertRefersh.DELETE_COMMENT));
-                },
-                error => returnError(dispatch, failure, error, true)
-            );
+    const datax = commentId;
+    const actions = {
+        request: commentConstants.DELETE_COMMENT_REQUEST,
+        success: commentConstants.DELETE_COMMENT_SUCCESS,
+        failure: commentConstants.DELETE_COMMENT_FAILURE
     };
-
-    function request() { return { type: commentConstants.DELETE_COMMENT_REQUEST } }
-    function success(payload) { return { type: commentConstants.DELETE_COMMENT_SUCCESS, payload } }
-    function failure(error) { return { type: commentConstants.DELETE_COMMENT_FAILURE, error } }
+    const successCallback = (dispatch, data) => {
+        dispatch(alertActions.success(`Comment deleted successfully`));
+        dispatch(alertActions.refresh(alertRefersh.DELETE_COMMENT));
+    };
+    return perform(commentService.deleteComment, datax, actions, successCallback);
 }
 
 function clear() {

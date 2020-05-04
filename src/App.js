@@ -8,7 +8,7 @@ import { alertActions, userActions } from './actions';
 import paths from './constants/path.constants';
 import { cancelPendingRequests } from './helpers/axios';
 
-import Navbar from './components/pages/Navbar';
+import Navbar from './components/navbar/Navbar';
 import Footer from './components/pages/Footer';
 import Toast from './components/interactive/Toast';
 import ForceLogout from './components/interactive/ForceLogout';
@@ -32,7 +32,6 @@ import { ViewGroup } from './routes/groups/ViewGroup';
 import { Login } from './routes/users/Login';
 import { Register } from './routes/users/Register';
 import { Profile } from './routes/users/Profile';
-import { EditPassword } from './routes/users/EditPassword';
 import { UsersList } from './routes/users/UsersList';
 import { UserProfile } from './routes/users/UserProfile';
 import { Notifications } from './routes/users/Notifications';
@@ -87,11 +86,17 @@ class App extends React.Component {
 
     createPrivateRoutes() {
         const list = [];
-        list.push(<PrivateRoute key="EditPassword" path={paths.EDIT_PASSWORD} component={EditPassword} />);
-        list.push(<PrivateRoute key="Profile" path={paths.PROFILE} component={Profile} />);
         list.push(<PrivateRoute key="User" exact path={paths.USER} component={UserProfile} />);
         list.push(<PrivateRoute key="UsersList" exact path={paths.USERS} component={UsersList} />);
         list.push(<PrivateRoute key="Notifications" exact path={paths.NOTIFICATIONS} component={Notifications} />);
+
+        list.push(<PrivateRoute key="Profile" exact path={paths.PROFILE} component={Profile} />);
+        list.push(<PrivateRoute key="EditPassword" path={paths.EDIT_PASSWORD} component={Profile} />);
+        list.push(<PrivateRoute key="NotificationSettings" path={paths.NOTIFICATIONS_SETTINGS} component={Profile} />);
+        list.push(<PrivateRoute key="CancelAccount" path={paths.CANCEL_ACCOUNT} component={Profile} />);
+        list.push(<PrivateRoute key="BlockedUsers" path={paths.BLOCKED_USERS} component={Profile} />);
+        list.push(<PrivateRoute key="Subscriptions" path={paths.SUBSCRIPTIONS} component={Profile} />);
+        list.push(<PrivateRoute key="ProfileGroups" path={paths.PROFILE_GROUPS} component={Profile} />);
 
         list.push(<PrivateRoute key="Chat" exact path={paths.CHAT} component={Chat} />);
         list.push(<PrivateRoute key="Chat" exact path={paths.VIEW_CHAT} component={Chat} />);

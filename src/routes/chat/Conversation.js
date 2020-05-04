@@ -31,7 +31,7 @@ export const Conversation = (props) => {
 
     const handleScroll = (e) => {
         const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
-        const top = e.target.scrollTop <= 0.2 * e.target.clientHeight;
+        const top = e.target.scrollTop <= e.target.clientHeight - 100;
         if (bottom) setAllowToLoadMore(true);
         if (top && allowToLoadMore && hasMore && loadMore) {
             loadMore();

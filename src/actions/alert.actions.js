@@ -18,6 +18,8 @@ export const alertRefersh = {
     UPDATE_GROUP: 'UPDATE_GROUP',
     UPDATE_GROUP_USERS: 'UPDATE_GROUP_USERS',
 
+    UNSUBSCRIBE: 'UNSUBSCRIBE',
+
     // Functions
     is,
     isIn

@@ -1,6 +1,6 @@
 import { userConstants } from '../constants';
 import { userService } from '../services';
-import { alertActions, returnError, notificationActions } from '../actions';
+import { alertActions, returnError, notificationActions, alertRefersh } from '../actions';
 import history from '../helpers/history';
 import paths from '../constants/path.constants';
 import globalConstants from '../constants/global.constants';
@@ -262,6 +262,7 @@ function unsubscribe(userId) {
             .then(
                 data => {
                     dispatch(success(data));
+                    dispatch(alertActions.refresh(alertRefersh.UNSUBSCRIBE));
                 },
                 error => returnError(dispatch, failure, error, true)
             );

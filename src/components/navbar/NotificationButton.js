@@ -167,7 +167,7 @@ class NotificationButton extends React.Component {
 
     buildNotificationContent = () => {
         const notificationsList = this.buildNotificationsList();
-        const settingsLink = paths.PROFILE; // TODO change to settings page
+        const settingsLink = paths.NOTIFICATIONS_SETTINGS;
         const markAllClass = `not-mark-all ${this.hasUnread && 'active'}`;
         return (
             <div className="ui segment" style={{ width: '400px', marginLeft: '-175px' }}>

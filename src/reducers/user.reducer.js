@@ -131,3 +131,19 @@ export function userGroups(state = {}, action) {
             return state;
     }
 }
+
+export function subscriptions(state = {}, action) {
+    switch (action.type) {
+        case userConstants.GET_SUBSCRIPTIONS_REQUEST:
+            return { loading: true };
+        case userConstants.GET_SUBSCRIPTIONS_SUCCESS:
+            return { data: action.payload.users, metadata: action.payload.metadata };
+        case userConstants.GET_SUBSCRIPTIONS_FAILURE:
+            return { error: action.error };
+
+        case userConstants.LOGOUT_SUCCESS:
+            return {};
+        default:
+            return state;
+    }
+}

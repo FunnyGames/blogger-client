@@ -97,6 +97,7 @@ export function chats(state = {}, action) {
             return { ...state };
 
         case chatConstants.UNBLOCK_USER_SUCCESS:
+            if (!state.chats) return state;
             state.chats = state.chats.map(c => {
                 if (c._id === action.other.chatId) {
                     c.userBlocked1 = false;
@@ -173,6 +174,25 @@ export function messages(state = {}, action) {
                 })],
                 metadata: { total: state.metadata.total }
             };
+            return { ...state };
+
+        default:
+            return state;
+    }
+}
+
+export function blocked(state = {}, action) {
+    switch (action.type) {
+        case chatConstants.GET_BLOCKED_USERS_REQUEST:
+            return { loading: true };
+        case chatConstants.GET_BLOCKED_USERS_SUCCESS:
+            return { ...action.payload };
+        case chatConstants.GET_BLOCKED_USERS_FAILURE:
+            return { error: action.error };
+
+        case chatConstants.UNBLOCK_USER_SUCCESS:
+            if (!state.blocked) return state;
+            state.blocked = state.blocked.filter(c => c._id !== action.other.chatId);
             return { ...state };
 
         default:

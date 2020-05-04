@@ -22,7 +22,7 @@ class EditPasswordForm extends React.Component {
                         <button type="submit" disabled={submitting} className="ui large blue submit button">
                             Submit
                         </button>
-                        <Link type="submit" disabled={submitting} className="ui large blue submit button" to={paths.PROFILE}>
+                        <Link type="submit" disabled={submitting} className="ui large submit button" to={paths.PROFILE}>
                             Cancel
                         </Link>
                     </div>

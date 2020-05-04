@@ -6,3 +6,4 @@ export * from './comment.actions';
 export * from './reaction.actions';
 export * from './notification.actions';
 export * from './chat.actions';
+export * from './setting.actions';

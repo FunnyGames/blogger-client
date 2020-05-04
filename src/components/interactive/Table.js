@@ -107,10 +107,25 @@ class Table extends React.Component {
     }
 
     render() {
-        const { tableRows, totalRows, loading, options, searchPlaceHolder, initialInput, disableSearch } = this.props;
+        const { tableRows, totalRows, loading, options, searchPlaceHolder, initialInput, disableSearch, onSelectChange } = this.props;
         const { selectedOption } = this.state;
         const searchValue = this.state.name === undefined ? initialInput : this.state.name;
         const searchStyle = !disableSearch ? null : { display: 'flex', flexDirection: 'row-reverse' };
+        const pageNumbers = onSelectChange ? (
+            <center>
+                <table>
+                    <tbody>
+                        <tr>
+                            <th colSpan="5">
+                                <div className="ui center pagination menu">
+                                    {this.renderPageNumbers(totalRows)}
+                                </div>
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
+            </center>
+        ) : null;
         return (
             <div>
                 <div className="">
@@ -155,19 +170,7 @@ class Table extends React.Component {
                                     {tableRows}
                                 </tbody>
                             </table>
-                            <center>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <th colSpan="5">
-                                                <div className="ui center pagination menu">
-                                                    {this.renderPageNumbers(totalRows)}
-                                                </div>
-                                            </th>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </center>
+                            {pageNumbers}
                         </Fragment>
                 }
             </div >

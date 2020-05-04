@@ -11,8 +11,15 @@ export default {
     REGISTER: '/register',
     USERS: '/users',
     USER: '/users/:id',
+
+    // Settings
     PROFILE: '/profile',
     EDIT_PASSWORD: '/profile/password',
+    NOTIFICATIONS_SETTINGS: '/profile/notifications',
+    CANCEL_ACCOUNT: '/profile/cancel',
+    BLOCKED_USERS: '/profile/blocked',
+    PROFILE_GROUPS: '/profile/groups',
+    SUBSCRIPTIONS: '/profile/subscriptions',
 
     // Groups
     GROUPS: '/groups',

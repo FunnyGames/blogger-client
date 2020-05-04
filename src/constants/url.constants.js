@@ -16,6 +16,10 @@ export default {
     GET_USER_PROFILE: api + '/users/:id',
     CANCEL_ACCOUNT: api + '/users/cancel',
 
+    // Settings
+    GET_SETTINGS: api + '/settings',
+    UPDATE_SETTINGS: api + '/settings',
+
     // Subscriptions
     SUBSCRIBE: api + '/users/subscribe/:id',
     UNUBSCRIBE: api + '/users/unsubscribe/:id',

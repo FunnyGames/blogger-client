@@ -1,13 +1,16 @@
 import { notificationConstants } from '../constants';
 import { notificationService } from '../services';
 import { perform } from './base.actions';
+import { alertActions } from '.';
+import { formatNotification } from '../components/navbar/NotificationButton';
 
 export const notificationActions = {
     getNotifications,
     getShortNotifications,
     getTotalNotifications,
     markReadAll,
-    markReadById
+    markReadById,
+    newNotification
 };
 
 function getNotifications(page, limit, filter, sortBy, sortOrder) {
@@ -59,4 +62,14 @@ function markReadById(id) {
     };
     const other = { success: id };
     return perform(notificationService.markReadById, datax, actions, null, null, other);
+}
+
+function newNotification(data) {
+    return dispatch => {
+        dispatch(success(data));
+        const msg = formatNotification(data);
+        dispatch(alertActions.notification(msg));
+    };
+
+    function success(data) { return { type: notificationConstants.NEW_NOTIFICATION, data } }
 }

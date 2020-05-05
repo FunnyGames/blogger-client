@@ -37,6 +37,9 @@ import { UserProfile } from './routes/users/UserProfile';
 import { Notifications } from './routes/users/Notifications';
 import { Chat } from './routes/chat/Chat';
 
+import socket from './socket/socket.service';
+import * as socketListener from './socket/listener';
+
 Modal.setAppElement('#root');
 
 class App extends React.Component {
@@ -50,8 +53,6 @@ class App extends React.Component {
 
             // clear alert on location change
             dispatch(alertActions.clear());
-
-            this.loadProfile();
         });
     }
 
@@ -65,6 +66,8 @@ class App extends React.Component {
         if (user && user.loggedIn) {
             if (!user.user || !user.user.username) {
                 if (user.loading) return;
+                socket.connect(); // TODO - find another place to call it
+                socketListener.listen(this.props.dispatch);
                 dispatch(userActions.getProfile());
             }
         }

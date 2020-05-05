@@ -30,6 +30,10 @@ export const getUserId = () => {
     return null;
 }
 
+export const getToken = () => {
+    return Cookies.get(COOKIE_JWT) || localStorage.getItem(LOCAL_STR_TOKEN);
+}
+
 export const getDecodedToken = () => {
     try {
         let token = Cookies.get(COOKIE_JWT) || localStorage.getItem(LOCAL_STR_TOKEN);

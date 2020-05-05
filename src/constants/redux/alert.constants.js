@@ -3,5 +3,6 @@ export const alertConstants = {
     ERROR: 'ALERT_ERROR',
     CLEAR: 'ALERT_CLEAR',
     REFRESH: 'ALERT_REFRESH',
+    NOTIFICATION: 'ALERT_NOTIFICATION',
     LOGOUT: 'ALERT_LOGOUT'
 };

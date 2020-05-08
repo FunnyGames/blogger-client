@@ -2,10 +2,13 @@ import io from 'socket.io-client';
 import env from '../environments/env';
 import * as utils from '../helpers/utils';
 import constants from '../constants/global.constants';
+import socketConstants from './constants';
 
 const HEADER = constants.HEADER_AUTH;
 
 let socket = null;
+let currentUserId = null;
+let toListenUserId = null;
 
 const connect = () => {
     if (socket) return;
@@ -20,6 +23,9 @@ const connect = () => {
                 }
             }
         });
+        if (toListenUserId) {
+            listenToUserStatus(toListenUserId);
+        }
     } catch (error) {
     }
 }
@@ -34,4 +40,34 @@ const addListener = (event, func) => {
     socket.on(event, func);
 }
 
-export default { send, connect, addListener };
+const disconnect = () => {
+    if (!socket) return;
+    socket.disconnect();
+    socket = null;
+}
+
+const join = (room) => {
+    if (!socket) return;
+    socket.emit(socketConstants.JOIN, { room });
+}
+
+const leave = (room) => {
+    if (!socket) return;
+    socket.emit(socketConstants.LEAVE, { room });
+}
+
+const listenToUserStatus = (userId) => {
+    if (!socket) {
+        currentUserId = null;
+        toListenUserId = userId;
+        return;
+    }
+    toListenUserId = null;
+    if (currentUserId !== userId) {
+        if (currentUserId) socket.emit(socketConstants.LEAVE, { userId: currentUserId });
+        socket.emit(socketConstants.JOIN, { userId });
+        currentUserId = userId;
+    }
+}
+
+export default { send, connect, addListener, disconnect, join, leave, listenToUserStatus };

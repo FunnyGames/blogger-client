@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import Cookies from 'js-cookie';
 import globalConstants from '../constants/global.constants';
+import history from '../helpers/history';
 
 
 const { COOKIE_JWT, LOCAL_STR_TOKEN } = globalConstants;
@@ -77,4 +78,21 @@ export const nFormatter = (num, digits) => {
 export const shortenMessage = (msg, length = 50) => {
     if (!msg) return '';
     return (msg.length > length ? msg.substring(0, length - 3) + '...' : msg);
+}
+
+export const pathIsIn = (url) => {
+    const path = history.location.pathname;
+    const splited = path.split('/');
+    const urlSplited = url.split('/');
+    return splited[1] === urlSplited[1];
+}
+
+export const getPathId = () => {
+    const path = history.location.pathname;
+    const splited = path.split('/');
+    return splited[2];
+}
+
+export const pathIdIs = (id) => {
+    return getPathId() === id;
 }

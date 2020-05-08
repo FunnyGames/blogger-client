@@ -124,3 +124,17 @@
 .notification-toast-progress {
   background: #2185d0!important;
 }
+
+.message-header {
+  font-size: small;
+  color: black;
+}
+
+.message-toast-body {
+  font-size: small;
+  color: #aaa;
+}
+
+.message-toast-progress {
+  background: #2185d0!important;
+}

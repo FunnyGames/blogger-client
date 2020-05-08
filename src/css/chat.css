@@ -79,7 +79,22 @@
 }
 
 .chat-go-down {
-  position: absolute;
-  bottom: 100px;
-  left: 30px;
+    position: absolute;
+    bottom: 100px;
+    left: 30px;
+}
+
+.dot {
+    height: 0.4em;
+    width: 0.4em;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot.online {
+    background-color: green;
+}
+
+.dot.offline {
+    background-color: red;
 }

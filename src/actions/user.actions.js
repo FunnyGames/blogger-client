@@ -5,6 +5,8 @@ import history from '../helpers/history';
 import paths from '../constants/path.constants';
 import globalConstants from '../constants/global.constants';
 import { chatActions } from './chat.actions';
+import socket from '../socket/socket.service';
+import * as socketListener from '../socket/listener';
 
 const { LOCAL_STR_TOKEN } = globalConstants;
 
@@ -28,6 +30,9 @@ export const userActions = {
 function loadInitialData(dispatch) {
     dispatch(notificationActions.getTotalNotifications());
     dispatch(chatActions.getTotalMessages());
+
+    socket.connect();
+    socketListener.listen(dispatch);
 }
 
 function checkAvailability(username, email) {
@@ -59,7 +64,6 @@ function login(username, password, redirect) {
                     localStorage.setItem(LOCAL_STR_TOKEN, data.jwt);
                     if (!redirect) redirect = paths.HOMEPAGE;
                     history.push(redirect);
-                    loadInitialData(dispatch);
                 },
                 error => returnError(dispatch, failure, error, true)
             );
@@ -102,6 +106,7 @@ function logout(error) {
             localStorage.removeItem(LOCAL_STR_TOKEN);
             history.push(paths.LOGIN);
         }, 50);
+        socket.disconnect();
     };
 
     function success() { return { type: userConstants.LOGOUT_SUCCESS } }
@@ -113,7 +118,11 @@ function getProfile() {
 
         userService.getProfile()
             .then(
-                user => dispatch(success(user)),
+                user => {
+                    dispatch(success(user));
+
+                    loadInitialData(dispatch);
+                },
                 error => returnError(dispatch, failure, error, true)
             );
     };

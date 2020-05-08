@@ -30,6 +30,11 @@ export function alert(state = {}, action) {
                 type: 'alert-notification',
                 notification: action
             }
+        case alertConstants.MESSAGE:
+            return {
+                type: 'alert-message',
+                chatMessage: action
+            }
         default:
             return state;
     }

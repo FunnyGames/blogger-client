@@ -4,5 +4,6 @@ export const alertConstants = {
     CLEAR: 'ALERT_CLEAR',
     REFRESH: 'ALERT_REFRESH',
     NOTIFICATION: 'ALERT_NOTIFICATION',
+    MESSAGE: 'ALERT_MESSAGE',
     LOGOUT: 'ALERT_LOGOUT'
 };

@@ -55,7 +55,6 @@ class BlockedUsers extends React.Component {
                 username = row.username1;
                 userId = row.userId1;
             }
-            console.log(row);
             tableRows.push(this.buildRow(row._id, username, userId));
         }
         return tableRows;

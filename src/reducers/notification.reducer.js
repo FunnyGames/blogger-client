@@ -63,6 +63,11 @@ export function totalNotifications(state = {}, action) {
         case notificationConstants.GET_SHORT_NOTIFICATIONS_SUCCESS:
             return { count: 0 };
 
+        case notificationConstants.NEW_NOTIFICATION:
+            let count = state.count || 0;
+            ++count;
+            return { count };
+
         case userConstants.LOGOUT_SUCCESS:
             return {};
 

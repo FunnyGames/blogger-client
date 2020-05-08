@@ -2,6 +2,10 @@ import { chatConstants } from '../constants';
 import { chatService } from '../services';
 import { perform } from './base.actions';
 import * as utils from '../helpers/utils';
+import { alertActions } from './alert.actions';
+import paths from '../constants/path.constants';
+import socketService from '../socket/socket.service';
+import socketConstants from '../socket/constants';
 
 export const chatActions = {
     createChat,
@@ -14,7 +18,12 @@ export const chatActions = {
     unblockUser,
     deleteMessage,
     clear,
-    countTotalMessages
+    countTotalMessages,
+    newMessage,
+    deleteOtherUserMessage,
+    blockUserReceive,
+    unblockUserReceive,
+    userStatus
 };
 
 function createChat(userId) {
@@ -116,13 +125,86 @@ function clear() {
 }
 
 function countTotalMessages(chats) {
-    let count = 0;
+    let count = [];
     const myUserId = utils.getUserId();
-    for (let i = 0; i < chats.length; ++i) {
-        let c = chats[i];
-        if (c.totalNewMessages > 0 && c.lastUserId !== myUserId) {
-            ++count;
+    if (chats) {
+        for (let i = 0; i < chats.length; ++i) {
+            let c = chats[i];
+            if (c.totalNewMessages > 0 && c.lastUserId !== myUserId) {
+                count.push(c._id);
+            }
         }
     }
     return { type: chatConstants.GET_TOTAL_MESSAGES_NUMBER, payload: { count } };
+}
+
+function newMessage(data) {
+    return (dispatch, getState) => {
+        let insideChat = utils.pathIsIn(paths.CHAT);
+        if (!insideChat) {
+            dispatch(alertActions.message(data));
+        } else {
+            const state = getState();
+            const { chats } = state.chats;
+            let isChatOpened = false;
+            if (chats) {
+                for (let i = 0; i < chats.length; ++i) {
+                    let c = chats[i];
+                    if (utils.pathIdIs(c._id) && c._id === data.chatId) {
+                        isChatOpened = true;
+                        const dataRead = {
+                            _id: data._id,
+                            chatId: data.chatId
+                        };
+                        socketService.send(socketConstants.MESSAGE_READ, dataRead);
+                    }
+                }
+            }
+            data.isChatOpened = isChatOpened;
+        }
+        dispatch(success(data));
+    };
+
+    function success(payload) { return { type: chatConstants.NEW_MESSAGE, payload } }
+}
+
+function deleteOtherUserMessage(chatId, msgId) {
+    return dispatch => {
+        const data = { msgId, chatId };
+        dispatch(request(data));
+        dispatch(success());
+    };
+
+    function request(other) { return { type: chatConstants.DELETE_MESSAGE_REQUEST, other } }
+    function success() { return { type: chatConstants.DELETE_MESSAGE_SUCCESS } }
+}
+
+function blockUserReceive(chatId) {
+    return dispatch => {
+        const data = { chatId };
+        dispatch(success(data));
+    };
+
+    function success(other) { return { type: chatConstants.BLOCK_USER_RECEIVED_SUCCESS, other } }
+}
+
+function unblockUserReceive(chatId) {
+    return dispatch => {
+        const data = { chatId };
+        dispatch(success(data));
+    };
+
+    function success(other) { return { type: chatConstants.UNBLOCK_USER_RECEIVED_SUCCESS, other } }
+}
+
+function userStatus(data) {
+    return dispatch => {
+        let insideChat = utils.pathIsIn(paths.CHAT);
+        if (insideChat) {
+            data.chatId = utils.getPathId();
+        }
+        dispatch(success(data));
+    };
+
+    function success(other) { return { type: chatConstants.USER_STATUS, other } }
 }

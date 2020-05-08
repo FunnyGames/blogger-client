@@ -6,6 +6,8 @@ export const alertActions = {
     error,
     clear,
     refresh,
+    notification,
+    message,
     logout
 };
 
@@ -39,6 +41,14 @@ function clear() {
 
 function refresh(action) {
     return { type: alertConstants.REFRESH, action };
+}
+
+function notification(action) {
+    return { type: alertConstants.NOTIFICATION, action };
+}
+
+function message(action) {
+    return { type: alertConstants.MESSAGE, action };
 }
 
 function logout() {

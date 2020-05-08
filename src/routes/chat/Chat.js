@@ -13,6 +13,7 @@ import { Conversation } from './Conversation';
 import { NewChat } from './NewChat';
 import { ContextMenuTrigger } from 'react-contextmenu';
 import { ContextMenu, MenuItem } from 'react-contextmenu';
+import socket from '../../socket/socket.service';
 
 import '../../css/chat.css';
 import 'emoji-mart/css/emoji-mart.css';
@@ -245,7 +246,7 @@ class Chat extends React.Component {
         if (!selectedOption) {
             return <div>Please select chat first</div>;
         }
-        let { userId1, username1, username2, totalMessages, userBlocked1, userBlocked2 } = selectedOption;
+        let { userId1, username1, username2, totalMessages, userBlocked1, userBlocked2, online } = selectedOption;
         const meUser1 = userId1 === utils.getUserId();
         const username = meUser1 ? username2 : username1;
         const isBlocked = userBlocked1 || userBlocked2;
@@ -253,9 +254,11 @@ class Chat extends React.Component {
         const inputClass = `ui ${isBlocked ? 'disabled' : ''} left action right icon fluid input`;
         const chatId = this.getChatId();
         const hasMore = !loading && metadata && metadata.total > globalConstants.MESSAGES_LIMIT;
+        const onlineStatus = online ? 'online' : 'offline';
+        const onlineDiv = (<span className={`dot ${onlineStatus}`}></span>);
         return (
             <div>
-                <h2>{username} <span className="total-messages">({totalMessages} total)</span></h2>
+                <h2>{username} {onlineDiv} <span className="total-messages">({totalMessages} total)</span></h2>
                 <div className="ui divider"></div>
                 <Conversation
                     messages={messages}
@@ -292,6 +295,8 @@ class Chat extends React.Component {
                 chat = chats[i];
                 if (chat._id === chatId) {
                     this.setState({ selectedOption: chat }, f);
+                    const userId = chat.userId1 === utils.getUserId() ? chat.userId2 : chat.userId1;
+                    socket.listenToUserStatus(userId);
                     return true;
                 }
             }

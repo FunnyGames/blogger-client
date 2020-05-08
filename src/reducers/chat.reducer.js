@@ -19,6 +19,9 @@ export function chats(state = {}, action) {
                 state.chats = state.chats.map(c => {
                     if (c._id === action.other.chatId) {
                         c.totalNewMessages = 0;
+                        c.opened = true;
+                    } else {
+                        c.opened = false;
                     }
                     return c;
                 });
@@ -50,6 +53,45 @@ export function chats(state = {}, action) {
                     list.splice(0, 0, newChat);
                     state.chats = list;
                 }
+            }
+            return { ...state };
+
+        case chatConstants.NEW_MESSAGE:
+            if (!state.chats) return state;
+            let msg = action.payload;
+            if (state.chats.length > 0) {
+                let chats = state.chats;
+                let list = [];
+                let newChat = null;
+                for (let i = 0; i < chats.length; ++i) {
+                    let c = chats[i];
+                    if (c._id !== msg.chatId) {
+                        list.push(c);
+                    } else {
+                        newChat = c;
+                        newChat.lastMessage = utils.shortenMessage(msg.content);
+                        newChat.deleted = msg.deleted;
+                        newChat.lastUpdate = msg.createDate;
+                        newChat.lastMessageId = msg._id;
+                        newChat.totalMessages++;
+                        if (!action.payload.isChatOpened) newChat.totalNewMessages++;
+                    }
+                }
+                if (newChat) {
+                    list.splice(0, 0, newChat);
+                    state.chats = list;
+                }
+            } else {
+                let newChat = {};
+                newChat.username1 = msg.fromUsername;
+                newChat.userId1 = msg.userId1;
+                newChat.lastMessage = utils.shortenMessage(msg.content);
+                newChat.deleted = msg.deleted;
+                newChat.lastUpdate = msg.createDate;
+                newChat.lastMessageId = msg._id;
+                newChat.totalMessages++;
+                newChat.totalNewMessages++;
+                state.chats = [newChat];
             }
             return { ...state };
 
@@ -96,7 +138,20 @@ export function chats(state = {}, action) {
             });
             return { ...state };
 
+        case chatConstants.BLOCK_USER_RECEIVED_SUCCESS:
+            state.chats = state.chats.map(c => {
+                if (c._id === action.other.chatId) {
+                    if (utils.getUserId() !== c.userId2)
+                        c.userBlocked1 = true;
+                    else
+                        c.userBlocked2 = true;
+                }
+                return c;
+            });
+            return { ...state };
+
         case chatConstants.UNBLOCK_USER_SUCCESS:
+        case chatConstants.UNBLOCK_USER_RECEIVED_SUCCESS:
             if (!state.chats) return state;
             state.chats = state.chats.map(c => {
                 if (c._id === action.other.chatId) {
@@ -107,10 +162,30 @@ export function chats(state = {}, action) {
             });
             return { ...state };
 
+        case chatConstants.USER_STATUS:
+            let chatId = action.other.chatId;
+            if (chatId && state.chats) {
+                state.chats = state.chats.map(c => {
+                    if (c._id === chatId) {
+                        c.online = action.other.online;
+                    }
+                    return c;
+                });
+                return { ...state };
+            }
+            return state;
+
         case userConstants.LOGOUT_SUCCESS:
             return {};
 
         default:
+            if (state.chats) {
+                state.chats = state.chats.map(c => {
+                    c.opened = false;
+                    return c;
+                });
+                return { ...state };
+            }
             return state;
     }
 }
@@ -126,6 +201,15 @@ export function totalMessages(state = {}, action) {
 
         case chatConstants.GET_TOTAL_MESSAGES_NUMBER:
             return { ...action.payload };
+
+        case chatConstants.NEW_MESSAGE:
+            if (action.payload.isChatOpened) {
+                return state;
+            }
+            const chatId = action.payload.chatId;
+            let count = (state.count ? state.count.filter(c => c !== chatId) : []);
+            count.push(chatId);
+            return { count };
 
         case userConstants.LOGOUT_SUCCESS:
             return {};
@@ -144,16 +228,27 @@ export function messages(state = {}, action) {
             data = action.payload.messages.reverse().concat(data);
             let total = state.metadata ? state.metadata.overall : 0;
             action.payload.metadata.overall = Math.max(action.payload.metadata.total, total);
-            return { messages: data, metadata: action.payload.metadata };
+            return { messages: data, metadata: action.payload.metadata, chatId: action.other.chatId };
         case chatConstants.GET_MESSAGES_FAILURE:
             return { error: action.error };
 
         case chatConstants.CREATE_MESSAGE_SUCCESS:
             state = {
                 messages: [...state.messages, action.payload],
-                metadata: { total: state.metadata.total + 1 }
+                metadata: { total: state.metadata.total + 1 },
+                chatId: state.chatId
             };
-            return { ...state };
+            return state;
+
+        case chatConstants.NEW_MESSAGE:
+            if (!state.messages || state.chatId !== action.payload.chatId) return state;
+            let msg = { ...action.payload, chats: undefined };
+            state = {
+                messages: [...state.messages, msg],
+                metadata: { total: state.metadata.total + 1 },
+                chatId: state.chatId
+            };
+            return state;
 
         case chatConstants.GET_MESSAGES_CLEAR:
         case userConstants.LOGOUT_SUCCESS:
@@ -172,9 +267,10 @@ export function messages(state = {}, action) {
                     }
                     return m;
                 })],
-                metadata: { total: state.metadata.total }
+                metadata: { total: state.metadata.total },
+                chatId: state.chatId
             };
-            return { ...state };
+            return state;
 
         default:
             return state;

@@ -20,7 +20,7 @@ class MessageButton extends React.Component {
     render() {
         const { totalMessages } = this.props;
         let numberOfMessages = 0;
-        if (totalMessages && totalMessages.count > 0) numberOfMessages = totalMessages.count;
+        if (totalMessages && totalMessages.count) numberOfMessages = totalMessages.count.length;
         return (
             <div className="navbar-icon" onClick={this.onMessagesClick}>
                 <div className="notification">

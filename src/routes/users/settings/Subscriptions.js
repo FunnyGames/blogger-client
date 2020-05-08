@@ -76,7 +76,6 @@ class Subscriptions extends React.Component {
             let row = data[i];
             let username = row.subToUsername;
             let userId = row.subToUserId;
-            console.log(row);
             tableRows.push(this.buildRow(row._id, username, userId));
         }
         return tableRows;
@@ -85,7 +84,6 @@ class Subscriptions extends React.Component {
     render() {
         const { info, subscriptions, alert, dispatch } = this.props;
         if (info.error) return <ErrorConnect />;
-        console.log(subscriptions);
         if (alertRefersh.is(alert, alertRefersh.UNSUBSCRIBE)) {
             this.fetchSubs();
             dispatch(alertActions.clear());

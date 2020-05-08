@@ -58,7 +58,7 @@ class Navbar extends React.Component {
 
     render() {
         this.hasActive = false;
-        const { loggedIn, user } = this.props;
+        const { loggedIn, user, version } = this.props;
         let listOfLinks = [];
         listOfLinks.push(<Link key={paths.BLOGS} className={this.getLinkClass({ page: paths.HOMEPAGE, exact: true }, paths.BLOGS)} to={paths.HOMEPAGE}>Blogs</Link>);
         listOfLinks.push(this.createLink("Groups", paths.GROUPS));
@@ -83,7 +83,7 @@ class Navbar extends React.Component {
         return (
             <div className="sticky">
                 <div className="navbar topnav">
-                    <Link className="header-main" to={paths.HOMEPAGE}>Blogger <span style={{ fontSize: 'x-small' }}>v3</span></Link>
+                    <Link className="header-main" to={paths.HOMEPAGE}>Blogger <span style={{ fontSize: 'x-small' }}>v{version}</span></Link>
                     {listOfLinks}
                 </div>
             </div>

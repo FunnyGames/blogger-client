@@ -39,6 +39,8 @@ import { Chat } from './routes/chat/Chat';
 
 Modal.setAppElement('#root');
 
+const version = 3.1;
+
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -118,14 +120,14 @@ class App extends React.Component {
         // Return the render
         return (
             <Router history={history}>
-                <Navbar history={history} />
+                <Navbar history={history} version={version} />
                 <Switch>
                     {privateRoutes}
                     {publicRoutes}
 
                     <Route component={NotFound} />
                 </Switch>
-                <Footer />
+                <Footer version={version} />
                 <Toast />
                 <ForceLogout />
             </Router>

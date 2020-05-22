@@ -1,5 +1,5 @@
 import socket from './socket.service';
-import { notificationActions, chatActions } from '../actions';
+import { notificationActions, chatActions, friendActions } from '../actions';
 import constants from './listen.constants';
 
 export const listen = (dispatch) => {
@@ -29,5 +29,16 @@ export const listen = (dispatch) => {
     // User
     socket.addListener(constants.USER_STATUS, (data) => {
         dispatch(chatActions.userStatus(data));
+    });
+
+    // Friend
+    socket.addListener(constants.FRIEND, (data) => {
+        if (data.content) {
+            if (data.content.pending) {
+                dispatch(friendActions.newFriendRequest(data));
+            } else {
+                dispatch(friendActions.newFriendAccepted(data));
+            }
+        }
     });
 }

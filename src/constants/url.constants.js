@@ -70,4 +70,12 @@ export default {
     CHAT_BLOCK_USER: api + '/chat/:id/block',
     CHAT_UNBLOCK_USER: api + '/chat/:id/unblock',
     DELETE_MESSAGE: api + '/chat/:id/delete/:id2',
+
+    // Friends
+    GET_FRIENDS: api + '/users/friends',
+    GET_FRIEND_REQUESTS: api + '/users/friends/requests',
+    FRIEND_REQUEST: api + '/users/friends/:id/friend',
+    UNFRIEND: api + '/users/friends/:id/unfriend',
+    FRIEND_ACCEPT: api + '/users/friends/:id/accept',
+    GET_TOTAL_FRIEND_REQUESTS: api + '/users/friends/total',
 }

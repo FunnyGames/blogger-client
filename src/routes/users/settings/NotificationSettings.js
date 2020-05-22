@@ -31,6 +31,10 @@ const getTitleDesc = (s) => {
             title = 'Blogs';
             description = 'Updates about new blogs of users you subscribed to';
             break;
+        case 'friendSettings':
+            title = 'Friend Requests';
+            description = 'Updates about new friends requests and users that accepted your requests';
+            break;
         case 'customSettings':
             title = 'Custom';
             description = 'Updates or announcements from the site';

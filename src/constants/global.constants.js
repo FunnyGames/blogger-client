@@ -42,4 +42,6 @@ export default {
     COMMENT_MAX_LENGTH: 1000,
     // Chat
     MESSAGES_LIMIT: 20,
+    // Friend
+    FRIEND_REQUEST_LIMIT: 20,
 };

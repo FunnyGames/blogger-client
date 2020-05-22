@@ -22,6 +22,8 @@ export const alertRefersh = {
 
     UNSUBSCRIBE: 'UNSUBSCRIBE',
 
+    FRIEND_REQUEST: 'FRIEND_REQUEST',
+
     // Functions
     is,
     isIn

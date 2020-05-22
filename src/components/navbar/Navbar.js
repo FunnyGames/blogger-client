@@ -5,6 +5,7 @@ import paths from '../../constants/path.constants';
 import { userActions } from '../../actions';
 import NotificationButton from './NotificationButton';
 import MessageButton from './MessageButton';
+import FriendButton from './FriendButton';
 
 import '../../css/navbar.css';
 
@@ -74,6 +75,7 @@ class Navbar extends React.Component {
                 listOfLinks.push(<div className="hello-nav" key="Welcome" style={{ minWidth: '200px' }}>{!name ? <div className="ui active loader"></div> : null} {text}</div >);
                 listOfLinks.push(<NotificationButton key="notification-button" />);
                 listOfLinks.push(<MessageButton key="message-button" />);
+                listOfLinks.push(<FriendButton key="friend-button" />);
             }
         } else {
             listOfLinks.push(this.createLink("Log in", paths.LOGIN));

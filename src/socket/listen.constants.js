@@ -10,4 +10,7 @@ export default {
 
     // User
     USER_STATUS: 'user_status',
+
+    // Friend
+    FRIEND: 'friend',
 };

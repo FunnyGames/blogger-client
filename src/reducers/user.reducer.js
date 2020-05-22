@@ -1,4 +1,4 @@
-import { userConstants } from '../constants';
+import { userConstants, friendConstants } from '../constants';
 import globalConstants from '../constants/global.constants';
 const { LOCAL_STR_TOKEN } = globalConstants;
 
@@ -108,6 +108,38 @@ export function profile(state = {}, action) {
         case userConstants.SUBSCRIBE_REQUEST:
         case userConstants.UNSUBSCRIBE_REQUEST:
             return { ...state, subLoading: true };
+
+        case friendConstants.FRIEND_ACCEPT_SUCCESS:
+            if (!state.friend) return state;
+            if (state.friend._id !== action.other) return state;
+            return { ...state, friendLoading: undefined, friend: { ...state.friend, pending: false } };
+
+        case friendConstants.UNFRIEND_SUCCESS:
+            if (!state.friend) return state;
+            if (state.friend._id !== action.other) return state;
+            return { ...state, friendLoading: undefined, friend: null };
+
+        case friendConstants.FRIEND_SUCCESS:
+            return { ...state, friend: action.payload, friendLoading: false };
+
+        case friendConstants.NEW_FRIEND_REQUEST:
+            if (state.friend) return state;
+            if (state._id !== action.data.content.userId1 && state._id !== action.data.content.userId2) return state;
+            return { ...state, friend: action.data.content, friendLoading: false };
+
+        case friendConstants.NEW_FRIEND_ACCEPT:
+            if (!state.friend) return state;
+            if (state.friend._id !== action.data.content._id) return state;
+            return { ...state, friend: action.data.content, friendLoading: false };
+
+        case friendConstants.FRIEND_REQUEST:
+            return { ...state, friendLoading: true };
+
+        case friendConstants.UNFRIEND_REQUEST:
+        case friendConstants.FRIEND_ACCEPT_REQUEST:
+            if (!state.friend) return state;
+            if (state.friend._id !== action.other) return state;
+            return { ...state, friendLoading: true };
 
         case userConstants.LOGOUT_SUCCESS:
             return {};

@@ -4,15 +4,17 @@ import paths from '../../constants/path.constants';
 import setTitle from '../../environments/document';
 import ErrorConnect from '../../components/pages/ErrorConnect';
 import renderLoader from '../../components/interactive/Loader';
-import * as utils from '../../helpers/utils';
 import history from '../../helpers/history';
 import { EditProfile } from './settings/EditProfile';
 import { EditPassword } from './settings/EditPassword';
 import { ProfileGroups } from './settings/ProfileGroups';
+import { ProfileBlogs } from './settings/ProfileBlogs';
 import { CancelAccount } from './settings/CancelAccount';
 import { BlockedUsers } from './settings/BlockedUsers';
 import { Subscriptions } from './settings/Subscriptions';
 import { NotificationSettings } from './settings/NotificationSettings';
+import { FriendRequests } from './settings/FriendRequests';
+import { FriendList } from './settings/FriendList';
 
 import '../../css/profile.css';
 
@@ -64,12 +66,11 @@ class Profile extends React.Component {
     buildLeftPanel = () => {
         const list = [];
 
-        const userId = utils.getUserId();
-        let myBlogsLink = utils.convertUrlPath(paths.USER_BLOGS, { id: userId });
-
         list.push(this.buildLeftPanelTitle('General'));
-        list.push(this.buildLeftPanelItem('My Posts', 'book', myBlogsLink, true));
+        list.push(this.buildLeftPanelItem('My Posts', 'book', paths.PROFILE_BLOGS));
         list.push(this.buildLeftPanelItem('My Groups', 'users', paths.PROFILE_GROUPS));
+        list.push(this.buildLeftPanelItem('Friends', 'users', paths.FRIENDS));
+        list.push(this.buildLeftPanelItem('Friend Requests', 'user plus', paths.FRIEND_REQUESTS));
         list.push(this.buildLeftPanelItem('Blocked Users', 'ban', paths.BLOCKED_USERS));
         list.push(this.buildLeftPanelItem('Subscriptions', 'newspaper outline', paths.SUBSCRIPTIONS));
 
@@ -92,8 +93,11 @@ class Profile extends React.Component {
         switch (path) {
             case paths.PROFILE: ret = (<EditProfile />); break;
             case paths.EDIT_PASSWORD: ret = (<EditPassword />); break;
+            case paths.PROFILE_BLOGS: ret = (<ProfileBlogs />); break;
             case paths.PROFILE_GROUPS: ret = (<ProfileGroups />); break;
             case paths.CANCEL_ACCOUNT: ret = (<CancelAccount />); break;
+            case paths.FRIENDS: ret = (<FriendList />); break;
+            case paths.FRIEND_REQUESTS: ret = (<FriendRequests />); break;
             case paths.BLOCKED_USERS: ret = (<BlockedUsers />); break;
             case paths.SUBSCRIPTIONS: ret = (<Subscriptions />); break;
             case paths.NOTIFICATIONS_SETTINGS: ret = (<NotificationSettings />); break;

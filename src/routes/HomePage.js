@@ -24,7 +24,8 @@ class HomePage extends React.Component {
     buildMenuItem = (text, type) => {
         const { activeList } = this.state;
         const cls = activeList === type ? 'item active' : 'item';
-        return (<div class={cls} style={{ cursor: 'pointer' }} onClick={() => this.changeMenu(type)}>{text}</div>);
+        const key = text.toLowerCase();
+        return (<div key={key} className={cls} style={{ cursor: 'pointer' }} onClick={() => this.changeMenu(type)}>{text}</div>);
     }
 
     buildMenuList = () => {
@@ -42,7 +43,7 @@ class HomePage extends React.Component {
         const currentTab = isLoggedIn ? activeList : RECENT;
         return (
             <div className="ui container">
-                {isLoggedIn && <div class="ui three item menu" style={{ marginTop: '2em' }}>
+                {isLoggedIn && <div className="ui three item menu" style={{ marginTop: '2em' }}>
                     {menuList}
                 </div>
                 }

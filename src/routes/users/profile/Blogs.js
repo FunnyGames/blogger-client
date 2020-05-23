@@ -1,25 +1,21 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import Table from '../../../components/interactive/Table';
-import { blogActions, userActions, alertActions } from '../../../actions';
+import { blogActions, alertActions } from '../../../actions';
 import history from '../../../helpers/history';
 import globalConstants from '../../../constants/global.constants';
 import * as utils from '../../../helpers/utils';
 import * as timeUtils from '../../../helpers/time-utils';
 import paths from '../../../constants/path.constants';
 import { blogOptions } from '../../../constants/table.options';
-import Modal from '../../../components/interactive/Modal';
 
 class BlogsList extends React.Component {
     state = {
         name: undefined,
         page: 1,
         selectedOption: null,
-        my: false,
         userId: undefined
     };
-
-    openModal = {};
 
     componentDidMount() {
         let params = utils.getUrlParams();
@@ -29,44 +25,28 @@ class BlogsList extends React.Component {
             userId = path[2];
         }
         let tags = params.get('tags');
-        let my = userId === utils.getUserId();
         let name = tags ? '#' + tags : undefined;
-        this.setState({ name, my, userId }, this.fetchBlogs);
+        this.setState({ name, userId }, this.fetchBlogs);
     }
 
     fetchBlogs() {
         // Get dispatch function from props
-        const { dispatch, profile } = this.props;
+        const { dispatch } = this.props;
 
         // Fetch blogs
         const limit = globalConstants.TABLE_LIMIT;
-        const { page, name, selectedOption, userId, my } = this.state;
+        const { page, name, selectedOption, userId } = this.state;
         let { sortOrder, sortBy } = {};
         if (selectedOption) {
             sortBy = selectedOption.sortBy;
             sortOrder = selectedOption.sortOrder;
         }
-        let blogs = (my ? 'my' : undefined);
 
         const query = {
-            blogs,
-            userId: my ? undefined : userId
+            userId
         }
         dispatch(blogActions.getBlogs(page, limit, name, sortBy, sortOrder, query));
-        if (!my && userId && profile && !profile.username) {
-            dispatch(userActions.getUserProfile(userId));
-        }
-    }
 
-    showDeleteConfirm = (blogId) => {
-        if (this.openModal.func) {
-            this.openModal.func(blogId);
-        }
-    }
-
-    confirmDelete = (blogId) => {
-        const { dispatch } = this.props;
-        dispatch(blogActions.deleteBlog(blogId));
     }
 
     onSearch = (name) => {
@@ -93,11 +73,6 @@ class BlogsList extends React.Component {
                     <div style={{ width: '100%' }}></div>
                 </td>
                 <td style={{ textAlign: 'right' }}><i>{createDate}</i></td>
-                {this.isOwner(userId) ?
-                    <td style={{ textAlign: 'right', width: '1%' }}>
-                        <button className="ui red button" onClick={e => { e.stopPropagation(); this.showDeleteConfirm(id); }}>Delete</button>
-                    </td>
-                    : <td />}
             </tr>
         );
     }
@@ -161,15 +136,6 @@ class BlogsList extends React.Component {
                         initialInput={initialInput}
                     />
                 }
-                <Modal
-                    message="Are you sure you want to delete this blog?"
-                    onConfirm={this.confirmDelete}
-                    confirmLabel="Yes"
-                    confirmColor="red"
-                    denyLabel="No"
-                    denyColor="grey"
-                    openModal={this.openModal}
-                />
             </Fragment>
         );
     }

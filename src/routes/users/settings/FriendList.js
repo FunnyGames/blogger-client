@@ -71,11 +71,12 @@ class FriendList extends React.Component {
     createTableRows = (data) => {
         if (!data || data.length === 0) return [this.noDataTableRows()];
         const tableRows = [];
+        const userId = utils.getUserId();
         for (let i = 0; i < data.length; ++i) {
             let row = data[i];
-            const { userRequested, userId1, username1, username2 } = row;
-            let fromUserId = userRequested;
-            let fromUsername = userRequested === userId1 ? username1 : username2;
+            const { userId1, userId2, username1, username2 } = row;
+            let fromUserId = userId1 === userId ? userId2 : userId1;
+            let fromUsername = userId1 === userId ? username2 : username1;
             tableRows.push(this.buildRow(row._id, fromUsername, fromUserId));
         }
         return tableRows;

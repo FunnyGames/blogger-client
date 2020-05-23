@@ -14,16 +14,20 @@ class BlogForm extends React.Component {
     state = {
         selectedMemberOption: null,
         selectedGroupOption: null,
-        isPrivate: false
+        isPrivate: false,
+        isPublic: true,
+        isFriends: false
     };
 
     componentDidMount() {
         const { initialValues } = this.props;
         if (!initialValues) return;
         const isPrivate = initialValues.permission === 'private';
+        const isFriends = initialValues.permission === 'friends';
+        const isPublic = initialValues.permission === 'public';
         const selectedMemberOption = initialValues.members;
         const selectedGroupOption = initialValues.groups;
-        this.setState({ isPrivate, selectedMemberOption, selectedGroupOption });
+        this.setState({ isPrivate, isFriends, isPublic, selectedMemberOption, selectedGroupOption });
     }
 
     inputMemberChanged = val => {
@@ -70,10 +74,20 @@ class BlogForm extends React.Component {
         this.props.dispatch(change(formName, 'tags', tags));
     }
 
-    changePrivacy = () => {
-        const isPrivate = !this.state.isPrivate;
-        this.setState({ isPrivate });
+    changePrivacy = (e) => {
+        let isPrivate = false;
+        let isFriends = false;
+        let isPublic = false;
+        let permission = null;
+        switch (e.target.name) {
+            case 'permission_private': isPrivate = true; permission = 'private'; break;
+            case 'permission_friends': isFriends = true; permission = 'friends'; break;
+            case 'permission_public': isPublic = true; permission = 'public'; break;
+            default: break;
+        }
+        this.setState({ isPrivate, isFriends, isPublic });
         this.props.dispatch(change(formName, 'isPrivate', isPrivate));
+        this.props.dispatch(change(formName, 'permission', permission));
     }
 
     buildMemberOptions = (users) => {
@@ -92,10 +106,9 @@ class BlogForm extends React.Component {
 
     render() {
         const { handleSubmit, onCancel, submitting, users, groups, userLoading, groupLoading, initialValues, disabled } = this.props;
-        const { selectedMemberOption, selectedGroupOption, isPrivate } = this.state;
+        const { selectedMemberOption, selectedGroupOption, isPrivate, isFriends, isPublic } = this.state;
         const memberOptions = this.buildMemberOptions(users);
         const groupOptions = this.buildGroupOptions(groups);
-        const privacyLevel = isPrivate ? 'Private' : 'Public';
         const tags = initialValues && initialValues.tags;
 
         const permissions = isPrivate ?
@@ -131,10 +144,26 @@ class BlogForm extends React.Component {
                     Tags:
                     <Field name="tags" component={Tags} onTagChange={this.handleTagsChange} type="text" label="Enter tags" initialValues={tags} />
                     <p></p>
-                    <label>Visibility: </label>
-                    <div className="ui slider checkbox">
-                        <input type="checkbox" name="privacy" onChange={this.changePrivacy} checked={isPrivate} disabled={disabled} />
-                        <label>{privacyLevel}</label>
+                    <div className="inline fields">
+                        <label>Visibility:</label>
+                        <div className="field">
+                            <div className="ui radio checkbox">
+                                <input type="radio" name="permission_public" onChange={this.changePrivacy} checked={isPublic} disabled={disabled} />
+                                <label>Public</label>
+                            </div>
+                        </div>
+                        <div className="field">
+                            <div className="ui radio checkbox">
+                                <input type="radio" name="permission_friends" onChange={this.changePrivacy} checked={isFriends} disabled={disabled} />
+                                <label>Friends only</label>
+                            </div>
+                        </div>
+                        <div className="field">
+                            <div className="ui radio checkbox">
+                                <input type="radio" name="permission_private" onChange={this.changePrivacy} checked={isPrivate} disabled={disabled} />
+                                <label>Private</label>
+                            </div>
+                        </div>
                     </div>
                     <br />
                     {permissions}

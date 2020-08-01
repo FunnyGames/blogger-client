@@ -1,11 +1,11 @@
 import { returnError } from './';
 
-export function perform(service, data, actions, successCallback, failureCallback, other) {
+export function perform(service, data, actions, successCallback, failureCallback, other, uploadCallback) {
     if (!other) other = {};
     return dispatch => {
         dispatch(request(other.request));
 
-        service(data)
+        service(data, uploadCallback)
             .then(
                 data => {
                     dispatch(success(data, other.success));

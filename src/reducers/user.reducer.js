@@ -37,6 +37,26 @@ export function user(state = initialState, action) {
         case userConstants.GET_PROFILE_FAILURE:
             return { loggedIn: state.loggedIn, error: action.error };
 
+        case userConstants.UPLOAD_AVATAR_REQUEST:
+        case userConstants.UPLOAD_AVATAR_FAILURE:
+        case userConstants.DELETE_AVATAR_REQUEST:
+        case userConstants.DELETE_AVATAR_FAILURE:
+            return { ...state, avatarUpdated: false };
+
+        case userConstants.UPLOAD_AVATAR_SUCCESS:
+            let u = {
+                ...state.user,
+                avatar: action.payload.data.avatar
+            };
+            return { ...state, user: u, avatarUpdated: true };
+
+        case userConstants.DELETE_AVATAR_SUCCESS:
+            let us = {
+                ...state.user,
+                avatar: ''
+            };
+            return { ...state, user: us, avatarUpdated: true };
+
         default:
             return state;
     }

@@ -8,14 +8,23 @@ import Dropdown from '../interactive/Dropdown';
 import { friendActions } from '../../actions';
 import globalConstants from '../../constants/global.constants';
 
+import defaultProfileImage from '../../images/static/default-profile.png';
+
 import '../../css/notification.css';
 
 export const formatFriendRequest = (request, onAccept, onDecline) => {
-    const { username1, username2, userId1, pending, userRequested } = request;
+    const { username1, username2, userId1, pending, userRequested, avatar1, avatar2 } = request;
     let fromUserId = userRequested;
-    let fromUsername = userRequested === userId1 ? username1 : username2;
+    let otherUser1 = userRequested === userId1;
+    let fromUsername = otherUser1 ? username1 : username2;
+    let avatar = otherUser1 ? avatar1 : avatar2;
+    let image = avatar || defaultProfileImage;
     const userUrl = fromUserId ? utils.convertUrlPath(paths.USER, { id: fromUserId }) : '';
-    const userLink = <div className="notification-user-link" style={{ display: 'initial' }} onClick={e => { e.stopPropagation(); history.push(userUrl); }} allowclose="true">{fromUsername}</div>;
+    const userLink = (
+        <div className="notification-user-link" style={{ display: 'initial' }} onClick={e => { e.stopPropagation(); history.push(userUrl); }} allowclose="true">
+            <img src={image} alt="profile pic" className="profile-avatar" style={{ marginRight: '10px' }} /><p>{fromUsername}</p>
+        </div>
+    );
     let text = (
         <div allowclose="true">
             {pending &&

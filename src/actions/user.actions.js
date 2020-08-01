@@ -6,6 +6,7 @@ import paths from '../constants/path.constants';
 import globalConstants from '../constants/global.constants';
 import { chatActions } from './chat.actions';
 import socket from '../socket/socket.service';
+import { perform } from './base.actions';
 import * as socketListener from '../socket/listener';
 
 const { LOCAL_STR_TOKEN } = globalConstants;
@@ -24,7 +25,9 @@ export const userActions = {
     cancelAccount,
     subscribe,
     unsubscribe,
-    subscriptions
+    subscriptions,
+    uploadAvatar,
+    deleteAvatar,
 };
 
 function loadInitialData(dispatch) {
@@ -298,4 +301,24 @@ function subscriptions(page, limit, name, sortBy, sortOrder) {
     function request() { return { type: userConstants.GET_SUBSCRIPTIONS_REQUEST } }
     function success(payload) { return { type: userConstants.GET_SUBSCRIPTIONS_SUCCESS, payload } }
     function failure(error) { return { type: userConstants.GET_SUBSCRIPTIONS_FAILURE, error } }
+}
+
+function uploadAvatar(image, callback) {
+    const datax = image;
+    const actions = {
+        request: userConstants.UPLOAD_AVATAR_REQUEST,
+        success: userConstants.UPLOAD_AVATAR_SUCCESS,
+        failure: userConstants.UPLOAD_AVATAR_FAILURE
+    };
+    return perform(userService.uploadAvatar, datax, actions, null, null, null, callback);
+}
+
+function deleteAvatar() {
+    const datax = null;
+    const actions = {
+        request: userConstants.DELETE_AVATAR_REQUEST,
+        success: userConstants.DELETE_AVATAR_SUCCESS,
+        failure: userConstants.DELETE_AVATAR_FAILURE
+    };
+    return perform(userService.deleteAvatar, datax, actions);
 }

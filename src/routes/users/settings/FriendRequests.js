@@ -10,6 +10,8 @@ import history from '../../../helpers/history';
 import globalConstants from '../../../constants/global.constants';
 import { friendOptions } from '../../../constants/table.options';
 
+import defaultProfileImage from '../../../images/static/default-profile.png';
+
 import '../../../css/profile.css';
 
 class FriendRequests extends React.Component {
@@ -69,9 +71,12 @@ class FriendRequests extends React.Component {
     buildRow = (data) => {
         const onAccept = e => { e.stopPropagation(); this.onAccept(_id); }
         const onDecline = e => { e.stopPropagation(); this.onDecline(_id); }
-        const { _id, username1, username2, userId1, userId2, userRequested } = data;
-        const username = userId1 === utils.getUserId() ? username2 : username1;
-        const fromUserId = userId1 === utils.getUserId() ? userId2 : userId1;
+        const { _id, username1, username2, userId1, userId2, userRequested, avatar1, avatar2 } = data;
+        const meUser1 = userId1 === utils.getUserId();
+        const username = meUser1 ? username2 : username1;
+        const fromUserId = meUser1 ? userId2 : userId1;
+        const avatar = meUser1 ? avatar2 : avatar1;
+        const image = avatar || defaultProfileImage;
         const userUrl = fromUserId ? utils.convertUrlPath(paths.USER, { id: fromUserId }) : '';
         const button = userRequested === utils.getUserId() ?
             (<button className="ui red button" onClick={onDecline}><i className="icon ban" />Cancel Request</button>) :
@@ -80,7 +85,10 @@ class FriendRequests extends React.Component {
                 <button className="ui red button" onClick={onDecline}><i className="icon user times" />Decline</button>
             </Fragment>);
         return (
-            <tr key={_id} style={{ cursor: 'pointer' }} onClick={() => history.push(userUrl)}><td>{username}</td><td className="right aligned">{button}</td></tr>
+            <tr key={_id} style={{ cursor: 'pointer' }} onClick={() => history.push(userUrl)}>
+                <td><img src={image} alt="profile pic" className="profile-avatar" style={{ marginRight: '10px' }} /><p style={{ marginTop: '5px' }}>{username}</p></td>
+                <td className="right aligned">{button}</td>
+            </tr>
         );
     }
 

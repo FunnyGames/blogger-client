@@ -15,8 +15,11 @@ import { ContextMenuTrigger } from 'react-contextmenu';
 import { ContextMenu, MenuItem } from 'react-contextmenu';
 import socket from '../../socket/socket.service';
 
+import defaultProfileImage from '../../images/static/default-profile.png';
+
 import '../../css/chat.css';
 import 'emoji-mart/css/emoji-mart.css';
+import { Link } from 'react-router-dom';
 
 const BLOCK_USER_ID = 'BLOCK_USER_ID';
 const UNBLOCK_USER_ID = 'UNBLOCK_USER_ID';
@@ -159,7 +162,7 @@ class Chat extends React.Component {
         }
     }
 
-    buildLeftPanelItem = (_id, username, lastMessage, lastUpdate, newMessages, selected, meUser1, chat) => {
+    buildLeftPanelItem = (_id, username, lastMessage, lastUpdate, newMessages, selected, meUser1, chat, avatar) => {
         const { userBlocked1, userBlocked2 } = chat;
         const key = 'item-' + _id;
         const newMsgCount = newMessages > 0 ? <b className="chat-new-messages-count">{newMessages}</b> : null;
@@ -171,12 +174,14 @@ class Chat extends React.Component {
         const onClickBlock = isBlocked ? this.onClickUnBlock : this.onClickBlock;
         const meBlocked = meUser1 ? userBlocked1 : userBlocked2;
         const blockMsg = meBlocked ? 'You are blocked' : isBlocked ? 'Unblock User' : 'Block User';
+        const image = avatar || defaultProfileImage;
 
         return (
             <div key={key}>
                 <ContextMenuTrigger id={menuId}>
                     <div className={userClass} onClick={() => this.onChangeSelect(chat)}>
                         <div className="content">
+                            <img src={image} alt="profile pic" className="profile-avatar" style={{ marginRight: '10px' }} />
                             <span className="chat-last-update">{lastUpdate}</span>
                             <span className="chat-username">{username} {newMsgCount}</span><br />
                             <span className="chat-last-message">{lastMessage}</span>
@@ -211,13 +216,15 @@ class Chat extends React.Component {
     buildLeftPanel = (chats) => {
         if (!chats || chats.loading) return this.loadingChatList();
         const list = [];
+        let avatars = chats.avatars;
         chats = chats.chats;
         if (chats && chats.length > 0) {
             chats = this.filterChatList(chats);
             const length = chats.length;
             for (let i = 0; i < length; ++i) {
-                let { userId1, username1, username2, lastMessage, _id, deleted, lastUpdate, lastUserId, totalNewMessages } = chats[i];
+                let { userId1, userId2, username1, username2, lastMessage, _id, deleted, lastUpdate, lastUserId, totalNewMessages } = chats[i];
                 const meUser1 = userId1 === utils.getUserId();
+                const userId = meUser1 ? userId2 : userId1;
                 let username = meUser1 ? username2 : username1;
                 let newMessages = 0;
                 if (totalNewMessages > 0) {
@@ -228,7 +235,8 @@ class Chat extends React.Component {
                 if (deleted) lastMessage = 'Message deleted';
                 lastUpdate = timeUtils.formatChatTime(lastUpdate);
                 const selected = this.isChatSelected(_id);
-                list.push(this.buildLeftPanelItem(_id, username, lastMessage, lastUpdate, newMessages, selected, meUser1, chats[i]));
+                const avatar = avatars[userId];
+                list.push(this.buildLeftPanelItem(_id, username, lastMessage, lastUpdate, newMessages, selected, meUser1, chats[i], avatar));
             }
         } else {
             list.push(<div key="no-chats"><center><i>No Chats</i></center></div>)
@@ -240,15 +248,17 @@ class Chat extends React.Component {
         );
     }
 
-    buildCenterPanel = (messages) => {
+    buildCenterPanel = (chats, messages) => {
         const { loading, metadata } = messages;
         const { message, selectedOption, emojiPickerOpened } = this.state;
         if (!selectedOption) {
             return <div>Please select chat first</div>;
         }
-        let { userId1, username1, username2, totalMessages, userBlocked1, userBlocked2, online } = selectedOption;
+        let avatars = chats.avatars;
+        let { userId1, userId2, username1, username2, totalMessages, userBlocked1, userBlocked2, online } = selectedOption;
         const meUser1 = userId1 === utils.getUserId();
         const username = meUser1 ? username2 : username1;
+        const userId = meUser1 ? userId2 : userId1;
         const isBlocked = userBlocked1 || userBlocked2;
         const sendIcon = message && message.length > 0 ? 'inverted circular paper plane link icon' : 'disabled paper plane icon';
         const inputClass = `ui ${isBlocked ? 'disabled' : ''} left action right icon fluid input`;
@@ -256,9 +266,14 @@ class Chat extends React.Component {
         const hasMore = !loading && metadata && metadata.total > globalConstants.MESSAGES_LIMIT;
         const onlineStatus = online ? 'online' : 'offline';
         const onlineDiv = (<span className={`dot ${onlineStatus}`}></span>);
+        const avatar = avatars[userId] || defaultProfileImage;
+        let path = utils.convertUrlPath(paths.USER, { id: userId });
+        const image = <img src={avatar} alt="profile pic" className="profile-avatar" style={{ marginRight: '10px', width: '50px', height: '50px' }} />
         return (
             <div>
-                <h2>{username} {onlineDiv} <span className="total-messages">({totalMessages} total)</span></h2>
+                <h2 style={{ height: '50px' }}>
+                    <Link style={{ color: 'black' }} to={path}>{image} {username}</Link> {onlineDiv} <span className="total-messages">({totalMessages} total)</span>
+                </h2>
                 <div className="ui divider"></div>
                 <Conversation
                     messages={messages}
@@ -310,7 +325,7 @@ class Chat extends React.Component {
             return this.loadingChatList();
         }
         const leftPanel = this.buildLeftPanel(chats);
-        const centerPanel = this.buildCenterPanel(messages);
+        const centerPanel = this.buildCenterPanel(chats, messages);
 
         return (
             <div style={{ marginBottom: '4em', marginTop: '4em' }}>

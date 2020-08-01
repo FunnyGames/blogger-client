@@ -7,7 +7,10 @@ import NotificationButton from './NotificationButton';
 import MessageButton from './MessageButton';
 import FriendButton from './FriendButton';
 
+import defaultProfileImage from '../../images/static/default-profile.png';
+
 import '../../css/navbar.css';
+import '../../css/profile.css';
 
 // Component for showing the navbar
 class Navbar extends React.Component {
@@ -36,7 +39,7 @@ class Navbar extends React.Component {
                 if (path === p.page) {
                     active = true;
                     this.hasActive = true;
-                    break
+                    break;
                 }
             } else if (this.pathIsActive(path, p)) {
                 active = true;
@@ -72,7 +75,16 @@ class Navbar extends React.Component {
             } else {
                 let name = user && user.user ? user.user.firstName : null;
                 let text = name ? "Hello " + name + "!" : "...";
-                listOfLinks.push(<div className="hello-nav" key="Welcome" style={{ minWidth: '200px' }}>{!name ? <div className="ui active loader"></div> : null} {text}</div >);
+                let image = (user && user.user && user.user.avatar) || defaultProfileImage;
+                listOfLinks.push(
+                    <Link className="hello-nav profile-link" key="Welcome" style={{ minWidth: '200px' }} to={paths.PROFILE}>
+                        <img src={image} alt="profile" className="profile-avatar" />
+                        {!name ?
+                            <div className="ui active loader"></div>
+                            : <div className="profile-text">{text}</div>
+                        }
+                    </Link>
+                );
                 listOfLinks.push(<NotificationButton key="notification-button" />);
                 listOfLinks.push(<MessageButton key="message-button" />);
                 listOfLinks.push(<FriendButton key="friend-button" />);

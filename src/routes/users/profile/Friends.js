@@ -8,6 +8,8 @@ import * as utils from '../../../helpers/utils';
 import { friendOptions } from '../../../constants/table.options';
 import paths from '../../../constants/path.constants';
 
+import defaultProfileImage from '../../../images/static/default-profile.png';
+
 class UserFriends extends React.Component {
     state = {
         name: undefined,
@@ -52,9 +54,13 @@ class UserFriends extends React.Component {
         this.setState({ selectedOption }, this.fetchUserFriends);
     };
 
-    buildRow(id, title) {
+    buildRow(id, title, avatar) {
         let path = utils.convertUrlPath(paths.USER, { id });
-        return (<tr key={id} style={{ cursor: 'pointer' }} onClick={() => history.push(path)}><td>{title}</td></tr>);
+        let image = avatar || defaultProfileImage;
+        return (
+            <tr key={id} style={{ cursor: 'pointer' }} onClick={() => history.push(path)}>
+                <td><img src={image} alt="profile pic" className="profile-avatar" style={{ marginRight: '10px' }} /><p style={{ marginTop: '5px' }}>{title}</p></td>
+            </tr>);
     }
 
     noDataTableRows = () => {
@@ -67,9 +73,11 @@ class UserFriends extends React.Component {
         const userId = this.getUserId();
         for (let i = 0; i < data.length; ++i) {
             let row = data[i];
-            const name = userId === row.userId1 ? row.username2 : row.username1;
-            const id = userId === row.userId1 ? row.userId2 : row.userId1;
-            tableRows.push(this.buildRow(id, name));
+            const meUser1 = userId === row.userId1;
+            const name = meUser1 ? row.username2 : row.username1;
+            const id = meUser1 ? row.userId2 : row.userId1;
+            const avatar = meUser1 ? row.avatar2 : row.avatar1;
+            tableRows.push(this.buildRow(id, name, avatar));
         }
         return tableRows;
     }

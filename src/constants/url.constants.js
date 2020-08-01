@@ -15,6 +15,8 @@ export default {
     GET_USERS: api + '/users',
     GET_USER_PROFILE: api + '/users/:id',
     CANCEL_ACCOUNT: api + '/users/cancel',
+    UPLOAD_AVATAR: api + '/users/avatar',
+    DELETE_AVATAR: api + '/users/avatar',
 
     // Settings
     GET_SETTINGS: api + '/settings',

@@ -10,6 +10,8 @@ import history from '../../../helpers/history';
 import globalConstants from '../../../constants/global.constants';
 import { friendOptions } from '../../../constants/table.options';
 
+import defaultProfileImage from '../../../images/static/default-profile.png';
+
 import '../../../css/profile.css';
 
 class FriendList extends React.Component {
@@ -58,10 +60,16 @@ class FriendList extends React.Component {
         dispatch(friendActions.unfriend(friendId));
     }
 
-    buildRow(id, title, fromUserId) {
+    buildRow(id, title, fromUserId, avatar) {
         let button = (<button className="ui red button" onClick={e => { e.stopPropagation(); this.onRemoveFriend(id); }}>Remove Friend</button>);
         const userUrl = fromUserId ? utils.convertUrlPath(paths.USER, { id: fromUserId }) : '';
-        return (<tr key={id} style={{ cursor: 'pointer' }} onClick={() => history.push(userUrl)}><td>{title}</td><td className="right aligned">{button}</td></tr>);
+        let image = avatar || defaultProfileImage;
+        return (
+            <tr key={id} style={{ cursor: 'pointer' }} onClick={() => history.push(userUrl)}>
+                <td><img src={image} alt="profile pic" className="profile-avatar" style={{ marginRight: '10px' }} /><p style={{ marginTop: '5px' }}>{title}</p></td>
+                <td className="right aligned">{button}</td>
+            </tr>
+        );
     }
 
     noDataTableRows = () => {
@@ -74,10 +82,12 @@ class FriendList extends React.Component {
         const userId = utils.getUserId();
         for (let i = 0; i < data.length; ++i) {
             let row = data[i];
-            const { userId1, userId2, username1, username2 } = row;
-            let fromUserId = userId1 === userId ? userId2 : userId1;
-            let fromUsername = userId1 === userId ? username2 : username1;
-            tableRows.push(this.buildRow(row._id, fromUsername, fromUserId));
+            const { userId1, userId2, username1, username2, avatar1, avatar2 } = row;
+            const meUser1 = userId1 === userId;
+            let fromUserId = meUser1 ? userId2 : userId1;
+            let fromUsername = meUser1 ? username2 : username1;
+            const avatar = meUser1 ? avatar2 : avatar1;
+            tableRows.push(this.buildRow(row._id, fromUsername, fromUserId, avatar));
         }
         return tableRows;
     }

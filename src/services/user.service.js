@@ -1,4 +1,5 @@
 import * as http from './base.service';
+import axios from '../helpers/axios';
 import url from '../constants/url.constants';
 import * as utils from '../helpers/utils';
 
@@ -15,7 +16,9 @@ export const userService = {
     cancelAccount,
     subscribe,
     unsubscribe,
-    subscriptions
+    subscriptions,
+    uploadAvatar,
+    deleteAvatar,
 };
 
 function login(username, password) {
@@ -103,4 +106,19 @@ function subscriptions(page, limit, name, sortBy, sortOrder) {
         sortOrder
     };
     return http.get(url.SUBSCRIPTIONS, params);
+}
+
+function uploadAvatar(image, callback) {
+    const formData = new FormData();
+    formData.append(
+        'image',
+        image
+    );
+    return axios.post(url.UPLOAD_AVATAR, formData, {
+        onUploadProgress: progressEvent => callback(progressEvent.loaded / progressEvent.total)
+    });
+}
+
+function deleteAvatar() {
+    return http.del(url.DELETE_AVATAR);
 }

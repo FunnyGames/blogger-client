@@ -217,14 +217,14 @@ class UserProfile extends React.Component {
 
         const centerPanel = this.buildCenterPanel();
 
-        const { username, firstName, lastName, subscribed, subLoading, friend, friendLoading } = profile;
+        const { username, firstName, lastName, subscribed, subLoading, friend, friendLoading, avatar } = profile;
 
         const subText = subscribed ? 'SUBSCRIBED' : 'SUBSCRIBE';
         const subClass = `ui tiny ${subscribed ? '' : 'blue'} ${subLoading ? 'loading' : ''} button`;
 
         const friendDiv = this.buildFriendButtons(friend, friendLoading);
 
-        const imageSrc = defaultProfileImage;
+        const imageSrc = avatar || defaultProfileImage;
 
         return (
             <div style={{ marginBottom: '4em', marginTop: '4em' }}>

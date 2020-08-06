@@ -109,7 +109,7 @@ class Avatar extends Component {
         return (
             <div>
                 Select File:
-                <input name="newImage" type="file" onChange={this.handleNewImage} />
+                <input name="newImage" type="file" onChange={this.handleNewImage} disabled={this.state.uploading || this.state.processing} />
                 <br />
                 Zoom:
                 <input
@@ -120,7 +120,7 @@ class Avatar extends Component {
                     max="2"
                     step="0.01"
                     defaultValue="1"
-                    disabled={this.isDefaultImage()}
+                    disabled={this.isDefaultImage() || this.state.uploading || this.state.processing}
                 />
             </div>
         );
@@ -129,10 +129,10 @@ class Avatar extends Component {
     setEditorRef = (editor) => this.editor = editor
 
     render() {
-        const { percentage } = this.props;
+        const { percentage, src } = this.props;
         const editButton = this.getEditButton();
         const editorButtons = this.getEditorButtons();
-        const image = this.props.src || defaultProfileImage;
+        const image = src || defaultProfileImage;
         return (
             <Fragment>
                 {this.state.edit ?

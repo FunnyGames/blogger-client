@@ -19,6 +19,8 @@ export const userService = {
     subscriptions,
     uploadAvatar,
     deleteAvatar,
+    forgotPassword,
+    resetPassword,
 };
 
 function login(username, password) {
@@ -121,4 +123,14 @@ function uploadAvatar(image, callback) {
 
 function deleteAvatar() {
     return http.del(url.DELETE_AVATAR);
+}
+
+function forgotPassword(data) {
+    return http.post(url.FORGOT_PASSWORD, data);
+}
+
+function resetPassword(data) {
+    let { token, newPassword } = data;
+    let urlx = utils.convertUrlPath(url.RESET_PASSWORD, { token });
+    return http.post(urlx, { newPassword });
 }

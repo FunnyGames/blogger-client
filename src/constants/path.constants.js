@@ -9,6 +9,8 @@ export default {
     // Users
     LOGIN: '/login',
     REGISTER: '/register',
+    FORGOT_PASSWORD: '/forgot',
+    RESET_PASSWORD: '/reset/:token',
     USERS: '/users',
     USER: '/users/:id',
     USER_BLOGS: '/users/:id/blogs',

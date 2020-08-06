@@ -28,6 +28,8 @@ export const userActions = {
     subscriptions,
     uploadAvatar,
     deleteAvatar,
+    forgotPassword,
+    resetPassword,
 };
 
 function loadInitialData(dispatch) {
@@ -321,4 +323,24 @@ function deleteAvatar() {
         failure: userConstants.DELETE_AVATAR_FAILURE
     };
     return perform(userService.deleteAvatar, datax, actions);
+}
+
+function forgotPassword(email) {
+    const datax = { email };
+    const actions = {
+        request: userConstants.FORGOT_PASSWORD_REQUEST,
+        success: userConstants.FORGOT_PASSWORD_SUCCESS,
+        failure: userConstants.FORGOT_PASSWORD_FAILURE
+    };
+    return perform(userService.forgotPassword, datax, actions);
+}
+
+function resetPassword(token, newPassword) {
+    const datax = { token, newPassword };
+    const actions = {
+        request: userConstants.RESET_PASSWORD_REQUEST,
+        success: userConstants.RESET_PASSWORD_SUCCESS,
+        failure: userConstants.RESET_PASSWORD_FAILURE
+    };
+    return perform(userService.resetPassword, datax, actions);
 }

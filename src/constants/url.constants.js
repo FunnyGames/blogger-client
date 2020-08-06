@@ -17,6 +17,8 @@ export default {
     CANCEL_ACCOUNT: api + '/users/cancel',
     UPLOAD_AVATAR: api + '/users/avatar',
     DELETE_AVATAR: api + '/users/avatar',
+    FORGOT_PASSWORD: api + '/users/reset/request',
+    RESET_PASSWORD: api + '/users/reset/password/:token',
 
     // Settings
     GET_SETTINGS: api + '/settings',

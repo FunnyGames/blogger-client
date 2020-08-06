@@ -1,14 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { userActions } from '../../actions';
-import LoginForm from '../../forms/users/LoginForm';
-import paths from '../../constants/path.constants';
-import history from '../../helpers/history';
-import setTitle from '../../environments/document';
-import * as utils from '../../helpers/utils';
+import { userActions } from '../../../actions';
+import LoginForm from '../../../forms/users/LoginForm';
+import paths from '../../../constants/path.constants';
+import history from '../../../helpers/history';
+import setTitle from '../../../environments/document';
+import * as utils from '../../../helpers/utils';
 
-import '../../css/login.css';
+import '../../../css/login.css';
 
 class Login extends React.Component {
     componentDidMount() {
@@ -54,7 +54,7 @@ class Login extends React.Component {
                         <LoginForm onSubmit={this.submit} />
                         {errorMsg}
                         <div className="ui message">
-                            New to us? <Link key={paths.REGISTER} to={paths.REGISTER}>Register</Link>
+                            New to us? <Link key={paths.REGISTER} to={paths.REGISTER}>Register</Link> | <Link key={paths.FORGOT_PASSWORD} to={paths.FORGOT_PASSWORD}>Forgot password? </Link>
                         </div>
                     </div>
                 </div>

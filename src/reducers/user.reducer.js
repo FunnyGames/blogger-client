@@ -199,3 +199,28 @@ export function subscriptions(state = {}, action) {
             return state;
     }
 }
+
+export function forgotPassword(state = {}, action) {
+    switch (action.type) {
+        case userConstants.FORGOT_PASSWORD_REQUEST:
+            return { loading: true };
+        case userConstants.FORGOT_PASSWORD_SUCCESS:
+            return { ...action.payload };
+        case userConstants.FORGOT_PASSWORD_FAILURE:
+            return { error: action.error };
+
+        case userConstants.RESET_PASSWORD_REQUEST:
+            return { loading: true };
+        case userConstants.RESET_PASSWORD_SUCCESS:
+            return { ...action.payload };
+        case userConstants.RESET_PASSWORD_FAILURE:
+            return { error: action.error };
+
+        case userConstants.LOGOUT_SUCCESS:
+        case userConstants.LOGIN_SUCCESS:
+        case userConstants.REGISTER_SUCCESS:
+            return {};
+        default:
+            return state;
+    }
+}

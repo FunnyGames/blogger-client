@@ -28,8 +28,10 @@ import { GroupsList } from './routes/groups/GroupsList';
 import { AddGroup } from './routes/groups/AddGroup';
 import { ViewGroup } from './routes/groups/ViewGroup';
 
-import { Login } from './routes/users/Login';
-import { Register } from './routes/users/Register';
+import { Login } from './routes/users/auth/Login';
+import { Register } from './routes/users/auth/Register';
+import { ForgotPassword } from './routes/users/auth/ForgotPassword';
+import { ResetPassword } from './routes/users/auth/ResetPassword';
 import { Profile } from './routes/users/Profile';
 import { UsersList } from './routes/users/UsersList';
 import { UserProfile } from './routes/users/UserProfile';
@@ -78,6 +80,8 @@ class App extends React.Component {
         list.push(<Route key="ViewBlog" path={paths.BLOG} component={ViewBlog} />);
         list.push(<Route key="Login" path={paths.LOGIN + "*"} component={Login} />);
         list.push(<Route key="Register" path={paths.REGISTER} component={Register} />);
+        list.push(<Route key="ForgotPassword" path={paths.FORGOT_PASSWORD} component={ForgotPassword} />);
+        list.push(<Route key="ResetPassword" path={paths.RESET_PASSWORD} component={ResetPassword} />);
         list.push(<Route key="About" path={paths.ABOUT} component={About} />);
         list.push(<Route key="Privacy" path={paths.PRIVACY} component={Privacy} />);
         list.push(<Route key="Support" path={paths.SUPPORT} component={Support} />);

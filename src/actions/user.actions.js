@@ -8,6 +8,7 @@ import { chatActions } from './chat.actions';
 import socket from '../socket/socket.service';
 import { perform } from './base.actions';
 import * as socketListener from '../socket/listener';
+import { friendActions } from './friend.actions';
 
 const { LOCAL_STR_TOKEN } = globalConstants;
 
@@ -35,6 +36,7 @@ export const userActions = {
 function loadInitialData(dispatch) {
     dispatch(notificationActions.getTotalNotifications());
     dispatch(chatActions.getTotalMessages());
+    dispatch(friendActions.getTotalFriendRequests());
 
     socket.connect();
     socketListener.listen(dispatch);

@@ -20,6 +20,11 @@ import '../../css/profile.css';
 class UserProfile extends React.Component {
 
     componentDidMount() {
+        // Do it only once when the page is loaded
+        let action = this.getAction();
+        if (action) {
+            this.performAction(action);
+        }
         if (!history.location.state || !history.location.state.fromProfile) {
             if (this.props.profile && this.props.profile.username)
                 setTitle(`${this.props.profile.username}\`s Profile`)
@@ -60,6 +65,39 @@ class UserProfile extends React.Component {
         }
 
         this.fetchUser();
+    }
+
+    getAction = () => {
+        let { search } = this.props.location;
+        if (search) {
+            let splitted = search.split('?');
+            for (let i = 0; i < splitted.length; ++i) {
+                let s = splitted[i];
+                if (s.includes('action')) {
+                    let fieldName = s.split('=');
+                    if (fieldName[0] === 'action') {
+                        return fieldName[1];
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    performAction = (action) => {
+        // Get dispatch function from props
+        const { dispatch } = this.props;
+
+        action = action.replace(/-/g, '=');
+        let data = Buffer.from(action, 'base64').toString();
+        let splitted = data.split(';');
+        let friendId = splitted[0];
+        let perform = splitted[1];
+        if (perform === 'accept') {
+            dispatch(friendActions.friendAccept(friendId));
+        } else if (perform === 'decline') {
+            dispatch(friendActions.unfriend(friendId));
+        }
     }
 
     getUserId = () => {

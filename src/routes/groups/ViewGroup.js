@@ -151,7 +151,7 @@ class ViewGroup extends React.Component {
     }
 
     buildRow(id, title, groupOwner, owner, avatar) {
-        let ownerDiv = (groupOwner ? <div className="ui yellow label">Owner</div> : null);
+        let ownerDiv = (groupOwner ? <span className="ui yellow label" style={{ marginLeft: '5px' }}>Owner</span> : null);
         let path = utils.convertUrlPath(paths.USER, { id });
         let image = avatar || defaultProfileImage;
         return (

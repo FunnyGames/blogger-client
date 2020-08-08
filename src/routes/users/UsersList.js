@@ -52,7 +52,7 @@ class UsersList extends React.Component {
     };
 
     buildRow(id, title, you, avatar) {
-        let youDiv = (you ? <div className="ui yellow label">You</div> : null);
+        let youDiv = (you ? <span className="ui yellow label">You</span> : null);
         let path = utils.convertUrlPath(paths.USER, { id });
         let image = avatar || defaultProfileImage;
         return (<tr key={id} style={{ cursor: 'pointer' }} onClick={() => history.push(path)}>

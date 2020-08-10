@@ -20,9 +20,36 @@ const toastChatMessageOptions = {
 
 // Component for showing toasts
 class Toast extends React.Component {
+    toasts = {};
+
     notify = (msg) => toast.success(msg);
 
-    notifyError = (msg) => toast.error(msg);
+    toastExists = (msg) => {
+        let keys = Object.keys(this.toasts);
+        for (let i = 0; i < keys.length; ++i) {
+            let k = keys[i];
+            if (this.toasts[k] === msg) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    onToastClose = () => {
+        let keys = Object.keys(this.toasts);
+        for (let i = 0; i < keys.length; ++i) {
+            let k = keys[i];
+            if (!toast.isActive(k)) {
+                delete this.toasts[k];
+            }
+        }
+    }
+
+    notifyError = (msg) => {
+        if (this.toastExists(msg)) return;
+        let x = toast.error(msg, { onClose: this.onToastClose });
+        this.toasts[x] = msg;
+    }
 
     showNotification = (data) => {
         if (!data || !data.action) return;

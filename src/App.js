@@ -7,6 +7,7 @@ import history from './helpers/history';
 import { alertActions, userActions } from './actions';
 import paths from './constants/path.constants';
 import { cancelPendingRequests } from './helpers/axios';
+import socket from './socket/socket.service';
 
 import Navbar from './components/navbar/Navbar';
 import Footer from './components/pages/Footer';
@@ -53,6 +54,9 @@ class App extends React.Component {
 
             // clear alert on location change
             dispatch(alertActions.clear());
+
+            // clear socket user id
+            socket.clearCurrentUserId();
 
             this.loadProfile();
         });

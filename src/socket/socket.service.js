@@ -70,4 +70,11 @@ const listenToUserStatus = (userId) => {
     }
 }
 
-export default { send, connect, addListener, disconnect, join, leave, listenToUserStatus };
+const clearCurrentUserId = () => {
+    if (currentUserId) {
+        socket.emit(socketConstants.LEAVE, { userId: currentUserId });
+        currentUserId = null;
+    }
+}
+
+export default { send, connect, addListener, disconnect, join, leave, listenToUserStatus, clearCurrentUserId };

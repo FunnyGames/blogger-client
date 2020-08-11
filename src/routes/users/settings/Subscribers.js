@@ -97,7 +97,7 @@ class Subscribers extends React.Component {
         return (
             <div>
                 <div className="ui center aligned header">
-                    <h1>{total > 0 ? total : null} Subscriber{total > 1 ? 's' : ''}:</h1>
+                    <h1>{total > 0 ? total : null} Subscriber{total !== 1 ? 's' : ''}:</h1>
                 </div>
                 <p></p>
                 {subscribers.error ?

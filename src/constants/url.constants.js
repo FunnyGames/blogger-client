@@ -19,6 +19,8 @@ export default {
     DELETE_AVATAR: api + '/users/avatar',
     FORGOT_PASSWORD: api + '/users/reset/request',
     RESET_PASSWORD: api + '/users/reset/password/:token',
+    EMAIL_RESEND: api + '/users/email/resend',
+    EMAIL_CONFIRM: api + '/users/email/confirm/:token',
 
     // Settings
     GET_SETTINGS: api + '/settings',

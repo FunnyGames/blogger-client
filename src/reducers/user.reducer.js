@@ -224,3 +224,22 @@ export function forgotPassword(state = {}, action) {
             return state;
     }
 }
+
+export function emailConfirm(state = {}, action) {
+    switch (action.type) {
+        case userConstants.EMAIL_CONFIRM_REQUEST:
+            return { loading: true };
+        case userConstants.EMAIL_CONFIRM_SUCCESS:
+            return { ...action.payload };
+        case userConstants.EMAIL_CONFIRM_FAILURE:
+            return { error: action.error };
+
+        case userConstants.LOGOUT_SUCCESS:
+        case userConstants.LOGIN_SUCCESS:
+        case userConstants.REGISTER_SUCCESS:
+            return {};
+
+        default:
+            return state;
+    }
+}

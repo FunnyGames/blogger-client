@@ -31,6 +31,7 @@ import { ViewGroup } from './routes/groups/ViewGroup';
 
 import { Login } from './routes/users/auth/Login';
 import { Register } from './routes/users/auth/Register';
+import { ConfirmEmail } from './routes/users/auth/ConfirmEmail';
 import { ForgotPassword } from './routes/users/auth/ForgotPassword';
 import { ResetPassword } from './routes/users/auth/ResetPassword';
 import { Profile } from './routes/users/Profile';
@@ -98,6 +99,8 @@ class App extends React.Component {
         list.push(<PrivateRoute key="UserBlogs" exact path={paths.USER_BLOGS} component={UserProfile} />);
         list.push(<PrivateRoute key="UserGroups" exact path={paths.USER_GROUPS} component={UserProfile} />);
         list.push(<PrivateRoute key="UserFriends" exact path={paths.USER_FRIENDS} component={UserProfile} />);
+
+        list.push(<PrivateRoute key="ConfirmEmail" exact path={paths.EMAIL_CONFIRM} component={ConfirmEmail} />);
 
         list.push(<PrivateRoute key="UsersList" exact path={paths.USERS} component={UsersList} />);
         list.push(<PrivateRoute key="Notifications" exact path={paths.NOTIFICATIONS} component={Notifications} />);

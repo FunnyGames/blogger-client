@@ -16,6 +16,7 @@ export default {
     USER_BLOGS: '/users/:id/blogs',
     USER_GROUPS: '/users/:id/groups',
     USER_FRIENDS: '/users/:id/friends',
+    EMAIL_CONFIRM: '/confirm/:token',
 
     // Settings
     PROFILE: '/profile',

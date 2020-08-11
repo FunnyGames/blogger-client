@@ -64,17 +64,29 @@ class EditProfile extends React.Component {
         }
     }
 
+    onResendEmail = () => {
+        const { dispatch } = this.props;
+
+        dispatch(userActions.resendEmail());
+    }
+
     render() {
         const { user, info } = this.props;
         if (info.error) return <ErrorConnect />;
         if (!user) return renderLoader();
 
-        const { firstName, lastName, email, avatar } = user;
+        const { firstName, lastName, email, avatar, waitingForEmailConfirmation } = user;
+        const emailStatus = waitingForEmailConfirmation ?
+            (<span style={{ marginLeft: '5px', marginRight: '5px' }}>Waiting for verifiction <button className="ui blue submit button" onClick={this.onResendEmail} >Resend email</button></span>)
+            : <span style={{ marginLeft: '5px' }}>Verified<i className="check green icon"></i></span>;
 
         return (
             <div className="ui container">
                 <strong>Avatar:</strong>
                 <Avatar onSaveImage={this.onSaveImage} onDeleteImage={this.onDeleteImage} src={avatar} percentage={this.state.percentage} avatarUpdated={info.avatarUpdated} />
+                <br />
+                <strong>Email status:</strong>{emailStatus}
+                <br />
                 <br />
                 <strong>Profile:</strong>
                 <ProfileForm email={email} firstName={firstName} lastName={lastName} onSubmit={this.onSubmit} initialValues={{ firstName, lastName, email }} />

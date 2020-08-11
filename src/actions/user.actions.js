@@ -31,6 +31,8 @@ export const userActions = {
     deleteAvatar,
     forgotPassword,
     resetPassword,
+    resendEmail,
+    confirmEmail,
 };
 
 function loadInitialData(dispatch) {
@@ -345,4 +347,34 @@ function resetPassword(token, newPassword) {
         failure: userConstants.RESET_PASSWORD_FAILURE
     };
     return perform(userService.resetPassword, datax, actions);
+}
+
+function resendEmail() {
+    const datax = null;
+    const actions = {
+        request: userConstants.EMAIL_RESEND_REQUEST,
+        success: userConstants.EMAIL_RESEND_SUCCESS,
+        failure: userConstants.EMAIL_RESEND_FAILURE
+    };
+    const successCallback = (dispatch, data) => {
+        dispatch(alertActions.success(`Email sent successfully!`));
+    };
+    const failureCallback = (dispatch, error) => {
+        dispatch(alertActions.error(`Sending email failed!`));
+    };
+    return perform(userService.resendEmail, datax, actions, successCallback, failureCallback);
+}
+
+function confirmEmail(token) {
+    const datax = token;
+    const actions = {
+        request: userConstants.EMAIL_CONFIRM_REQUEST,
+        success: userConstants.EMAIL_CONFIRM_SUCCESS,
+        failure: userConstants.EMAIL_CONFIRM_FAILURE
+    };
+    const successCallback = (dispatch, data) => {
+        localStorage.setItem(LOCAL_STR_TOKEN, data.jwt);
+        dispatch(userActions.getProfile());
+    };
+    return perform(userService.confirmEmail, datax, actions, successCallback);
 }

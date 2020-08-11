@@ -21,6 +21,8 @@ export const userService = {
     deleteAvatar,
     forgotPassword,
     resetPassword,
+    resendEmail,
+    confirmEmail,
 };
 
 function login(username, password) {
@@ -133,4 +135,13 @@ function resetPassword(data) {
     let { token, newPassword } = data;
     let urlx = utils.convertUrlPath(url.RESET_PASSWORD, { token });
     return http.post(urlx, { newPassword });
+}
+
+function resendEmail() {
+    return http.get(url.EMAIL_RESEND);
+}
+
+function confirmEmail(token) {
+    let urlx = utils.convertUrlPath(url.EMAIL_CONFIRM, { token });
+    return http.get(urlx);
 }

@@ -73,8 +73,8 @@ class Subscribers extends React.Component {
         const tableRows = [];
         for (let i = 0; i < data.length; ++i) {
             let row = data[i];
-            let username = row.subToUsername;
-            let userId = row.subToUserId;
+            let username = row.username;
+            let userId = row.userId;
             let avatar = row.avatar;
             tableRows.push(this.buildRow(row._id, username, userId, avatar));
         }

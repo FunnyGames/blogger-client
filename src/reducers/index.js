@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 
 import { alert } from './alert.reducer';
-import { user, userAvailable, users, profile, userGroups, subscriptions, forgotPassword, emailConfirm, subscribers } from './user.reducer';
+import { user, userAvailable, users, profile, userGroups, subscriptions, forgotPassword, emailConfirm, subscribers, unsubscribeEmail } from './user.reducer';
 import { groups, group, groupUsers } from './group.reducer';
 import { blogs, blog, members } from './blog.reducer';
 import { update } from './update.reducer';
@@ -46,6 +46,7 @@ const rootReducer = combineReducers({
     totalFriendRequests,
     forgotPassword,
     emailConfirm,
+    unsubscribeEmail,
     form: formReducer
 });
 

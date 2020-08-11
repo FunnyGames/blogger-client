@@ -5,6 +5,7 @@ export default {
     ABOUT: '/about',
     PRIVACY: '/privacy',
     SUPPORT: '/support',
+    UNSUBSCRIBE_EMAIL: '/unsubscribe',
 
     // Users
     LOGIN: '/login',

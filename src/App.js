@@ -19,6 +19,7 @@ import { NotFound } from './components/pages/NotFound';
 import { About } from './routes/static/About';
 import { Privacy } from './routes/static/Privacy';
 import { Support } from './routes/static/Support';
+import { UnsubscribeEmail } from './routes/users/UnsubscribeEmail';
 
 import { HomePage } from './routes/HomePage';
 import { AddBlog } from './routes/blogs/AddBlog';
@@ -90,6 +91,7 @@ class App extends React.Component {
         list.push(<Route key="About" path={paths.ABOUT} component={About} />);
         list.push(<Route key="Privacy" path={paths.PRIVACY} component={Privacy} />);
         list.push(<Route key="Support" path={paths.SUPPORT} component={Support} />);
+        list.push(<Route key="UnsubscribeEmail" exact path={paths.UNSUBSCRIBE_EMAIL} component={UnsubscribeEmail} />);
         return list;
     }
 

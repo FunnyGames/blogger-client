@@ -21,6 +21,7 @@ export default {
     RESET_PASSWORD: api + '/users/reset/password/:token',
     EMAIL_RESEND: api + '/users/email/resend',
     EMAIL_CONFIRM: api + '/users/email/confirm/:token',
+    UNSUBSCRIBE_EMAIL: api + '/settings/unsubscribe',
 
     // Settings
     GET_SETTINGS: api + '/settings',

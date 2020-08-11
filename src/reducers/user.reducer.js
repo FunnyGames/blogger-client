@@ -259,3 +259,22 @@ export function emailConfirm(state = {}, action) {
             return state;
     }
 }
+
+export function unsubscribeEmail(state = {}, action) {
+    switch (action.type) {
+        case userConstants.UNSUBSCRIBE_EMAIL_REQUEST:
+            return { loading: true };
+        case userConstants.UNSUBSCRIBE_EMAIL_SUCCESS:
+            return { ...action.payload };
+        case userConstants.UNSUBSCRIBE_EMAIL_FAILURE:
+            return { error: action.error };
+
+        case userConstants.LOGOUT_SUCCESS:
+        case userConstants.LOGIN_SUCCESS:
+        case userConstants.REGISTER_SUCCESS:
+            return {};
+
+        default:
+            return state;
+    }
+}

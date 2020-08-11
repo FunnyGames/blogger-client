@@ -24,6 +24,7 @@ export const userService = {
     resetPassword,
     resendEmail,
     confirmEmail,
+    unsubscribeEmail,
 };
 
 function login(username, password) {
@@ -155,5 +156,12 @@ function resendEmail() {
 
 function confirmEmail(token) {
     let urlx = utils.convertUrlPath(url.EMAIL_CONFIRM, { token });
+    return http.get(urlx);
+}
+
+function unsubscribeEmail(data) {
+    let { email, token, t } = data;
+    let encoded = encodeURI(`?email=${email}&token=${token}&t=${t}`);
+    let urlx = url.UNSUBSCRIBE_EMAIL + encoded;
     return http.get(urlx);
 }

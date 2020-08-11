@@ -34,6 +34,7 @@ export const userActions = {
     resetPassword,
     resendEmail,
     confirmEmail,
+    unsubscribeEmail,
 };
 
 function loadInitialData(dispatch) {
@@ -396,4 +397,14 @@ function confirmEmail(token) {
         dispatch(userActions.getProfile());
     };
     return perform(userService.confirmEmail, datax, actions, successCallback);
+}
+
+function unsubscribeEmail(email, token, t) {
+    const datax = { email, token, t };
+    const actions = {
+        request: userConstants.UNSUBSCRIBE_EMAIL_REQUEST,
+        success: userConstants.UNSUBSCRIBE_EMAIL_SUCCESS,
+        failure: userConstants.UNSUBSCRIBE_EMAIL_FAILURE
+    };
+    return perform(userService.unsubscribeEmail, datax, actions);
 }

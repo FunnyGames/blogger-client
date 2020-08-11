@@ -119,12 +119,13 @@ class FriendRequests extends React.Component {
         let tableRows = this.createTableRows(friends.data);
         let totalRows = friends.metadata ? friends.metadata.total : 0;
         let loadingTable = friends.loading;
+        let total = friends.metadata ? friends.metadata.total : 0;
 
         return (
             <div>
                 <div className="ui container">
                     <div className="ui center aligned header">
-                        <h1>Friend Requests:</h1>
+                        <h1>Friend Requests: <span style={{ fontWeight: 'normal', fontSize: 'large' }}>({total})</span></h1>
                     </div>
                     {friends.error ?
                         <center>Error loading</center>

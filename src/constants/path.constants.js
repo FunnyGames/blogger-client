@@ -29,6 +29,7 @@ export default {
     PROFILE_GROUPS: '/profile/groups',
     PROFILE_BLOGS: '/profile/blogs',
     SUBSCRIPTIONS: '/profile/subscriptions',
+    SUBSCRIBERS: '/profile/subscribers',
 
     // Groups
     GROUPS: '/groups',

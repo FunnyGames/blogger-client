@@ -113,6 +113,7 @@ class App extends React.Component {
         list.push(<PrivateRoute key="FriendRequests" path={paths.FRIEND_REQUESTS} component={Profile} />);
         list.push(<PrivateRoute key="BlockedUsers" path={paths.BLOCKED_USERS} component={Profile} />);
         list.push(<PrivateRoute key="Subscriptions" path={paths.SUBSCRIPTIONS} component={Profile} />);
+        list.push(<PrivateRoute key="Subscribers" path={paths.SUBSCRIBERS} component={Profile} />);
         list.push(<PrivateRoute key="ProfileGroups" path={paths.PROFILE_GROUPS} component={Profile} />);
         list.push(<PrivateRoute key="ProfileBlogs" path={paths.PROFILE_BLOGS} component={Profile} />);
 

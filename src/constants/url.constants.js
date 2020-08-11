@@ -30,6 +30,7 @@ export default {
     SUBSCRIBE: api + '/users/subscribe/:id',
     UNUBSCRIBE: api + '/users/unsubscribe/:id',
     SUBSCRIPTIONS: api + '/users/subscriptions',
+    SUBSCRIBERS: api + '/users/subscribers',
 
     // Groups
     GET_GROUPS: api + '/groups',

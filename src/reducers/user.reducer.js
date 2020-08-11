@@ -200,6 +200,22 @@ export function subscriptions(state = {}, action) {
     }
 }
 
+export function subscribers(state = {}, action) {
+    switch (action.type) {
+        case userConstants.GET_SUBSCRIBERS_REQUEST:
+            return { loading: true };
+        case userConstants.GET_SUBSCRIBERS_SUCCESS:
+            return { data: action.payload.users, metadata: action.payload.metadata };
+        case userConstants.GET_SUBSCRIBERS_FAILURE:
+            return { error: action.error };
+
+        case userConstants.LOGOUT_SUCCESS:
+            return {};
+        default:
+            return state;
+    }
+}
+
 export function forgotPassword(state = {}, action) {
     switch (action.type) {
         case userConstants.FORGOT_PASSWORD_REQUEST:

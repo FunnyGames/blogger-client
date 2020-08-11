@@ -14,7 +14,7 @@ import defaultProfileImage from '../../../images/static/default-profile.png';
 
 import '../../../css/profile.css';
 
-class Subscriptions extends React.Component {
+class Subscribers extends React.Component {
     state = {
         name: undefined,
         page: 1,
@@ -22,7 +22,7 @@ class Subscriptions extends React.Component {
     };
 
     componentDidMount() {
-        setTitle('Subscriptions');
+        setTitle('Subscribers');
         this.fetchSubs();
     }
 
@@ -38,7 +38,7 @@ class Subscriptions extends React.Component {
             sortBy = selectedOption.sortBy;
             sortOrder = selectedOption.sortOrder;
         }
-        dispatch(userActions.subscriptions(page, limit, name, sortBy, sortOrder));
+        dispatch(userActions.subscribers(page, limit, name, sortBy, sortOrder));
     }
 
     onSearch = (name) => {
@@ -54,21 +54,12 @@ class Subscriptions extends React.Component {
         this.setState({ selectedOption }, this.fetchSubs);
     };
 
-    unsubUser = (id) => {
-        // Get dispatch function from props
-        const { dispatch } = this.props;
-
-        dispatch(userActions.unsubscribe(id));
-    }
-
     buildRow(id, title, userId, avatar) {
-        let button = <button className="ui button" onClick={e => { e.stopPropagation(); this.unsubUser(userId); }}>UNSUBSCRIBE</button>;
         let path = utils.convertUrlPath(paths.USER, { id: userId });
         let image = avatar || defaultProfileImage;
         return (
             <tr key={id} style={{ cursor: 'pointer' }} onClick={() => history.push(path)}>
                 <td><img src={image} alt="profile pic" className="profile-avatar" style={{ marginRight: '10px' }} /><p style={{ marginTop: '5px' }}>{title}</p></td>
-                <td className="right aligned">{button}</td>
             </tr>)
             ;
     }
@@ -91,25 +82,25 @@ class Subscriptions extends React.Component {
     }
 
     render() {
-        const { info, subscriptions, alert, dispatch } = this.props;
+        const { info, subscribers, alert, dispatch } = this.props;
         if (info.error) return <ErrorConnect />;
         if (alertRefersh.is(alert, alertRefersh.UNSUBSCRIBE)) {
             this.fetchSubs();
             dispatch(alertActions.clear());
         }
 
-        let tableRows = this.createTableRows(subscriptions.data);
-        let totalRows = subscriptions.data ? subscriptions.data.length : 0;
-        let loadingTable = subscriptions.loading;
-        let total = subscriptions.metadata ? subscriptions.metadata.total : 0;
+        let tableRows = this.createTableRows(subscribers.data);
+        let totalRows = subscribers.data ? subscribers.data.length : 0;
+        let loadingTable = subscribers.loading;
+        let total = subscribers.metadata ? subscribers.metadata.total : 0;
 
         return (
             <div>
                 <div className="ui center aligned header">
-                    <h1>{total > 0 ? total : null} Subscription{total > 1 ? 's' : ''}:</h1>
+                    <h1>{total > 0 ? total : null} Subscriber{total > 1 ? 's' : ''}:</h1>
                 </div>
                 <p></p>
-                {subscriptions.error ?
+                {subscribers.error ?
                     <center>Error loading</center>
                     : <Table
                         loading={loadingTable}
@@ -128,9 +119,9 @@ class Subscriptions extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const { user, subscriptions, alert } = state;
-    return { info: user, subscriptions, alert };
+    const { user, subscribers, alert } = state;
+    return { info: user, subscribers, alert };
 }
 
-const connected = connect(mapStateToProps)(Subscriptions);
-export { connected as Subscriptions };
+const connected = connect(mapStateToProps)(Subscribers);
+export { connected as Subscribers };

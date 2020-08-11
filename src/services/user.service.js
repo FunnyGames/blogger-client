@@ -17,6 +17,7 @@ export const userService = {
     subscribe,
     unsubscribe,
     subscriptions,
+    subscribers,
     uploadAvatar,
     deleteAvatar,
     forgotPassword,
@@ -110,6 +111,17 @@ function subscriptions(page, limit, name, sortBy, sortOrder) {
         sortOrder
     };
     return http.get(url.SUBSCRIPTIONS, params);
+}
+
+function subscribers(page, limit, name, sortBy, sortOrder) {
+    let params = {
+        page,
+        limit,
+        name,
+        sortBy,
+        sortOrder
+    };
+    return http.get(url.SUBSCRIBERS, params);
 }
 
 function uploadAvatar(image, callback) {

@@ -27,6 +27,7 @@ export const userActions = {
     subscribe,
     unsubscribe,
     subscriptions,
+    subscribers,
     uploadAvatar,
     deleteAvatar,
     forgotPassword,
@@ -307,6 +308,24 @@ function subscriptions(page, limit, name, sortBy, sortOrder) {
     function request() { return { type: userConstants.GET_SUBSCRIPTIONS_REQUEST } }
     function success(payload) { return { type: userConstants.GET_SUBSCRIPTIONS_SUCCESS, payload } }
     function failure(error) { return { type: userConstants.GET_SUBSCRIPTIONS_FAILURE, error } }
+}
+
+function subscribers(page, limit, name, sortBy, sortOrder) {
+    return dispatch => {
+        dispatch(request());
+
+        userService.subscribers(page, limit, name, sortBy, sortOrder)
+            .then(
+                data => {
+                    dispatch(success(data));
+                },
+                error => returnError(dispatch, failure, error, true)
+            );
+    };
+
+    function request() { return { type: userConstants.GET_SUBSCRIBERS_REQUEST } }
+    function success(payload) { return { type: userConstants.GET_SUBSCRIBERS_SUCCESS, payload } }
+    function failure(error) { return { type: userConstants.GET_SUBSCRIBERS_FAILURE, error } }
 }
 
 function uploadAvatar(image, callback) {

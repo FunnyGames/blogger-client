@@ -15,6 +15,7 @@ import { Subscriptions } from './settings/Subscriptions';
 import { NotificationSettings } from './settings/NotificationSettings';
 import { FriendRequests } from './settings/FriendRequests';
 import { FriendList } from './settings/FriendList';
+import { Subscribers } from './settings/Subscribers';
 
 import '../../css/profile.css';
 
@@ -73,6 +74,7 @@ class Profile extends React.Component {
         list.push(this.buildLeftPanelItem('Friend Requests', 'user plus', paths.FRIEND_REQUESTS));
         list.push(this.buildLeftPanelItem('Blocked Users', 'ban', paths.BLOCKED_USERS));
         list.push(this.buildLeftPanelItem('Subscriptions', 'newspaper outline', paths.SUBSCRIPTIONS));
+        list.push(this.buildLeftPanelItem('Subscribers', 'eye', paths.SUBSCRIBERS));
 
         list.push(this.buildLeftPanelTitle('Settings'));
         list.push(this.buildLeftPanelItem('Edit Profile', 'user circle outline', paths.PROFILE));
@@ -100,6 +102,7 @@ class Profile extends React.Component {
             case paths.FRIEND_REQUESTS: ret = (<FriendRequests />); break;
             case paths.BLOCKED_USERS: ret = (<BlockedUsers />); break;
             case paths.SUBSCRIPTIONS: ret = (<Subscriptions />); break;
+            case paths.SUBSCRIBERS: ret = (<Subscribers />); break;
             case paths.NOTIFICATIONS_SETTINGS: ret = (<NotificationSettings />); break;
             default: ret = null;
         }

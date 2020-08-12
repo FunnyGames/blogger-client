@@ -1,13 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { BlogsList } from './BlogsList';
-import setTitle from '../../environments/document';
+import { BlogsList } from '../users/profile/Blogs';
 
 class UserBlogs extends React.Component {
-    componentDidMount() {
-        setTitle("Homepage");
-    }
-
     render() {
         return <BlogsList />
     }

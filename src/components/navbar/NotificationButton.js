@@ -13,7 +13,7 @@ import { notificationActions } from '../../actions';
 import '../../css/notification.css';
 
 export const formatNotification = (notification) => {
-    const { kind, fromUserId, fromUsername, sourceName, content, sourceId } = notification;
+    let { kind, fromUserId, fromUsername, sourceName, content, sourceId } = notification;
     let toLink = paths.HOMEPAGE;
     let path = null;
     let msgType = '';
@@ -22,6 +22,24 @@ export const formatNotification = (notification) => {
     let text;
     let image;
     switch (kind) {
+        case types.FRIEND_REQUEST:
+            path = paths.USER;
+            sourceId = fromUserId;
+            if (content.pending) {
+                text = (
+                    <div allowclose="true">
+                        {userLink} sent you a friend request
+                    </div>
+                );
+            } else {
+                text = (
+                    <div allowclose="true">
+                        {userLink} accepted your friend request
+                    </div>
+                );
+            }
+            msgType = 'Friend request';
+            break;
         case types.COMMENT:
             path = paths.BLOG;
             text = (

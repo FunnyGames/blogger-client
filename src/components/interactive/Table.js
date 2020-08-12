@@ -163,7 +163,7 @@ class Table extends React.Component {
                 </div>
                 <p></p>
                 {
-                    loading ? renderLoader() :
+                    loading ? renderLoader() : //TODO - fix this table loading
                         <Fragment>
                             <table className="ui basic table">
                                 <tbody>

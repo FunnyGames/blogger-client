@@ -18,6 +18,7 @@ import haha from '../../images/emojis/haha.svg';
 import wow from '../../images/emojis/wow.svg';
 import sad from '../../images/emojis/sad.svg';
 import angry from '../../images/emojis/angry.svg';
+import defaultProfileImage from '../../images/static/default-profile.png';
 
 import '../../css/reaction.css';
 import 'react-tabs/style/react-tabs.css';
@@ -176,11 +177,13 @@ class Reaction extends React.Component {
         let content = [];
         for (let i = 0; i < reactions.length; ++i) {
             const r = reactions[i];
-            const { reactionId, username, userId, react } = r;
+            const { reactionId, username, userId, react, avatar } = r;
+            const avatarImg = avatar || defaultProfileImage;
             const image = setReactionImage(react);
             const userUrl = userId ? utils.convertUrlPath(paths.USER, { id: userId }) : '';
             content.push(
                 <div key={reactionId} style={{ cursor: 'pointer' }} className="ui segment" onClick={e => { e.stopPropagation(); history.push(userUrl); }}>
+                    <img src={avatarImg} alt="profile pic" className="profile-avatar" style={{ marginRight: '10px' }} />
                     <b>{username}</b> <img src={image} width="16px" height="16px" alt={react} />
                 </div>
             );

@@ -18,6 +18,8 @@ import _ from 'lodash';
 import CommentForm from '../../forms/blogs/CommentForm';
 import globalConstants from '../../constants/global.constants';
 
+import defaultProfileImage from '../../images/static/default-profile.png';
+
 import '../../css/search.css';
 
 class ViewBlog extends React.Component {
@@ -184,6 +186,7 @@ class ViewBlog extends React.Component {
                         dispatch={this.props.dispatch}
                         commentId={_id}
                         username={user.username}
+                        avatar={user.avatar}
                         content={content}
                         toLink={toLink}
                         dateTooltip={dateTooltip}
@@ -234,6 +237,7 @@ class ViewBlog extends React.Component {
         }) : '';
         let owner = blog.owner._id;
         let ownerName = blog.owner.username;
+        let avatar = blog.owner.avatar;
         let createDate = blog.createDate;
         let tags = this.buildTags(blog.tags);
 
@@ -259,6 +263,7 @@ class ViewBlog extends React.Component {
         const commentList = this.buildComments(comments.data, comments.metadata);
         const numberOfComments = comments && comments.metadata ? comments.metadata.overall : '-';
         const addCommentButton = loggedIn ? this.addReply : null;
+        const image = avatar || defaultProfileImage;
 
         return (
             <div style={{ marginBottom: '4em', marginTop: '4em' }}>
@@ -275,8 +280,13 @@ class ViewBlog extends React.Component {
                         {content}
                         <div className="ui divider"></div>
                         <p style={{ float: 'right' }}><i data-tooltip={dateTooltip} data-position="bottom center">{timeUtils.formatBlogDate(createDate)}</i></p>
-                        <p>By: <Link to={ownerUrl}>{ownerName}</Link></p>
                         <p>Tags: <i>{tags}</i></p>
+                        <p>By:<br />
+                            <Link to={ownerUrl}>
+                                <img src={image} alt="profile pic" className="profile-avatar" style={{ marginRight: '10px' }} />
+                                <p style={{ marginTop: '5px' }}>{ownerName}</p>
+                            </Link>
+                        </p>
                         {blog.permission === 'private' ?
                             <div style={{ fontSize: '1em' }}>
                                 Users with access: {userList}<br />

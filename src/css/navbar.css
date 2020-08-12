@@ -4,6 +4,7 @@
   padding: 0;
   overflow: hidden;
   background-color: #2185d0;
+  max-height: 50px;
 }
 
 .header-link {
@@ -55,16 +56,20 @@
 }
 
 .sticky {
-  position: -webkit-sticky; /* Safari */
+  position: -webkit-sticky;
+  /* Safari */
   position: sticky;
   top: 0;
   z-index: 1000;
 }
 
-@media screen and (max-width: 660px) {
-  .topnav .header-main,
-  .topnav .hello-nav,
-  .topnav .header-link {float: none;}
+@media screen and (max-width: 870px) {
+  .topnav .header-main, .topnav .hello-nav, .topnav .header-link {
+    float: none;
+  }
+  .navbar {
+    max-height: none;
+  }
 }
 
 .hello-nav {

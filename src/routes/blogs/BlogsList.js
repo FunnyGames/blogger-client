@@ -1,8 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Table from '../../components/interactive/Table';
-import { blogActions, userActions, alertActions } from '../../actions';
+import { blogActions, alertActions } from '../../actions';
 import setTitle from '../../environments/document';
 import history from '../../helpers/history';
 import globalConstants from '../../constants/global.constants';
@@ -10,17 +9,14 @@ import * as utils from '../../helpers/utils';
 import * as timeUtils from '../../helpers/time-utils';
 import paths from '../../constants/path.constants';
 import { blogOptions } from '../../constants/table.options';
-import renderLoader from '../../components/interactive/Loader';
 import Modal from '../../components/interactive/Modal';
-import _ from 'lodash';
 
 class BlogsList extends React.Component {
     state = {
         name: undefined,
         page: 1,
         selectedOption: null,
-        my: false,
-        userId: undefined
+        currentTab: null
     };
 
     openModal = {};
@@ -28,39 +24,36 @@ class BlogsList extends React.Component {
     componentDidMount() {
         setTitle("Homepage");
         let params = utils.getUrlParams();
-        let path = utils.getUrlPath(history.location.pathname);
-        let userId = undefined;
-        if (path.length > 2) {
-            userId = path[2];
-        }
         let tags = params.get('tags');
-        let my = userId === utils.getUserId();
         let name = tags ? '#' + tags : undefined;
-        this.setState({ name, my, userId }, this.fetchBlogs);
+        this.setState({ name }, this.fetchBlogs);
     }
 
-    fetchBlogs() {
+    componentDidUpdate() {
+        const { currentTab } = this.props;
+        if (this.state.currentTab !== currentTab) {
+            this.fetchBlogs(currentTab);
+            this.setState({ currentTab });
+        }
+    }
+
+    fetchBlogs(currentTab) {
         // Get dispatch function from props
-        const { dispatch, profile } = this.props;
+        const { dispatch } = this.props;
 
         // Fetch blogs
         const limit = globalConstants.TABLE_LIMIT;
-        const { page, name, selectedOption, userId, my } = this.state;
+        const { page, name, selectedOption } = this.state;
         let { sortOrder, sortBy } = {};
         if (selectedOption) {
             sortBy = selectedOption.sortBy;
             sortOrder = selectedOption.sortOrder;
         }
-        let blogs =  (my ? 'my' : undefined);
 
         const query = {
-            blogs,
-            userId: my ? undefined : userId
+            currentTab
         }
         dispatch(blogActions.getBlogs(page, limit, name, sortBy, sortOrder, query));
-        if (!my && userId && profile && !profile.username) {
-            dispatch(userActions.getUserProfile(userId));
-        }
     }
 
     showDeleteConfirm = (blogId) => {
@@ -98,11 +91,11 @@ class BlogsList extends React.Component {
                     <div style={{ width: '100%' }}></div>
                 </td>
                 <td style={{ textAlign: 'right' }}><i>{createDate}</i></td>
-                {this.isOwner(userId) ? 
+                {this.isOwner(userId) ?
                     <td style={{ textAlign: 'right', width: '1%' }}>
-                        <button className="ui red button" onClick={e => {e.stopPropagation(); this.showDeleteConfirm(id);}}>Delete</button>
+                        <button className="ui red button" onClick={e => { e.stopPropagation(); this.showDeleteConfirm(id); }}>Delete</button>
                     </td>
-                    : <td/>}
+                    : <td />}
             </tr>
         );
     }
@@ -137,17 +130,10 @@ class BlogsList extends React.Component {
     }
 
     render() {
-        let { user, blogs, profile, forceRefresh } = this.props;
-        const { userId, my } = this.state;
+        let { user, blogs, forceRefresh, currentTab } = this.props;
         const { loggedIn } = user;
-        if (my) {
-            profile = user.user;
-        }
-        if (userId || my) {
-            if (!profile || profile.loading || _.isEmpty(profile)) return renderLoader();
-        }
         if (forceRefresh) {
-            this.fetchBlogs();
+            this.fetchBlogs(currentTab);
             const { dispatch } = this.props;
             dispatch(alertActions.clear());
         }
@@ -159,19 +145,9 @@ class BlogsList extends React.Component {
         const tags = utils.getUrlParams().get('tags');
         const initialInput = tags ? '#' + tags : undefined;
 
-        let title = (<h1>Recent Blogs:</h1>);
-        const userUrl = utils.convertUrlPath(paths.USER, { id: userId });
-        if (userId) {
-            title = (<h1>You're viewing <Link to={userUrl} >{profile.username}</Link>`s blogs:</h1>);
-        }
-        const showAddPost = loggedIn && !userId;
+        const showAddPost = loggedIn;
         return (
-            <div style={{marginBottom: '4em', marginTop: '4em'}}>
-                <div className="ui header">
-                    <div className="ui center aligned header">
-                        {title}
-                    </div>
-                </div>
+            <div style={{ marginBottom: '4em', marginTop: '4em' }}>
                 <div className="ui container">
                     {showAddPost ? <button className="ui blue left floated button" onClick={() => history.push(paths.ADD_BLOG)}>Add Post</button> : null}
 
@@ -206,9 +182,9 @@ class BlogsList extends React.Component {
 }
 
 function mapStateToProps(state) {
-    let { user, blogs, profile, alert } = state;
+    let { user, blogs, alert } = state;
     const { forceRefresh } = alert;
-    return { user, blogs, profile, forceRefresh };
+    return { user, blogs, forceRefresh };
 }
 
 const connected = connect(mapStateToProps)(BlogsList);

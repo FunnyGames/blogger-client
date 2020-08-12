@@ -7,6 +7,8 @@ import Modal from '../../components/interactive/Modal';
 import { commentActions } from '../../actions';
 import renderLoader from '../interactive/Loader';
 
+import defaultProfileImage from '../../images/static/default-profile.png';
+
 import '../../css/comment.css';
 
 class Comment extends React.Component {
@@ -55,13 +57,17 @@ class Comment extends React.Component {
 
     render() {
         const { edit } = this.state;
-        const { toLink, username, dateTooltip, createDate, content, lastUpdate, owner, updateComment } = this.props;
+        const { toLink, username, dateTooltip, createDate, content, lastUpdate, owner, updateComment, avatar } = this.props;
         const initialValues = { content };
         if (updateComment && updateComment.loading && this.isActive()) {
             return renderLoader();
         }
+        const image = avatar || defaultProfileImage;
         return (
             <div className="comment">
+                <b className="avatar">
+                    <img src={image} alt="profile pic" />
+                </b>
                 <div className="content">
                     <Link to={toLink} className="author">{username}</Link>
                     <div className="metadata">

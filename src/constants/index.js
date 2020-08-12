@@ -7,3 +7,4 @@ export * from './redux/reaction.constants';
 export * from './redux/notification.constants';
 export * from './redux/chat.constants';
 export * from './redux/setting.constants';
+export * from './redux/friend.constants';

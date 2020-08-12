@@ -21,7 +21,7 @@ class AddBlog extends React.Component {
         let { dispatch } = this.props;
 
         // Get values from form
-        let { title, content, tags, isPrivate, members, groups } = values;
+        let { title, content, tags, isPrivate, permission, members, groups } = values;
 
         // Try to update
         if (title && content) {
@@ -39,11 +39,12 @@ class AddBlog extends React.Component {
             if (tags) {
                 tags = tags.map(t => t.value);
             }
+            if (!permission) permission = 'public';
             let data = {
                 name: title.trim(),
                 entry: content.trim(),
                 tags,
-                permission: isPrivate ? 'private' : 'public',
+                permission,
                 members,
                 groups
             }

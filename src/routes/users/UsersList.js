@@ -9,6 +9,8 @@ import * as utils from '../../helpers/utils';
 import { userOptions } from '../../constants/table.options';
 import paths from '../../constants/path.constants';
 
+import defaultProfileImage from '../../images/static/default-profile.png';
+
 class UsersList extends React.Component {
     state = {
         name: undefined,
@@ -49,10 +51,13 @@ class UsersList extends React.Component {
         this.setState({ selectedOption }, this.fetchUsers);
     };
 
-    buildRow(id, title, you) {
-        let youDiv = (you ? <div className="ui yellow label">You</div> : null);
+    buildRow(id, title, you, avatar) {
+        let youDiv = (you ? <span className="ui yellow label">You</span> : null);
         let path = utils.convertUrlPath(paths.USER, { id });
-        return (<tr key={id} style={{ cursor: 'pointer' }} onClick={() => history.push(path)}><td>{title} {youDiv}</td></tr>);
+        let image = avatar || defaultProfileImage;
+        return (<tr key={id} style={{ cursor: 'pointer' }} onClick={() => history.push(path)}>
+            <td><img src={image} alt="profile pic" className="profile-avatar" style={{ marginRight: '10px' }} /><p style={{ marginTop: '5px' }}>{title} {youDiv}</p></td>
+        </tr>);
     }
 
     noDataTableRows = () => {
@@ -66,7 +71,7 @@ class UsersList extends React.Component {
         for (let i = 0; i < data.length; ++i) {
             let row = data[i];
             let me = userId === row._id;
-            tableRows.push(this.buildRow(row._id, row.username, me));
+            tableRows.push(this.buildRow(row._id, row.username, me, row.avatar));
         }
         return tableRows;
     }

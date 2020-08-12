@@ -7,6 +7,7 @@ import history from './helpers/history';
 import { alertActions, userActions } from './actions';
 import paths from './constants/path.constants';
 import { cancelPendingRequests } from './helpers/axios';
+import socket from './socket/socket.service';
 
 import Navbar from './components/navbar/Navbar';
 import Footer from './components/pages/Footer';
@@ -18,19 +19,22 @@ import { NotFound } from './components/pages/NotFound';
 import { About } from './routes/static/About';
 import { Privacy } from './routes/static/Privacy';
 import { Support } from './routes/static/Support';
+import { UnsubscribeEmail } from './routes/users/UnsubscribeEmail';
 
 import { HomePage } from './routes/HomePage';
 import { AddBlog } from './routes/blogs/AddBlog';
 import { ViewBlog } from './routes/blogs/ViewBlog';
 import { EditBlog } from './routes/blogs/EditBlog';
-import { UserBlogs } from './routes/blogs/UserBlogList';
 
 import { GroupsList } from './routes/groups/GroupsList';
 import { AddGroup } from './routes/groups/AddGroup';
 import { ViewGroup } from './routes/groups/ViewGroup';
 
-import { Login } from './routes/users/Login';
-import { Register } from './routes/users/Register';
+import { Login } from './routes/users/auth/Login';
+import { Register } from './routes/users/auth/Register';
+import { ConfirmEmail } from './routes/users/auth/ConfirmEmail';
+import { ForgotPassword } from './routes/users/auth/ForgotPassword';
+import { ResetPassword } from './routes/users/auth/ResetPassword';
 import { Profile } from './routes/users/Profile';
 import { UsersList } from './routes/users/UsersList';
 import { UserProfile } from './routes/users/UserProfile';
@@ -39,7 +43,7 @@ import { Chat } from './routes/chat/Chat';
 
 Modal.setAppElement('#root');
 
-const version = 3.1;
+const version = 4;
 
 class App extends React.Component {
     constructor(props) {
@@ -52,6 +56,9 @@ class App extends React.Component {
 
             // clear alert on location change
             dispatch(alertActions.clear());
+
+            // clear socket user id
+            socket.clearCurrentUserId();
 
             this.loadProfile();
         });
@@ -75,20 +82,28 @@ class App extends React.Component {
     createPublicRoutes() {
         const list = [];
         list.push(<Route key="HomePage" exact path={paths.HOMEPAGE} component={HomePage} />);
-        list.push(<Route key="UserBlogs" exact path={paths.USER_BLOGS} component={UserBlogs} />);
         list.push(<Route key="Blogs" exact path={paths.BLOGS} ><Redirect to={paths.HOMEPAGE} /></Route>);
         list.push(<Route key="ViewBlog" path={paths.BLOG} component={ViewBlog} />);
         list.push(<Route key="Login" path={paths.LOGIN + "*"} component={Login} />);
         list.push(<Route key="Register" path={paths.REGISTER} component={Register} />);
+        list.push(<Route key="ForgotPassword" path={paths.FORGOT_PASSWORD} component={ForgotPassword} />);
+        list.push(<Route key="ResetPassword" path={paths.RESET_PASSWORD} component={ResetPassword} />);
         list.push(<Route key="About" path={paths.ABOUT} component={About} />);
         list.push(<Route key="Privacy" path={paths.PRIVACY} component={Privacy} />);
         list.push(<Route key="Support" path={paths.SUPPORT} component={Support} />);
+        list.push(<Route key="UnsubscribeEmail" exact path={paths.UNSUBSCRIBE_EMAIL} component={UnsubscribeEmail} />);
         return list;
     }
 
     createPrivateRoutes() {
         const list = [];
         list.push(<PrivateRoute key="User" exact path={paths.USER} component={UserProfile} />);
+        list.push(<PrivateRoute key="UserBlogs" exact path={paths.USER_BLOGS} component={UserProfile} />);
+        list.push(<PrivateRoute key="UserGroups" exact path={paths.USER_GROUPS} component={UserProfile} />);
+        list.push(<PrivateRoute key="UserFriends" exact path={paths.USER_FRIENDS} component={UserProfile} />);
+
+        list.push(<PrivateRoute key="ConfirmEmail" exact path={paths.EMAIL_CONFIRM} component={ConfirmEmail} />);
+
         list.push(<PrivateRoute key="UsersList" exact path={paths.USERS} component={UsersList} />);
         list.push(<PrivateRoute key="Notifications" exact path={paths.NOTIFICATIONS} component={Notifications} />);
 
@@ -96,9 +111,13 @@ class App extends React.Component {
         list.push(<PrivateRoute key="EditPassword" path={paths.EDIT_PASSWORD} component={Profile} />);
         list.push(<PrivateRoute key="NotificationSettings" path={paths.NOTIFICATIONS_SETTINGS} component={Profile} />);
         list.push(<PrivateRoute key="CancelAccount" path={paths.CANCEL_ACCOUNT} component={Profile} />);
+        list.push(<PrivateRoute key="Friends" path={paths.FRIENDS} component={Profile} />);
+        list.push(<PrivateRoute key="FriendRequests" path={paths.FRIEND_REQUESTS} component={Profile} />);
         list.push(<PrivateRoute key="BlockedUsers" path={paths.BLOCKED_USERS} component={Profile} />);
         list.push(<PrivateRoute key="Subscriptions" path={paths.SUBSCRIPTIONS} component={Profile} />);
+        list.push(<PrivateRoute key="Subscribers" path={paths.SUBSCRIBERS} component={Profile} />);
         list.push(<PrivateRoute key="ProfileGroups" path={paths.PROFILE_GROUPS} component={Profile} />);
+        list.push(<PrivateRoute key="ProfileBlogs" path={paths.PROFILE_BLOGS} component={Profile} />);
 
         list.push(<PrivateRoute key="Chat" exact path={paths.CHAT} component={Chat} />);
         list.push(<PrivateRoute key="Chat" exact path={paths.VIEW_CHAT} component={Chat} />);

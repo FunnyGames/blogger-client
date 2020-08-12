@@ -28,3 +28,11 @@ export const notificationOptions = [
     { value: 'create_date_dsc', sortBy: 'createDate', sortOrder: 'dsc', label: 'Newest first' },
     { value: 'create_date_asc', sortBy: 'createDate', sortOrder: 'asc', label: 'Oldest first' },
 ];
+
+export const friendOptions = [
+    { value: 'none', sortBy: undefined, sortOrder: undefined, label: 'No sort' },
+    { value: 'name_asc', sortBy: 'name', sortOrder: 'asc', label: 'Name ascending' },
+    { value: 'name_dsc', sortBy: 'name', sortOrder: 'dsc', label: 'Name descending' },
+    { value: 'create_date_dsc', sortBy: 'createDate', sortOrder: 'dsc', label: 'Newest first' },
+    { value: 'create_date_asc', sortBy: 'createDate', sortOrder: 'asc', label: 'Oldest first' },
+];

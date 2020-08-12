@@ -6,7 +6,9 @@ import paths from '../constants/path.constants';
 import globalConstants from '../constants/global.constants';
 import { chatActions } from './chat.actions';
 import socket from '../socket/socket.service';
+import { perform } from './base.actions';
 import * as socketListener from '../socket/listener';
+import { friendActions } from './friend.actions';
 
 const { LOCAL_STR_TOKEN } = globalConstants;
 
@@ -24,12 +26,21 @@ export const userActions = {
     cancelAccount,
     subscribe,
     unsubscribe,
-    subscriptions
+    subscriptions,
+    subscribers,
+    uploadAvatar,
+    deleteAvatar,
+    forgotPassword,
+    resetPassword,
+    resendEmail,
+    confirmEmail,
+    unsubscribeEmail,
 };
 
 function loadInitialData(dispatch) {
     dispatch(notificationActions.getTotalNotifications());
     dispatch(chatActions.getTotalMessages());
+    dispatch(friendActions.getTotalFriendRequests());
 
     socket.connect();
     socketListener.listen(dispatch);
@@ -298,4 +309,102 @@ function subscriptions(page, limit, name, sortBy, sortOrder) {
     function request() { return { type: userConstants.GET_SUBSCRIPTIONS_REQUEST } }
     function success(payload) { return { type: userConstants.GET_SUBSCRIPTIONS_SUCCESS, payload } }
     function failure(error) { return { type: userConstants.GET_SUBSCRIPTIONS_FAILURE, error } }
+}
+
+function subscribers(page, limit, name, sortBy, sortOrder) {
+    return dispatch => {
+        dispatch(request());
+
+        userService.subscribers(page, limit, name, sortBy, sortOrder)
+            .then(
+                data => {
+                    dispatch(success(data));
+                },
+                error => returnError(dispatch, failure, error, true)
+            );
+    };
+
+    function request() { return { type: userConstants.GET_SUBSCRIBERS_REQUEST } }
+    function success(payload) { return { type: userConstants.GET_SUBSCRIBERS_SUCCESS, payload } }
+    function failure(error) { return { type: userConstants.GET_SUBSCRIBERS_FAILURE, error } }
+}
+
+function uploadAvatar(image, callback) {
+    const datax = image;
+    const actions = {
+        request: userConstants.UPLOAD_AVATAR_REQUEST,
+        success: userConstants.UPLOAD_AVATAR_SUCCESS,
+        failure: userConstants.UPLOAD_AVATAR_FAILURE
+    };
+    return perform(userService.uploadAvatar, datax, actions, null, null, null, callback);
+}
+
+function deleteAvatar() {
+    const datax = null;
+    const actions = {
+        request: userConstants.DELETE_AVATAR_REQUEST,
+        success: userConstants.DELETE_AVATAR_SUCCESS,
+        failure: userConstants.DELETE_AVATAR_FAILURE
+    };
+    return perform(userService.deleteAvatar, datax, actions);
+}
+
+function forgotPassword(email) {
+    const datax = { email };
+    const actions = {
+        request: userConstants.FORGOT_PASSWORD_REQUEST,
+        success: userConstants.FORGOT_PASSWORD_SUCCESS,
+        failure: userConstants.FORGOT_PASSWORD_FAILURE
+    };
+    return perform(userService.forgotPassword, datax, actions);
+}
+
+function resetPassword(token, newPassword) {
+    const datax = { token, newPassword };
+    const actions = {
+        request: userConstants.RESET_PASSWORD_REQUEST,
+        success: userConstants.RESET_PASSWORD_SUCCESS,
+        failure: userConstants.RESET_PASSWORD_FAILURE
+    };
+    return perform(userService.resetPassword, datax, actions);
+}
+
+function resendEmail() {
+    const datax = null;
+    const actions = {
+        request: userConstants.EMAIL_RESEND_REQUEST,
+        success: userConstants.EMAIL_RESEND_SUCCESS,
+        failure: userConstants.EMAIL_RESEND_FAILURE
+    };
+    const successCallback = (dispatch, data) => {
+        dispatch(alertActions.success(`Email sent successfully!`));
+    };
+    const failureCallback = (dispatch, error) => {
+        dispatch(alertActions.error(`Sending email failed!`));
+    };
+    return perform(userService.resendEmail, datax, actions, successCallback, failureCallback);
+}
+
+function confirmEmail(token) {
+    const datax = token;
+    const actions = {
+        request: userConstants.EMAIL_CONFIRM_REQUEST,
+        success: userConstants.EMAIL_CONFIRM_SUCCESS,
+        failure: userConstants.EMAIL_CONFIRM_FAILURE
+    };
+    const successCallback = (dispatch, data) => {
+        localStorage.setItem(LOCAL_STR_TOKEN, data.jwt);
+        dispatch(userActions.getProfile());
+    };
+    return perform(userService.confirmEmail, datax, actions, successCallback);
+}
+
+function unsubscribeEmail(email, token, t) {
+    const datax = { email, token, t };
+    const actions = {
+        request: userConstants.UNSUBSCRIBE_EMAIL_REQUEST,
+        success: userConstants.UNSUBSCRIBE_EMAIL_SUCCESS,
+        failure: userConstants.UNSUBSCRIBE_EMAIL_FAILURE
+    };
+    return perform(userService.unsubscribeEmail, datax, actions);
 }

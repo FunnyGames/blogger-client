@@ -10,6 +10,8 @@ import history from '../../../helpers/history';
 import { userOptions } from '../../../constants/table.options';
 import globalConstants from '../../../constants/global.constants';
 
+import defaultProfileImage from '../../../images/static/default-profile.png';
+
 import '../../../css/profile.css';
 
 class Subscriptions extends React.Component {
@@ -59,10 +61,16 @@ class Subscriptions extends React.Component {
         dispatch(userActions.unsubscribe(id));
     }
 
-    buildRow(id, title, userId) {
+    buildRow(id, title, userId, avatar) {
         let button = <button className="ui button" onClick={e => { e.stopPropagation(); this.unsubUser(userId); }}>UNSUBSCRIBE</button>;
         let path = utils.convertUrlPath(paths.USER, { id: userId });
-        return (<tr key={id} style={{ cursor: 'pointer' }} onClick={() => history.push(path)}><td>{title}</td><td className="right aligned">{button}</td></tr>);
+        let image = avatar || defaultProfileImage;
+        return (
+            <tr key={id} style={{ cursor: 'pointer' }} onClick={() => history.push(path)}>
+                <td><img src={image} alt="profile pic" className="profile-avatar" style={{ marginRight: '10px' }} /><p style={{ marginTop: '5px' }}>{title}</p></td>
+                <td className="right aligned">{button}</td>
+            </tr>)
+            ;
     }
 
     noDataTableRows = () => {
@@ -76,7 +84,8 @@ class Subscriptions extends React.Component {
             let row = data[i];
             let username = row.subToUsername;
             let userId = row.subToUserId;
-            tableRows.push(this.buildRow(row._id, username, userId));
+            let avatar = row.avatar;
+            tableRows.push(this.buildRow(row._id, username, userId, avatar));
         }
         return tableRows;
     }
@@ -92,11 +101,12 @@ class Subscriptions extends React.Component {
         let tableRows = this.createTableRows(subscriptions.data);
         let totalRows = subscriptions.data ? subscriptions.data.length : 0;
         let loadingTable = subscriptions.loading;
+        let total = subscriptions.metadata ? subscriptions.metadata.total : 0;
 
         return (
             <div>
                 <div className="ui center aligned header">
-                    <h1>Subscriptions:</h1>
+                    <h1>{total > 0 ? total : null} Subscription{total !== 1 ? 's' : ''}:</h1>
                 </div>
                 <p></p>
                 {subscriptions.error ?

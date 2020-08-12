@@ -8,6 +8,8 @@ import * as utils from '../../../helpers/utils';
 import paths from '../../../constants/path.constants';
 import history from '../../../helpers/history';
 
+import defaultProfileImage from '../../../images/static/default-profile.png';
+
 import '../../../css/profile.css';
 
 class BlockedUsers extends React.Component {
@@ -31,10 +33,16 @@ class BlockedUsers extends React.Component {
         dispatch(chatActions.unblockUser(id));
     }
 
-    buildRow(id, title, userId) {
+    buildRow(id, title, userId, avatar) {
         let button = <button className="ui button" onClick={e => { e.stopPropagation(); this.unblockUser(id); }}>Unblock</button>;
         let path = utils.convertUrlPath(paths.USER, { id: userId });
-        return (<tr key={id} style={{ cursor: 'pointer' }} onClick={() => history.push(path)}><td>{title}</td><td className="right aligned">{button}</td></tr>);
+        let image = avatar || defaultProfileImage;
+        return (
+            <tr key={id} style={{ cursor: 'pointer' }} onClick={() => history.push(path)}>
+                <td><img src={image} alt="profile pic" className="profile-avatar" style={{ marginRight: '10px' }} /><p style={{ marginTop: '5px' }}>{title}</p></td>
+                <td className="right aligned">{button}</td>
+            </tr>
+        );
     }
 
     noDataTableRows = () => {
@@ -47,15 +55,17 @@ class BlockedUsers extends React.Component {
         const myUserId = utils.getUserId();
         for (let i = 0; i < data.length; ++i) {
             let row = data[i];
-            let username, userId;
-            if (row.userId1 === myUserId) {
+            let username, userId, avatar;
+            if (row.userId1._id === myUserId) {
                 username = row.username2;
-                userId = row.userId2;
+                userId = row.userId2._id;
+                avatar = row.userId2.avatar;
             } else {
                 username = row.username1;
-                userId = row.userId1;
+                userId = row.userId1._id;
+                avatar = row.userId1.avatar;
             }
-            tableRows.push(this.buildRow(row._id, username, userId));
+            tableRows.push(this.buildRow(row._id, username, userId, avatar));
         }
         return tableRows;
     }

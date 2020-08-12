@@ -15,6 +15,8 @@ import SearchSelect from '../../components/interactive/SearchSelect';
 import * as validator from '../../forms/validator';
 import Modal from '../../components/interactive/Modal';
 
+import defaultProfileImage from '../../images/static/default-profile.png';
+
 class ViewGroup extends React.Component {
     state = {
         edit: false,
@@ -148,12 +150,13 @@ class ViewGroup extends React.Component {
         return list;
     }
 
-    buildRow(id, title, groupOwner, owner) {
-        let ownerDiv = (groupOwner ? <div className="ui yellow label">Owner</div> : null);
+    buildRow(id, title, groupOwner, owner, avatar) {
+        let ownerDiv = (groupOwner ? <span className="ui yellow label" style={{ marginLeft: '5px' }}>Owner</span> : null);
         let path = utils.convertUrlPath(paths.USER, { id });
+        let image = avatar || defaultProfileImage;
         return (
             <tr key={id} style={{ cursor: 'pointer' }} onClick={() => history.push(path)}>
-                <td>{title}{ownerDiv}</td>
+                <td><img src={image} alt="profile pic" className="profile-avatar" style={{ marginRight: '10px' }} /><p style={{ marginTop: '5px' }}>{title}{ownerDiv}</p></td>
                 {owner && !groupOwner ?
                     <td><button className="ui right floated red button" onClick={e => { e.stopPropagation(); this.removeMember(id, title); }}>- Remove</button></td>
                     : <td />}
@@ -229,7 +232,7 @@ class ViewGroup extends React.Component {
         for (let i = 0; i < data.length; ++i) {
             let row = data[i];
             let gOwner = groupOwner === row._id;
-            tableRows.push(this.buildRow(row._id, row.username, gOwner, isOwner));
+            tableRows.push(this.buildRow(row._id, row.username, gOwner, isOwner, row.avatar));
         }
         return tableRows;
     }

@@ -15,6 +15,13 @@ export default {
     GET_USERS: api + '/users',
     GET_USER_PROFILE: api + '/users/:id',
     CANCEL_ACCOUNT: api + '/users/cancel',
+    UPLOAD_AVATAR: api + '/users/avatar',
+    DELETE_AVATAR: api + '/users/avatar',
+    FORGOT_PASSWORD: api + '/users/reset/request',
+    RESET_PASSWORD: api + '/users/reset/password/:token',
+    EMAIL_RESEND: api + '/users/email/resend',
+    EMAIL_CONFIRM: api + '/users/email/confirm/:token',
+    UNSUBSCRIBE_EMAIL: api + '/settings/unsubscribe',
 
     // Settings
     GET_SETTINGS: api + '/settings',
@@ -24,6 +31,7 @@ export default {
     SUBSCRIBE: api + '/users/subscribe/:id',
     UNUBSCRIBE: api + '/users/unsubscribe/:id',
     SUBSCRIPTIONS: api + '/users/subscriptions',
+    SUBSCRIBERS: api + '/users/subscribers',
 
     // Groups
     GET_GROUPS: api + '/groups',
@@ -70,4 +78,12 @@ export default {
     CHAT_BLOCK_USER: api + '/chat/:id/block',
     CHAT_UNBLOCK_USER: api + '/chat/:id/unblock',
     DELETE_MESSAGE: api + '/chat/:id/delete/:id2',
+
+    // Friends
+    GET_FRIENDS: api + '/users/friends',
+    GET_FRIEND_REQUESTS: api + '/users/friends/requests',
+    FRIEND_REQUEST: api + '/users/friends/:id/friend',
+    UNFRIEND: api + '/users/friends/:id/unfriend',
+    FRIEND_ACCEPT: api + '/users/friends/:id/accept',
+    GET_TOTAL_FRIEND_REQUESTS: api + '/users/friends/total',
 }

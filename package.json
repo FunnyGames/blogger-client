@@ -1,6 +1,6 @@
 {
   "name": "blogger",
-  "version": "3.1.0",
+  "version": "4.0.0",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
@@ -13,6 +13,7 @@
     "lodash": "^4.17.15",
     "moment": "^2.25.2",
     "react": "^16.13.1",
+    "react-avatar-editor": "11.0.9",
     "react-contextmenu": "^2.13.0",
     "react-dom": "^16.13.1",
     "react-infinite-scroller": "^1.2.4",

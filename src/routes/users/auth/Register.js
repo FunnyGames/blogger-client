@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import paths from '../../constants/path.constants';
-import RegisterForm from '../../forms/users/RegisterForm';
-import { userActions } from '../../actions';
-import history from '../../helpers/history';
-import setTitle from '../../environments/document';
+import paths from '../../../constants/path.constants';
+import RegisterForm from '../../../forms/users/RegisterForm';
+import { userActions } from '../../../actions';
+import history from '../../../helpers/history';
+import setTitle from '../../../environments/document';
 
-import '../../css/login.css';
+import '../../../css/login.css';
 
 
 class Register extends React.Component {

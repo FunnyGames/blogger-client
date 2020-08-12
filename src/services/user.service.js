@@ -1,4 +1,5 @@
 import * as http from './base.service';
+import axios from '../helpers/axios';
 import url from '../constants/url.constants';
 import * as utils from '../helpers/utils';
 
@@ -15,7 +16,15 @@ export const userService = {
     cancelAccount,
     subscribe,
     unsubscribe,
-    subscriptions
+    subscriptions,
+    subscribers,
+    uploadAvatar,
+    deleteAvatar,
+    forgotPassword,
+    resetPassword,
+    resendEmail,
+    confirmEmail,
+    unsubscribeEmail,
 };
 
 function login(username, password) {
@@ -103,4 +112,56 @@ function subscriptions(page, limit, name, sortBy, sortOrder) {
         sortOrder
     };
     return http.get(url.SUBSCRIPTIONS, params);
+}
+
+function subscribers(page, limit, name, sortBy, sortOrder) {
+    let params = {
+        page,
+        limit,
+        name,
+        sortBy,
+        sortOrder
+    };
+    return http.get(url.SUBSCRIBERS, params);
+}
+
+function uploadAvatar(image, callback) {
+    const formData = new FormData();
+    formData.append(
+        'image',
+        image
+    );
+    return axios.post(url.UPLOAD_AVATAR, formData, {
+        onUploadProgress: progressEvent => callback(progressEvent.loaded / progressEvent.total)
+    });
+}
+
+function deleteAvatar() {
+    return http.del(url.DELETE_AVATAR);
+}
+
+function forgotPassword(data) {
+    return http.post(url.FORGOT_PASSWORD, data);
+}
+
+function resetPassword(data) {
+    let { token, newPassword } = data;
+    let urlx = utils.convertUrlPath(url.RESET_PASSWORD, { token });
+    return http.post(urlx, { newPassword });
+}
+
+function resendEmail() {
+    return http.get(url.EMAIL_RESEND);
+}
+
+function confirmEmail(token) {
+    let urlx = utils.convertUrlPath(url.EMAIL_CONFIRM, { token });
+    return http.get(urlx);
+}
+
+function unsubscribeEmail(data) {
+    let { email, token, t } = data;
+    let encoded = encodeURI(`?email=${email}&token=${token}&t=${t}`);
+    let urlx = url.UNSUBSCRIBE_EMAIL + encoded;
+    return http.get(urlx);
 }

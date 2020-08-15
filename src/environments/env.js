@@ -9,7 +9,7 @@ const dev = {
 // Production config
 const prod = {
     api: {
-        serverAddress: 'http://fg-blogger-server.herokuapp.com/'
+        serverAddress: 'https://fg-blogger-server.herokuapp.com/'
     }
 };
 

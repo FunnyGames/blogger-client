@@ -9,7 +9,7 @@ const dev = {
 // Production config
 const prod = {
     api: {
-        serverAddress: process.env.SERVER_ADDRESS
+        serverAddress: process.env.SERVER_ADDRESS_PROD
     }
 };
 

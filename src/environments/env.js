@@ -9,7 +9,7 @@ const dev = {
 // Production config
 const prod = {
     api: {
-        serverAddress: 'http://ec2-18-184-213-254.eu-central-1.compute.amazonaws.com'
+        serverAddress: process.env.SERVER_ADDRESS
     }
 };
 

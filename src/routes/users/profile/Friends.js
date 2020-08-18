@@ -23,7 +23,7 @@ class UserFriends extends React.Component {
 
     fetchUserFriends() {
         // Get dispatch function from props
-        const { dispatch } = this.props;
+        const { dispatch, friends } = this.props;
 
         // Fetch groups of user
         const userId = this.getUserId();
@@ -33,6 +33,11 @@ class UserFriends extends React.Component {
         if (selectedOption) {
             sortBy = selectedOption.sortBy;
             sortOrder = selectedOption.sortOrder;
+        }
+
+        // Check if information already exists
+        if (friends && friends.data && friends.metadata) {
+            if (friends.metadata.page === page && friends.other && friends.other.currentTab === userId) return;
         }
         dispatch(friendActions.getFriends(userId, page, limit, name, sortBy, sortOrder));
     }
@@ -67,8 +72,8 @@ class UserFriends extends React.Component {
         return (<tr key={"no-data"}><td style={{ textAlign: 'center' }}>No Data</td></tr>);
     }
 
-    createTableRows = (data) => {
-        if (!data || data.length === 0) return [this.noDataTableRows()];
+    createTableRows = (data, other) => {
+        if (!data || data.length === 0 || (other && other.currentTab !== this.getUserId())) return [this.noDataTableRows()];
         const tableRows = [];
         const userId = this.getUserId();
         for (let i = 0; i < data.length; ++i) {
@@ -85,7 +90,7 @@ class UserFriends extends React.Component {
     render() {
         let { friends } = this.props;
 
-        let tableRows = this.createTableRows(friends.data);
+        let tableRows = this.createTableRows(friends.data, friends.other);
         let totalRows = friends.metadata ? friends.metadata.total : 0;
         let loadingTable = friends.loading;
         return (

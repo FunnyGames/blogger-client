@@ -31,7 +31,7 @@ class BlogsList extends React.Component {
 
     fetchBlogs() {
         // Get dispatch function from props
-        const { dispatch } = this.props;
+        const { dispatch, blogs } = this.props;
 
         // Fetch blogs
         const limit = globalConstants.TABLE_LIMIT;
@@ -43,7 +43,13 @@ class BlogsList extends React.Component {
         }
 
         const query = {
+            currentTab: userId,
             userId
+        }
+
+        // Check if information already exists
+        if (blogs && blogs.data && blogs.metadata) {
+            if (blogs.metadata.page === page && blogs.other.currentTab === userId) return;
         }
         dispatch(blogActions.getBlogs(page, limit, name, sortBy, sortOrder, query));
 

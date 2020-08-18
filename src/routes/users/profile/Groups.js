@@ -21,7 +21,7 @@ class UserGroups extends React.Component {
 
     fetchUserGroups() {
         // Get dispatch function from props
-        const { dispatch } = this.props;
+        const { dispatch, groups } = this.props;
 
         // Fetch groups of user
         const userId = this.getUserId();
@@ -31,6 +31,11 @@ class UserGroups extends React.Component {
         if (selectedOption) {
             sortBy = selectedOption.sortBy;
             sortOrder = selectedOption.sortOrder;
+        }
+
+        // Check if information already exists
+        if (groups && groups.data && groups.metadata) {
+            if (groups.metadata.page === page && groups.other && groups.other.currentTab === userId) return;
         }
         dispatch(userActions.getUserGroups(userId, page, limit, name, sortBy, sortOrder));
     }

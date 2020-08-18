@@ -3,9 +3,9 @@ import { blogConstants, userConstants } from '../constants';
 export function blogs(state = {}, action) {
     switch (action.type) {
         case blogConstants.GET_BLOGS_REQUEST:
-            return { loading: true, data: state.data };
+            return { loading: true, data: state.data, other: action.other };
         case blogConstants.GET_BLOGS_SUCCESS:
-            return { data: action.payload.blogs, metadata: action.payload.metadata };
+            return { data: action.payload.blogs, metadata: action.payload.metadata, other: action.other };
         case blogConstants.GET_BLOGS_FAILURE:
             return { error: action.error };
 

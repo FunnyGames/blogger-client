@@ -23,7 +23,7 @@ class GroupsList extends React.Component {
 
     fetchGroups() {
         // Get dispatch function from props
-        const { dispatch } = this.props;
+        const { dispatch, groups } = this.props;
 
         // Fetch groups
         const limit = globalConstants.TABLE_LIMIT;
@@ -32,6 +32,11 @@ class GroupsList extends React.Component {
         if (selectedOption) {
             sortBy = selectedOption.sortBy;
             sortOrder = selectedOption.sortOrder;
+        }
+
+        // Check if information already exists
+        if (groups && groups.data && groups.metadata) {
+            if (groups.metadata.page === page) return;
         }
         dispatch(groupActions.getGroups(page, limit, name, sortBy, sortOrder));
     }

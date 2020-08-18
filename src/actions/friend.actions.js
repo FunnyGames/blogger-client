@@ -23,7 +23,8 @@ function getFriends(userId, page, limit, name, sortBy, sortOrder) {
         success: friendConstants.GET_FRIENDS_SUCCESS,
         failure: friendConstants.GET_FRIENDS_FAILURE
     };
-    return perform(friendService.getFriends, datax, actions);
+    const other = { request: { currentTab: userId }, success: { currentTab: userId } };
+    return perform(friendService.getFriends, datax, actions, null, null, other);
 }
 
 function getFriendRequests(page, limit, name, sortBy, sortOrder) {

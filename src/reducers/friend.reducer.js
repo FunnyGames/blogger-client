@@ -3,9 +3,9 @@ import { friendConstants, userConstants } from '../constants';
 export function friends(state = {}, action) {
     switch (action.type) {
         case friendConstants.GET_FRIENDS_REQUEST:
-            return { loading: true };
+            return { loading: true, other: action.other };
         case friendConstants.GET_FRIENDS_SUCCESS:
-            return { data: action.payload.users, metadata: action.payload.metadata };
+            return { data: action.payload.users, metadata: action.payload.metadata, other: action.other };
         case friendConstants.GET_FRIENDS_FAILURE:
             return { error: action.error };
 

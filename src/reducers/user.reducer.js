@@ -171,9 +171,9 @@ export function profile(state = {}, action) {
 export function userGroups(state = {}, action) {
     switch (action.type) {
         case userConstants.GET_GROUPS_REQUEST:
-            return { loading: true };
+            return { loading: true, other: action.other };
         case userConstants.GET_GROUPS_SUCCESS:
-            return { data: action.payload.groups, metadata: action.payload.metadata };
+            return { data: action.payload.groups, metadata: action.payload.metadata, other: action.other };
         case userConstants.GET_GROUPS_FAILURE:
             return { error: action.error };
 

@@ -25,7 +25,7 @@ class UsersList extends React.Component {
 
     fetchUsers() {
         // Get dispatch function from props
-        const { dispatch } = this.props;
+        const { dispatch, users } = this.props;
 
         // Fetch users
         const limit = globalConstants.TABLE_LIMIT;
@@ -34,6 +34,11 @@ class UsersList extends React.Component {
         if (selectedOption) {
             sortBy = selectedOption.sortBy;
             sortOrder = selectedOption.sortOrder;
+        }
+
+        // Check if information already exists
+        if (users && users.data && users.metadata) {
+            if (users.metadata.page === page) return;
         }
         dispatch(userActions.getUsers(page, limit, name, sortBy, sortOrder));
     }

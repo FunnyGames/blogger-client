@@ -192,8 +192,8 @@ function getUserGroups(userId, page, limit, name, sortBy, sortOrder) {
             );
     };
 
-    function request(groups) { return { type: userConstants.GET_GROUPS_REQUEST, groups } }
-    function success(payload) { return { type: userConstants.GET_GROUPS_SUCCESS, payload } }
+    function request(groups) { return { type: userConstants.GET_GROUPS_REQUEST, groups, other: { currentTab: userId } } }
+    function success(payload) { return { type: userConstants.GET_GROUPS_SUCCESS, payload, other: { currentTab: userId } } }
     function failure(error) { return { type: userConstants.GET_GROUPS_FAILURE, error } }
 }
 

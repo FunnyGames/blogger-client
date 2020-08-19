@@ -56,7 +56,7 @@ class BlogsList extends React.Component {
 
         // Check if information already exists
         if (blogs && blogs.data && blogs.metadata) {
-            if (blogs.metadata.page === page && blogs.other.currentTab === currentTab) return;
+            if (blogs.metadata.page === page && blogs.other.currentTab === currentTab && blogs.other.name === name) return;
         }
         dispatch(blogActions.getBlogs(page, limit, name, sortBy, sortOrder, query));
     }

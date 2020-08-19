@@ -22,7 +22,7 @@ function getBlogs(page, limit, name, sortBy, sortOrder, query) {
         success: blogConstants.GET_BLOGS_SUCCESS,
         failure: blogConstants.GET_BLOGS_FAILURE
     };
-    const other = { request: query, success: query };
+    const other = { request: { ...query, name }, success: { ...query, name } };
     return perform(blogService.getBlogs, datax, actions, null, null, other);
 }
 
